@@ -1,5 +1,13 @@
 # office-dinners
 
+### Use prettier
+
+Config WebStorm to fix file with prettier on save.
+
+### Auth Service
+
+Installed as plugin. Using in components: `this.$authService`
+
 ## Project setup
 
 ```
