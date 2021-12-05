@@ -8,6 +8,10 @@ Config WebStorm to fix file with prettier on save.
 
 Installed as plugin. Using in components: `this.$authService`
 
+### Store
+
+Installed as plugin. Using in components: `this.$store`
+
 ## Project setup
 
 ```
