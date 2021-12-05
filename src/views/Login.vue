@@ -16,6 +16,9 @@ export default {
       this.$router.push("/");
     },
     testErrors: function () {
+      this.$axios.get("http://94.152.212.14:7764/").then((response) => {
+        console.warn(response);
+      });
       this.$store.commit("global/addErrors", ["a"]);
     },
   },
