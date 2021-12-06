@@ -1,11 +1,11 @@
 export default class AuthService {
   static isAuthenticated = () => {
-    return localStorage.getItem("user");
-  };
-  static loginUser = () => {
-    localStorage.setItem("user", "user");
-  };
+    return localStorage.getItem("user")
+  }
+  static loginUser = (token) => {
+    localStorage.setItem("user", token)
+  }
   static logoutUser = () => {
-    localStorage.removeItem("user");
-  };
+    localStorage.removeItem("user")
+  }
 }

@@ -43,6 +43,12 @@
     },
     "rules": {}
   },
+  "prettier": {
+    "printWidth": 160,
+    "proseWrap": "never",
+    "trailingComma": "none",
+    "semi": false
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",

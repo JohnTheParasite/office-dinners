@@ -1,7 +1,7 @@
-import store from "@/store/store";
+import store from "@/store/store"
 
 export const Store = {
   install(Vue) {
-    Vue.prototype.$store = store;
-  },
-};
+    Vue.prototype.$store = store
+  }
+}

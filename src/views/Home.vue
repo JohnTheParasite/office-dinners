@@ -13,9 +13,9 @@ export default {
   components: {},
   methods: {
     logout: function () {
-      this.$authService.logoutUser();
-      this.$router.push("login");
-    },
-  },
-};
+      this.$authService.logoutUser()
+      this.$router.push("login")
+    }
+  }
+}
 </script>

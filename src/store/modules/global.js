@@ -1,11 +1,11 @@
 export default {
   namespaced: true,
   state: {
-    errors: [],
+    errors: []
   },
   mutations: {
     addErrors: (state, errors) => {
-      state.errors = errors;
-    },
-  },
-};
+      state.errors = errors
+    }
+  }
+}
