@@ -1,9 +1,11 @@
 <template>
   <form class="login-form" ref="form" @submit="login">
-    <text-input :required="true" label="username" @input="onInput('username', $event)"></text-input>
-    <text-input :required="true" label="password" type="password" @input="onInput('password', $event)"></text-input>
-    {{ errorMessage }}
-    <button type="submit">Login</button>
+    <div class="auth-wrapper">
+      <text-input :required="true" label="username" @input="onInput('username', $event)"></text-input>
+      <text-input :required="true" label="password" type="password" @input="onInput('password', $event)"></text-input>
+      {{ errorMessage }}
+      <button type="submit">Login</button>
+    </div>
   </form>
 </template>
 
@@ -50,8 +52,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
+@import "src/scss/page-auth.scss";
 </style>

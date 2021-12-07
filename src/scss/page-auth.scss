@@ -1,0 +1,62 @@
+:root {
+  --blue: #00cfe8;
+  --indigo: #6610f2;
+  --purple: #7367f0;
+  --pink: #e83e8c;
+  --red: #ea5455;
+  --orange: #ff9f43;
+  --yellow: #ffc107;
+  --green: #28c76f;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #b8c2cc;
+  --gray-dark: #1e1e1e;
+  --primary: #7367f0;
+  --secondary: #82868b;
+  --success: #28c76f;
+  --info: #00cfe8;
+  --warning: #ff9f43;
+  --danger: #ea5455;
+  --light: #f6f6f6;
+  --dark: #4b4b4b;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: "Montserrat", Helvetica, Arial, serif;
+  --font-family-monospace: "Montserrat", Helvetica, Arial, serif;
+}
+
+body {
+  height: 100vh;
+
+  #app {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    vertical-align: center;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: var(--font-family-sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #6e6b7b;
+
+    .auth-wrapper {
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+  }
+}
+
+
+
+
