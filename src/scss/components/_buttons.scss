@@ -1,0 +1,41 @@
+.btn {
+  box-shadow: none;
+  display: inline-block;
+  font-weight: 400;
+  vertical-align: middle;
+  user-select: none;
+  font-size: 1rem;
+  line-height: 1;
+  margin: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background 0s, border 0s;
+  text-align: center;
+  background-color: transparent;
+  border: 1px  solid transparent;
+  padding: 0.786rem  1.5rem;
+  border-radius: 0.358rem;
+  color: $white;
+
+  &.disabled, &:disabled {
+    opacity: 0.65;
+  }
+
+  &-primary{
+    border-color: $primary;
+    background-color: $primary;
+
+    &:hover {
+      &:not(.disabled):not(:disabled) {
+        box-shadow: 0 8px 25px -8px $primary;
+      }
+    }
+  }
+  &:not(.disabled):not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
