@@ -3,12 +3,29 @@
     <div class="inner-form">
       <div class="login-form">
         <div class="logo"><h2 class="brand-text text-primary">Logo</h2></div>
-        <form ref="form" @submit="login">
-          <text-input :required="true" label="username" @input="onInput('username', $event)"></text-input>
-          <text-input :required="true" label="password" type="password" @input="onInput('password', $event)"></text-input>
-          {{ errorMessage }}
-          <button :disabled="!enableSubmit" type="submit" class="btn btn-primary">Sign in</button>
-        </form>
+        <span>
+          <form ref="form" @submit="login" class="auth-login-form">
+            <text-input
+              :required="true"
+              label="username"
+              warningMessage="The username field is required"
+              placeholder="John Doe"
+              @input="onInput('username', $event)"
+            />
+
+            <text-input
+              :required="true"
+              label="password"
+              warningMessage="The password field is required"
+              placeholder="Password"
+              :type="type"
+              :its-password="true"
+              @input="onInput('password', $event)"
+              @toggle-element-type="toggleElementType"
+            />
+            <button :disabled="!enableSubmit" type="submit" class="btn btn-primary">Sign in</button>
+          </form>
+        </span>
       </div>
     </div>
   </div>
@@ -24,7 +41,8 @@ export default {
     return {
       username: "",
       password: "",
-      errorMessage: ""
+      errorMessage: "",
+      type: "password"
     }
   },
   methods: {
@@ -51,6 +69,13 @@ export default {
         .catch(() => {
           this.errorMessage = "Incorrect login or password"
         })
+    },
+    toggleElementType() {
+      if (this.type === "password") {
+        this.type = "text"
+      } else {
+        this.type = "password"
+      }
     }
   },
   computed: {
@@ -124,6 +149,10 @@ export default {
         .brand-text {
           font-weight: 600;
         }
+      }
+
+      .auth-login-form {
+        margin-top: 1.5rem;
       }
     }
   }
