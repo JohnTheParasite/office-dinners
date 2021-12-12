@@ -4,26 +4,19 @@
       <div class="login-form">
         <div class="logo"><h2 class="brand-text text-primary">Logo</h2></div>
         <span>
-          <form ref="form" @submit="login" class="auth-login-form">
+          <form ref="form" class="auth-login-form" @submit="login">
+            <text-input :required="true" label="Username" warningMessage="The username field is required" @input="onInput('username', $event)" />
             <text-input
+              :icon="passwordIcon"
+              :on-icon-click="toggleElementType"
               :required="true"
-              label="username"
-              warningMessage="The username field is required"
-              placeholder="John Doe"
-              @input="onInput('username', $event)"
-            />
-
-            <text-input
-              :required="true"
-              label="password"
-              warningMessage="The password field is required"
-              placeholder="Password"
               :type="type"
-              :its-password="true"
+              label="Password"
+              warningMessage="The password field is required"
               @input="onInput('password', $event)"
-              @toggle-element-type="toggleElementType"
-            />
-            <button :disabled="!enableSubmit" type="submit" class="btn btn-primary">Sign in</button>
+            >
+            </text-input>
+            <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
           </form>
         </span>
       </div>
@@ -33,16 +26,19 @@
 
 <script>
 import TextInput from "@/components/controls/TextInput"
+import FormButton from "@/components/controls/FormButton"
 
 export default {
   name: "Login",
-  components: { TextInput },
+  components: { FormButton, TextInput },
   data() {
     return {
       username: "",
       password: "",
       errorMessage: "",
-      type: "password"
+      type: "password",
+      passwordIcon: "eye",
+      loadInProgress: false
     }
   },
   methods: {
@@ -54,6 +50,7 @@ export default {
       if (!this.$refs.form.checkValidity()) {
         return
       }
+      this.loadInProgress = true
       this.errorMessage = ""
       event.preventDefault()
       event.stopImmediatePropagation()
@@ -69,12 +66,17 @@ export default {
         .catch(() => {
           this.errorMessage = "Incorrect login or password"
         })
+        .finally(() => {
+          this.loadInProgress = false
+        })
     },
     toggleElementType() {
       if (this.type === "password") {
         this.type = "text"
+        this.passwordIcon = "eye-slash"
       } else {
         this.type = "password"
+        this.passwordIcon = "eye"
       }
     }
   },
@@ -126,9 +128,6 @@ export default {
 
     .login-form {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
       word-wrap: break-word;
       transition: all 0.3s ease-in-out, background 0s, color 0s, border-color 0s;
       background-color: $white;
@@ -159,7 +158,7 @@ export default {
 }
 
 button {
-  display: block;
+  margin: 15px 0;
   width: 100%;
 }
 </style>

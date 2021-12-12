@@ -47,3 +47,13 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+input, button, select, optgroup, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
