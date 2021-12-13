@@ -17,6 +17,7 @@
             >
             </text-input>
             <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
+            <b-button variant="outline-danger" @click="makeToast('danger')"> Hello IGOR</b-button>
           </form>
         </span>
       </div>
@@ -78,6 +79,14 @@ export default {
         this.type = "password"
         this.passwordIcon = "eye"
       }
+    },
+    makeToast(variant = null) {
+      this.$bvToast.toast("Toast body content", {
+        title: `Variant ${variant || "default"}`,
+        variant,
+        noAutoHide: true,
+        solid: false
+      })
     }
   },
   computed: {
