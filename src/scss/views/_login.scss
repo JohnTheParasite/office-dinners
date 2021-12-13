@@ -1,0 +1,31 @@
+body {
+  height: 100vh;
+
+  #app {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    vertical-align: center;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: var(--font-family-sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #6e6b7b;
+
+    .auth-wrapper {
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+  }
+}
+
+
+
+

@@ -1,7 +1,7 @@
-import AuthService from "@/services/authService";
+import AuthService from "@/services/authService"
 
 export const Auth = {
   install(Vue) {
-    Vue.prototype.$authService = AuthService;
-  },
-};
+    Vue.prototype.$authService = AuthService
+  }
+}
