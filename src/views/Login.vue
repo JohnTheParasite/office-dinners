@@ -22,6 +22,15 @@
         </span>
       </div>
     </div>
+    <div class="toaster-top-right">
+      <div class="toast">
+        <div class="toast-header">
+          <div class="toast-header-message">Danger danger!</div>
+          <!--<button class="toast-close-button"></button>-->
+        </div>
+        <div class="toast-body">Here is a new message!</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -99,6 +108,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../scss/components/color";
+//@import "../scss/views/toast";
 
 .login-wrapper {
   display: flex;
