@@ -2,6 +2,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import Home from "../views/Home.vue"
 import AuthService from "@/services/authService"
+import User from "@/views/User"
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,26 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/user",
+    name: "user",
+    component: User
+  },
+  {
+    path: "/cafe",
+    name: "cafe",
+    component: User
+  },
+  {
+    path: "/refills",
+    name: "refills",
+    component: User
+  },
+  {
+    path: "/orders",
+    name: "orders",
+    component: User
   },
   {
     path: "/login",
