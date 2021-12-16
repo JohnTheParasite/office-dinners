@@ -17,30 +17,22 @@
             >
             </text-input>
             <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
-            <b-button variant="outline-danger" @click="makeToast('danger')"> Hello IGOR</b-button>
           </form>
         </span>
       </div>
     </div>
-    <div class="toaster-top-right">
-      <div class="toast">
-        <div class="toast-header">
-          <div class="toast-header-message">Danger danger!</div>
-          <!--<button class="toast-close-button"></button>-->
-        </div>
-        <div class="toast-body">Here is a new message!</div>
-      </div>
-    </div>
+    <ToastContainer />
   </div>
 </template>
 
 <script>
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
+import ToastContainer from "@/components/controls/ToastContainer"
 
 export default {
   name: "Login",
-  components: { FormButton, TextInput },
+  components: { FormButton, TextInput, ToastContainer },
   data() {
     return {
       username: "",
@@ -75,6 +67,12 @@ export default {
         })
         .catch(() => {
           this.errorMessage = "Incorrect login or password"
+          let parameters = {
+            type: "danger",
+            messageLabel: "Warning.",
+            message: "Wrong username or password."
+          }
+          this.makeToast(parameters)
         })
         .finally(() => {
           this.loadInProgress = false
@@ -89,13 +87,13 @@ export default {
         this.passwordIcon = "eye"
       }
     },
-    makeToast(variant = null) {
-      this.$bvToast.toast("Toast body content", {
-        title: `Variant ${variant || "default"}`,
-        variant,
-        noAutoHide: true,
-        solid: false
-      })
+    makeToast(parameters) {
+      let toastContainer = document.getElementById("toastContainer")
+      if (!toastContainer) {
+        console.error("Creating new toast was failed. Toast container wasn't found.")
+        return
+      }
+      toastContainer.__vue__.addNotification(parameters)
     }
   },
   computed: {
