@@ -25,15 +25,20 @@
 
 <script>
 import FaIcon from "@/components/icons/FaIcon"
+import openableItem from "@/components/controls/openableItem"
 export default {
   name: "UserMenu",
   components: { FaIcon },
+  mixins: [openableItem],
   data() {
     return {
       showOptions: false
     }
   },
   methods: {
+    closeOpenable() {
+      this.showOptions = false
+    },
     toggleOptions() {
       this.showOptions = !this.showOptions
     },
