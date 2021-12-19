@@ -1,8 +1,5 @@
 <template>
-  <div class="home">
-    Home page
-    <button @click="logout">Logout</button>
-  </div>
+  <div class="home">Home page</div>
 </template>
 
 <script>

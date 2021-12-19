@@ -60,7 +60,7 @@ export default {
       this.$axios
         .post("http://94.152.212.14:7764/login", formData)
         .then((response) => {
-          this.$authService.loginUser(response.data.token)
+          this.$authService.loginUser(JSON.stringify(response.data))
           this.$router.push("/")
         })
         .catch(() => {
@@ -135,7 +135,7 @@ export default {
       border-radius: 0.428rem;
       border: none;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 24px 0 rgb(34 41 47 / 10%);
+      box-shadow: 0 4px 24px 0 rgba($black-border-color, 10%);
       flex: 1 1 auto;
       min-height: 1px;
       padding: 1.5rem;
