@@ -16,7 +16,7 @@
 }
 
 .content-container {
-  padding: 2rem 2rem 0;
+  padding: 1.3rem 2rem 0;
   width: 100%;
 }
 </style>

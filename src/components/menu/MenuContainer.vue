@@ -2,7 +2,7 @@
   <div class="menu-container">
     <div class="logo">Dinners</div>
     <menu-item icon="columns" router-name="Home" title="Dashboard"></menu-item>
-    <menu-item icon="envelope" router-name="user" title="Users"></menu-item>
+    <menu-item icon="users" router-name="user" title="Users"></menu-item>
     <menu-item icon="coffee" router-name="cafe" title="Cafe list"></menu-item>
     <menu-item icon="credit-card" router-name="refills" title="Refills"></menu-item>
     <menu-item icon="folder" router-name="orders" title="Orders"></menu-item>
