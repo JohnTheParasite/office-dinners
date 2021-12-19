@@ -60,7 +60,7 @@ export default {
       this.$axios
         .post("http://94.152.212.14:7764/login", formData)
         .then((response) => {
-          this.$authService.loginUser(response.data.token)
+          this.$authService.loginUser(JSON.stringify(response.data))
           this.$router.push("/")
         })
         .catch(() => {

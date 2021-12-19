@@ -2,14 +2,14 @@
   <div class="user-menu">
     <div class="user" @click="toggleOptions">
       <div class="text">
-        <span class="username">Username</span>
-        <span class="role">role</span>
+        <span class="username">{{ getName }}</span>
+        <span class="role">{{ getRole }}</span>
       </div>
       <div class="avatar">
         <img src="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png" />
       </div>
     </div>
-    <div class="options" :class="{ show: showOptions }">
+    <div :class="{ show: showOptions }" class="options">
       <div class="option">
         <fa-icon icon="user"></fa-icon>
         Profile
@@ -26,6 +26,7 @@
 <script>
 import FaIcon from "@/components/icons/FaIcon"
 import openableItem from "@/components/controls/openableItem"
+
 export default {
   name: "UserMenu",
   components: { FaIcon },
@@ -45,6 +46,14 @@ export default {
     logout: function () {
       this.$authService.logoutUser()
       this.$router.push("login")
+    }
+  },
+  computed: {
+    getName() {
+      return this.$authService.getUserData().name
+    },
+    getRole() {
+      return this.$authService.getUserData().role
     }
   }
 }
@@ -132,6 +141,7 @@ export default {
       i {
         margin-right: 6px;
       }
+
       &:hover {
         background-color: rgba($primary, 12%);
         color: $primary;
