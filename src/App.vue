@@ -28,7 +28,7 @@ export default {
   components: { TopBar, MenuContainer },
   computed: {
     showMenu() {
-      return this.$route.name !== "Login"
+      return this.$route.name !== "Login" && this.$route.name !== null
     }
   }
 }
