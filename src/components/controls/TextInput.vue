@@ -117,7 +117,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-bottom: 0.2857rem;
-    color: #5e5873;
+    color: $input-label-color;
     font-size: 0.857rem;
   }
 
@@ -142,7 +142,7 @@ export default {
     &.focused {
       .form-control {
         box-shadow: 0 3px 10px 0 rgba($black, 0.1);
-        border-color: $purple;
+        border-color: $primary;
       }
     }
 
@@ -154,7 +154,7 @@ export default {
     }
 
     .form-control {
-      border: 1px solid #d8d6de;
+      border: 1px solid $input-border-color;
       outline: none;
       padding: 0.438rem 1rem;
       background-color: $white;
@@ -167,7 +167,7 @@ export default {
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.45;
-      color: #6e6b7b;
+      color: $default-text-color;
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
       &::placeholder {

@@ -28,7 +28,7 @@ export default {
   left: 0;
   background: $white;
   height: 100vh;
-  box-shadow: 0 0 15px 0 rgb(34 41 47 / 5%);
+  box-shadow: 0 0 15px 0 rgba($black-border-color, 5%);
   font-size: 1.1rem;
 
   .logo {

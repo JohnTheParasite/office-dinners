@@ -46,6 +46,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../scss/components/color";
+
 .user {
   display: flex;
   align-items: center;
@@ -89,11 +91,11 @@ export default {
 
   .options {
     border-radius: 0.358rem;
-    box-shadow: 0 5px 25px rgb(34 41 47 / 10%);
+    box-shadow: 0 5px 25px rgba($black-border-color, 10%);
     position: absolute;
-    background-color: #fff;
+    background-color: $white;
     background-clip: padding-box;
-    border: 1px solid rgba(34, 41, 47, 0.05);
+    border: 1px solid rgba($black-border-color, 5%);
     padding: 0.5rem 0;
     z-index: 10;
     min-width: 10rem;
@@ -126,15 +128,15 @@ export default {
         margin-right: 6px;
       }
       &:hover {
-        background-color: rgba(115, 103, 240, 0.12);
-        color: #7367f0;
+        background-color: rgba($primary, 12%);
+        color: $primary;
         text-decoration: none;
       }
     }
 
     .separator {
       margin: 0.5rem 0;
-      border-top: 1px solid rgba(34, 41, 47, 0.08);
+      border-top: 1px solid rgba($black-border-color, 8%);
     }
   }
 }

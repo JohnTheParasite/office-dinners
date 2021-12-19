@@ -39,6 +39,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../scss/components/color";
+
 .menu-item {
   position: relative;
   white-space: nowrap;
@@ -48,7 +50,7 @@ export default {
     padding: 10px 15px 10px 15px;
     display: flex;
     align-items: center;
-    color: #625f6e;
+    color: $default-text-color;
     line-height: 1.45;
     transition: transform 0.25s ease;
     cursor: pointer;
@@ -68,10 +70,10 @@ export default {
   :hover,
   :active {
     a {
-      background: linear-gradient(118deg, #7367f0, rgba(115, 103, 240, 0.7));
-      box-shadow: 0 0 10px 1px rgb(115 103 240 / 70%);
+      background: linear-gradient(118deg, $primary, rgba($primary, 70%));
+      box-shadow: 0 0 10px 1px rgba($primary, 70%);
       border-radius: 4px;
-      color: #fff;
+      color: $white;
       font-weight: 400;
     }
   }
