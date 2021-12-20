@@ -48,6 +48,12 @@ export default {
       this.errorMessage = ""
       this[field] = value
     },
+    getDefaultToastParameters(message, type = "danger") {
+      return {
+        type: type,
+        message: message
+      }
+    },
     login(event) {
       if (!this.$refs.form.checkValidity()) {
         return
@@ -65,14 +71,25 @@ export default {
           this.$authService.loginUser(JSON.stringify(response.data))
           this.$router.push("/")
         })
-        .catch(() => {
-          this.errorMessage = "Incorrect login or password"
-          let parameters = {
-            type: "danger",
-            messageLabel: "Warning.",
-            message: "Wrong username or password."
+        .catch((error) => {
+          this.errorMessage = ""
+          if (error.response) {
+            let errorCode = error.response.data.status
+            //@todo function with errorcodes
+            if (errorCode === 401) {
+              this.errorMessage = "Incorrect login or password"
+              this.makeToast(this.getDefaultToastParameters("Wrong username or password."))
+            } else if (errorCode === 404) {
+              this.makeToast(this.getDefaultToastParameters("Not Found"))
+            } else {
+              this.makeToast(this.getDefaultToastParameters("Another error..."))
+            }
+          } else if (error.request) {
+            this.makeToast(this.getDefaultToastParameters(error.request))
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            this.makeToast(this.getDefaultToastParameters("We're doomed! call an ambulance"))
           }
-          this.makeToast(parameters)
         })
         .finally(() => {
           this.loadInProgress = false
