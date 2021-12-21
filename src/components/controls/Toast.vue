@@ -1,11 +1,13 @@
 <template>
-  <div class="toast-m" :class="[type, { show: show }]">
-    <div class="toast-m-header">
-      <strong class="toast-m-header-message">{{ messageHeader }}</strong>
-      <button type="button" aria-label="Close" class="toast-close-button" @click="close">×</button>
+  <transition name="notification">
+    <div class="toast-m" :class="type" v-if="show">
+      <div class="toast-m-header">
+        <strong class="toast-m-header-message">{{ messageHeader }}</strong>
+        <button type="button" aria-label="Close" class="toast-close-button" @click="close">×</button>
+      </div>
+      <div class="toast-m-body">{{ message }}</div>
     </div>
-    <div class="toast-m-body">{{ message }}</div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -55,7 +57,7 @@ export default {
   computed: {
     messageHeader() {
       if (this.messageLabel.trim().length === 0) {
-        return this.type //@todo CSS property, starts with uppercase
+        return this.type
       }
       return this.messageLabel
     }
@@ -66,8 +68,16 @@ export default {
 <style lang="scss" scoped>
 @import "src/scss/components/_color.scss";
 
+.notification-enter-active .notification-leave-active {
+  transition: opacity 5s;
+}
+
+.notification-enter,
+.notification-leave-to {
+  opacity: 0;
+}
+
 .toast-m {
-  display: none;
   box-sizing: border-box;
   width: 350px;
   max-width: 100%;
@@ -78,10 +88,6 @@ export default {
   box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
   border-radius: 0.25rem;
   margin-bottom: 0.3rem;
-
-  &.show {
-    display: block;
-  }
 
   &.default {
     background-color: rgba($white, 0.85);
@@ -161,6 +167,7 @@ export default {
     .toast-m-header-message {
       margin-right: 1.5rem;
       font-weight: 600;
+      text-transform: capitalize;
     }
 
     .toast-close-button {

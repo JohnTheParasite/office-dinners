@@ -54,6 +54,16 @@ export default {
         message: message
       }
     },
+    processErrorCode(errorCode) {
+      if (errorCode === 401) {
+        this.errorMessage = "Incorrect login or password"
+        this.makeToast(this.getDefaultToastParameters("Incorrect username or password."))
+      } else if (errorCode === 404) {
+        this.makeToast(this.getDefaultToastParameters("Resource not Found"))
+      } else {
+        this.makeToast(this.getDefaultToastParameters("Another error..."))
+      }
+    },
     login(event) {
       if (!this.$refs.form.checkValidity()) {
         return
@@ -74,16 +84,7 @@ export default {
         .catch((error) => {
           this.errorMessage = ""
           if (error.response) {
-            let errorCode = error.response.data.status
-            //@todo function with errorcodes
-            if (errorCode === 401) {
-              this.errorMessage = "Incorrect login or password"
-              this.makeToast(this.getDefaultToastParameters("Wrong username or password."))
-            } else if (errorCode === 404) {
-              this.makeToast(this.getDefaultToastParameters("Not Found"))
-            } else {
-              this.makeToast(this.getDefaultToastParameters("Another error..."))
-            }
+            this.processErrorCode(error.response.data.status)
           } else if (error.request) {
             this.makeToast(this.getDefaultToastParameters(error.request))
           } else {
