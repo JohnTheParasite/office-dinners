@@ -1,5 +1,5 @@
 <template>
-  <transition name="notification">
+  <transition name="notification" :after-leave="afterLeave">
     <div class="toast-m" :class="type" v-if="show">
       <div class="toast-m-header">
         <strong class="toast-m-header-message">{{ messageHeader }}</strong>
@@ -52,6 +52,11 @@ export default {
   methods: {
     close() {
       this.show = false
+    },
+    afterLeave(el) {
+      const parent = el.parentNode
+      parent.removeChild(el)
+      this.$destroy()
     }
   },
   computed: {
@@ -68,8 +73,9 @@ export default {
 <style lang="scss" scoped>
 @import "src/scss/components/_color.scss";
 
-.notification-enter-active .notification-leave-active {
-  transition: opacity 5s;
+.notification-enter-active,
+.notification-leave-active {
+  transition: all 0.3s;
 }
 
 .notification-enter,
