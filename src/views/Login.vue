@@ -3,36 +3,32 @@
     <div class="inner-form">
       <div class="login-form">
         <div class="logo"><h2 class="brand-text text-primary">Logo</h2></div>
-        <span>
-          <form ref="form" class="auth-login-form" @submit="login">
-            <text-input :required="true" label="Username" warningMessage="The username field is required" @input="onInput('username', $event)" />
-            <text-input
-              :icon="passwordIcon"
-              :on-icon-click="toggleElementType"
-              :required="true"
-              :type="type"
-              label="Password"
-              warningMessage="The password field is required"
-              @input="onInput('password', $event)"
-            >
-            </text-input>
-            <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
-          </form>
-        </span>
+        <form ref="form" class="auth-login-form" @submit="login">
+          <text-input :required="true" label="Username" warningMessage="The username field is required" @input="onInput('username', $event)" />
+          <text-input
+            :icon="passwordIcon"
+            :on-icon-click="toggleElementType"
+            :required="true"
+            :type="type"
+            label="Password"
+            warningMessage="The password field is required"
+            @input="onInput('password', $event)"
+          >
+          </text-input>
+          <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
+        </form>
       </div>
     </div>
-    <ToastContainer />
   </div>
 </template>
 
 <script>
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
-import ToastContainer from "@/components/controls/ToastContainer"
 
 export default {
   name: "Login",
-  components: { FormButton, TextInput, ToastContainer },
+  components: { FormButton, TextInput },
   data() {
     return {
       username: "",
@@ -55,14 +51,16 @@ export default {
       }
     },
     processErrorCode(errorCode) {
+      let errorMessage = ""
       if (errorCode === 401) {
         this.errorMessage = "Incorrect login or password"
-        this.makeToast(this.getDefaultToastParameters("Incorrect username or password."))
+        errorMessage = this.getDefaultToastParameters("Incorrect username or password.")
       } else if (errorCode === 404) {
-        this.makeToast(this.getDefaultToastParameters("Resource not Found"))
+        errorMessage = this.getDefaultToastParameters("Resource not Found")
       } else {
-        this.makeToast(this.getDefaultToastParameters("Another error..."))
+        errorMessage = this.getDefaultToastParameters("Another error...")
       }
+      this.$store.commit("notifications/addNotification", errorMessage)
     },
     login(event) {
       if (!this.$refs.form.checkValidity()) {
@@ -86,10 +84,10 @@ export default {
           if (error.response) {
             this.processErrorCode(error.response.data.status)
           } else if (error.request) {
-            this.makeToast(this.getDefaultToastParameters(error.request))
+            this.$store.commit("notifications/addNotification", this.getDefaultToastParameters(error.request))
           } else {
             // Something happened in setting up the request that triggered an Error
-            this.makeToast(this.getDefaultToastParameters("We're doomed! call an ambulance"))
+            this.$store.commit("notifications/addNotification", this.getDefaultToastParameters("We're doomed! call an ambulance"))
           }
         })
         .finally(() => {
@@ -104,14 +102,6 @@ export default {
         this.type = "password"
         this.passwordIcon = "eye"
       }
-    },
-    makeToast(parameters) {
-      let toastContainer = document.getElementById("toastContainer")
-      if (!toastContainer) {
-        console.error("Creating new toast was failed. Toast container wasn't found.")
-        return
-      }
-      toastContainer.__vue__.addNotification(parameters)
     }
   },
   computed: {
@@ -124,7 +114,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "../scss/components/color";
-//@import "../scss/views/toast";
 
 .login-wrapper {
   display: flex;

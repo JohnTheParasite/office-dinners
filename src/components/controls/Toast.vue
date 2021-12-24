@@ -1,9 +1,9 @@
 <template>
-  <transition name="notification" :after-leave="afterLeave">
-    <div class="toast-m" :class="type" v-if="show">
+  <transition name="notification">
+    <div v-if="show" :class="type" class="toast-m">
       <div class="toast-m-header">
         <strong class="toast-m-header-message">{{ messageHeader }}</strong>
-        <button type="button" aria-label="Close" class="toast-close-button" @click="close">×</button>
+        <button aria-label="Close" class="toast-close-button" type="button" @click="close">×</button>
       </div>
       <div class="toast-m-body">{{ message }}</div>
     </div>
@@ -14,24 +14,7 @@
 export default {
   name: "Toast",
   props: {
-    text: {},
-    type: {
-      default: "default"
-    },
-    timeout: {
-      default: 5000
-    },
-    autoClose: {
-      default: true
-    },
-    messageLabel: {
-      type: String,
-      default: ""
-    },
-    message: {
-      type: String,
-      default: ""
-    }
+    toast: {}
   },
   data() {
     return {
@@ -44,7 +27,7 @@ export default {
       this.show = true
       if (this.autoClose) {
         this.activeTimeout = setTimeout(() => {
-          this.show = false
+          this.close()
         }, this.timeout)
       }
     })
@@ -52,14 +35,32 @@ export default {
   methods: {
     close() {
       this.show = false
+      this.removeFromStore()
     },
-    afterLeave(el) {
-      const parent = el.parentNode
-      parent.removeChild(el)
+    removeFromStore() {
+      this.$store.commit("notifications/removeNotification", this.toast)
       this.$destroy()
     }
   },
   computed: {
+    text() {
+      return this.toast.text
+    },
+    type() {
+      return this.toast.type ?? "default"
+    },
+    timeout() {
+      return this.toast.timeout ?? 5000
+    },
+    autoClose() {
+      return this.toast.autoClose ?? true
+    },
+    messageLabel() {
+      return this.toast.messageLabel ?? ""
+    },
+    message() {
+      return this.toast.message ?? ""
+    },
     messageHeader() {
       if (this.messageLabel.trim().length === 0) {
         return this.type
@@ -97,9 +98,11 @@ export default {
 
   &.default {
     background-color: rgba($white, 0.85);
+
     .toast-m-header {
       background-color: $white;
       color: #6e6b7b;
+
       .toast-close-button {
         color: #6e6b7b;
       }
@@ -110,6 +113,7 @@ export default {
     background-color: rgba(249, 248, 254, 0.85);
     border-color: rgba(216, 212, 251, 0.85);
     color: #4c4993;
+
     .toast-m-header {
       background-color: #7367f0;
     }
@@ -119,6 +123,7 @@ export default {
     background-color: rgba(243, 244, 244, 0.85);
     border-color: rgba(220, 221, 223, 0.85);
     color: #54595f;
+
     .toast-m-header {
       background-color: #82868b;
     }
@@ -128,6 +133,7 @@ export default {
     background-color: rgba($white, 0.85);
     border-color: rgba(255, 228, 202, 0.85);
     color: #956639;
+
     .toast-m-header {
       background-color: #ff9f43;
     }
@@ -137,6 +143,7 @@ export default {
     background-color: rgba(254, 244, 244, 0.85);
     border-color: rgba(249, 207, 207, 0.85);
     color: #8a3f43;
+
     .toast-m-header {
       background-color: #ea5455;
     }
@@ -146,6 +153,7 @@ export default {
     background-color: rgba(232, 249, 240, 0.85);
     border-color: rgba(195, 239, 215, 0.85);
     color: #257b50;
+
     .toast-m-header {
       background-color: #28c76f;
     }
@@ -155,6 +163,7 @@ export default {
     background-color: rgba(227, 250, 252, 0.85);
     border-color: rgba(184, 242, 249, 0.85);
     color: #107f8f;
+
     .toast-m-header {
       background-color: #00cfe8;
     }
@@ -188,6 +197,7 @@ export default {
       color: $white;
       opacity: 0.5;
       transition: opacity 0.3s;
+
       &:hover {
         opacity: 1;
       }

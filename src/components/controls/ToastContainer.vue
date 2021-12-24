@@ -1,6 +1,6 @@
 <template>
   <div class="toast-container toaster-top-right" id="toastContainer">
-    <toast v-for="(toast, id) in toasts" :key="id" v-bind="toast"></toast>
+    <toast v-for="(toast, id) in getToasts" :key="id" :toast="toast"></toast>
   </div>
 </template>
 
@@ -10,14 +10,9 @@ import Toast from "@/components/controls/Toast"
 export default {
   name: "ToasterContainer",
   components: { Toast },
-  data() {
-    return {
-      toasts: []
-    }
-  },
-  methods: {
-    addNotification(parameters) {
-      this.toasts.push(parameters)
+  computed: {
+    getToasts() {
+      return this.$store.state.notifications.list
     }
   }
 }
@@ -31,6 +26,7 @@ export default {
   top: 1rem;
   right: 1rem;
   width: 350px;
+  z-index: 1;
   box-sizing: border-box;
 }
 </style>
