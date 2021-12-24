@@ -1,5 +1,5 @@
 <template>
-  <transition name="notification">
+  <transition name="notification" @leave="leave">
     <div v-if="show" :class="type" class="toast-m">
       <div class="toast-m-header">
         <strong class="toast-m-header-message">{{ messageHeader }}</strong>
@@ -35,11 +35,16 @@ export default {
   methods: {
     close() {
       this.show = false
-      this.removeFromStore()
     },
-    removeFromStore() {
-      this.$store.commit("notifications/removeNotification", this.toast)
-      this.$destroy()
+    leave(el) {
+      const parent = el.parentNode
+      setTimeout(() => {
+        if (parent.childNodes.length === 1) {
+          document.body.removeChild(parent)
+        }
+        parent.removeChild(el)
+        this.$destroy()
+      }, 250)
     }
   },
   computed: {
@@ -53,7 +58,7 @@ export default {
       return this.toast.timeout ?? 5000
     },
     autoClose() {
-      return this.toast.autoClose ?? true
+      return this.toast.autoClose ?? false
     },
     messageLabel() {
       return this.toast.messageLabel ?? ""
@@ -76,21 +81,28 @@ export default {
 
 .notification-enter-active,
 .notification-leave-active {
-  transition: all 0.3s;
+  overflow: hidden;
+  max-height: 500px;
+  transition: all 0.3s ease 0.05s, transform 0.3s ease, margin 0.25s ease, width 0.25s ease;
 }
 
-.notification-enter,
-.notification-leave-to {
-  opacity: 0;
+.notification-leave-to,
+.notification-enter {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden;
 }
 
 .toast-m {
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  transition: all 0.25s ease, transform 0.3s ease 0.1s, max-height 0.25s ease, width 0.25s ease;
   box-sizing: border-box;
   width: 350px;
   max-width: 100%;
   font-size: 0.875rem;
   pointer-events: auto;
-  background-clip: padding-box;
   border: 1px solid rgba($black, 0.1);
   box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
   border-radius: 0.25rem;
