@@ -6,10 +6,10 @@
         <form ref="form" class="auth-login-form" @submit="login">
           <text-input :required="true" label="Username" warningMessage="The username field is required" @input="onInput('username', $event)" />
           <text-input
-            :icon="passwordIcon"
+            :icon="passwordInput.icon"
             :on-icon-click="toggleElementType"
             :required="true"
-            :type="type"
+            :type="passwordInput.type"
             label="Password"
             warningMessage="The password field is required"
             @input="onInput('password', $event)"
@@ -25,26 +25,35 @@
 <script>
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
+import { ApiEndpoints } from "@/enums/apiEndpoints"
+import FormDataService from "@/services/formDataService"
+import InputTypes from "@/enums/inputTypes"
+import IconNames from "@/enums/iconNames"
+import SystemTypes from "@/enums/systemTypes"
 
 export default {
   name: "Login",
   components: { FormButton, TextInput },
   data() {
     return {
-      username: "",
-      password: "",
+      formGroup: {
+        username: "",
+        password: ""
+      },
+      passwordInput: {
+        type: InputTypes.PASSWORD,
+        icon: IconNames.EYE
+      },
       errorMessage: "",
-      type: "password",
-      passwordIcon: "eye",
       loadInProgress: false
     }
   },
   methods: {
     onInput(field, value) {
       this.errorMessage = ""
-      this[field] = value
+      this.formGroup[field] = value
     },
-    getDefaultToastParameters(message, type = "danger") {
+    getDefaultToastParameters(message, type = SystemTypes.DANGER) {
       return {
         type: type,
         message: message
@@ -70,11 +79,8 @@ export default {
       this.errorMessage = ""
       event.preventDefault()
       event.stopImmediatePropagation()
-      let formData = new FormData()
-      formData.append("username", this.username)
-      formData.append("password", this.password)
       this.$axios
-        .post("http://94.152.212.14:7764/login", formData)
+        .post(ApiEndpoints.LOGIN, FormDataService.getFormData(this.formGroup))
         .then((response) => {
           this.$authService.loginUser(JSON.stringify(response.data))
           this.$router.push("/")
@@ -95,18 +101,13 @@ export default {
         })
     },
     toggleElementType() {
-      if (this.type === "password") {
-        this.type = "text"
-        this.passwordIcon = "eye-slash"
-      } else {
-        this.type = "password"
-        this.passwordIcon = "eye"
-      }
+      this.passwordInput.icon = this.passwordInput.type === InputTypes.PASSWORD ? IconNames.EYE_SLASH : IconNames.EYE
+      this.passwordInput.type = this.passwordInput.type === InputTypes.PASSWORD ? InputTypes.TEXT : InputTypes.PASSWORD
     }
   },
   computed: {
     enableSubmit() {
-      return this.username.trim().length && this.password.trim().length
+      return this.formGroup.username.length && this.formGroup.password.length
     }
   }
 }

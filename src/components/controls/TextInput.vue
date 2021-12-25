@@ -5,7 +5,7 @@
       <div class="form-group-input-container">
         <input
           :id="_uid"
-          v-model="inputModel"
+          v-model.trim="inputModel"
           :class="{ invalid: hasError }"
           :placeholder="placeholder"
           :required="required"
