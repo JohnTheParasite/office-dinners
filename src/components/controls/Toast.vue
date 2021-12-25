@@ -2,15 +2,17 @@
   <transition name="notification" @leave="leave">
     <div v-if="show" :class="type" class="toast-m">
       <div class="toast-m-header">
-        <strong class="toast-m-header-message">{{ messageHeader }}</strong>
+        <strong class="toast-m-header-message">{{ $t(messageHeader) }}</strong>
         <button aria-label="Close" class="toast-close-button" type="button" @click="close">×</button>
       </div>
-      <div class="toast-m-body">{{ message }}</div>
+      <div class="toast-m-body">{{ $t(message) }}</div>
     </div>
   </transition>
 </template>
 
 <script>
+import SystemTypes from "@/enums/systemTypes"
+
 export default {
   name: "Toast",
   props: {
@@ -52,7 +54,7 @@ export default {
       return this.toast.text
     },
     type() {
-      return this.toast.type ?? "default"
+      return this.toast.type ?? SystemTypes.DEFAULT
     },
     timeout() {
       return this.toast.timeout ?? 5000

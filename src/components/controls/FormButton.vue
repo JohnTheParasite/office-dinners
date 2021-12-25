@@ -4,7 +4,7 @@
       <CssLoader></CssLoader>
     </template>
     <template v-else>
-      {{ label }}
+      {{ $t(label) }}
     </template>
   </button>
 </template>

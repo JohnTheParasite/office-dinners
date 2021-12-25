@@ -1,3 +1,5 @@
+import i18n from "@/i18n"
+
 export default {
   props: {
     label: {
@@ -22,8 +24,11 @@ export default {
     hasError() {
       return this.errorMessage.length
     },
+    getTranslatedLabel() {
+      return i18n.t(this.label)
+    },
     getLabel() {
-      let label = this.label
+      let label = this.getTranslatedLabel
       if (this.required) {
         label = "<span>" + label + '<span class="required-star">*</span></span>'
       }
