@@ -1,0 +1,51 @@
+@import "color";
+
+$body-bg: #f8f8f8 !default;
+$body-color: #6e6b7b !default;
+
+$b-table-sort-icon-bg-not-sorted: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='14px' height='26px' viewBox='0 0 14 26' version='1.1'%3E%3Ctitle%3Earrows%3C/title%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg id='Artboard' transform='translate(-257.000000, -561.000000)' stroke='%23C6C4D0' stroke-width='2'%3E%3Cg id='arrows' transform='translate(258.000000, 562.000000)'%3E%3Cg id='chevron-down' transform='translate(0.000000, 18.000000)'%3E%3Cpolyline id='Path' points='0 0 6 6 12 0'/%3E%3C/g%3E%3Cg id='chevron-up'%3E%3Cpolyline id='Path' points='12 6 6 0 0 6'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+$b-table-sort-icon-bg-ascending: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='14px' height='26px' viewBox='0 0 14 26' version='1.1'%3E%3Ctitle%3Eactive-up%3C/title%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg id='Artboard' transform='translate(-197.000000, -561.000000)' stroke-width='2'%3E%3Cg id='active-up' transform='translate(198.000000, 562.000000)'%3E%3Cg id='chevron-down' transform='translate(0.000000, 18.000000)' stroke='%23C6C4D0'%3E%3Cpolyline id='Path' points='0 0 6 6 12 0'/%3E%3C/g%3E%3Cg id='chevron-up' stroke='%235E5873'%3E%3Cpolyline id='Path' points='12 6 6 0 0 6'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+$b-table-sort-icon-bg-descending: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='14px' height='26px' viewBox='0 0 14 26' version='1.1'%3E%3Ctitle%3Eactive-down%3C/title%3E%3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg id='Artboard' transform='translate(-227.000000, -561.000000)' stroke-width='2'%3E%3Cg id='active-down' transform='translate(228.000000, 562.000000)'%3E%3Cg id='chevron-down' transform='translate(0.000000, 18.000000)' stroke='%235E5873'%3E%3Cpolyline id='Path' points='0 0 6 6 12 0'/%3E%3C/g%3E%3Cg id='chevron-up' stroke='%23C6C4D0'%3E%3Cpolyline id='Path' points='12 6 6 0 0 6'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+$double-chevron-right: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevrons-right'%3E%3Cpolyline points='13 17 18 12 13 7'%3E%3C/polyline%3E%3Cpolyline points='6 17 11 12 6 7'%3E%3C/polyline%3E%3C/svg%3E";
+// Chevron Icons
+$chevron-left: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-left'%3E%3Cpolyline points='15 18 9 12 15 6'%3E%3C/polyline%3E%3C/svg%3E";
+$chevron-right: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-right'%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E";
+$chevron-up: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-up'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E";
+$chevron-down: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-down'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E";
+
+$download: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-download'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E";
+$remove: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-x'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E";
+$check: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-check'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E";
+$circle: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-circle'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3C/svg%3E";
+$infoIcon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-info'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='16' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'%3E%3C/line%3E%3C/svg%3E";
+$warningIcon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-alert-triangle'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'%3E%3C/path%3E%3Cline x1='12' y1='9' x2='12' y2='13'%3E%3C/line%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'%3E%3C/line%3E%3C/svg%3E";
+$menu: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cline x1='3' y1='12' x2='21' y2='12'%3E%3C/line%3E%3Cline x1='3' y1='6' x2='21' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='18' x2='21' y2='18'%3E%3C/line%3E%3C/svg%3E";
+
+$pagination-font-size-lg: 1.14rem !default; // custom
+$pagination-font-size-sm: 0.857rem !default; // custom
+
+$text-muted: #b9b9c3 !default;
+// Pagination
+
+$pagination-padding-y: 0.5rem !default;
+$pagination-padding-x: 0.85rem !default;
+$pagination-padding-y-lg: 0.5575rem !default;
+$pagination-padding-x-lg: 1rem !default;
+$pagination-padding-y-sm: 0.443rem !default;
+$pagination-padding-x-sm: 0.745rem !default;
+
+$pagination-disabled-color: $text-muted !default;
+
+$pagination-color: $body-color !default;
+$pagination-bg: #f3f2f7 !default;
+
+$pagination-hover-color: $primary !default;
+$pagination-hover-bg: #f3f2f7 !default;
+
+$pagination-active-color: $primary !default;
+
+$pagination-disabled-color: $text-muted !default;
+$pagination-disabled-bg: #f3f2f7 !default;
+
+$pagination-font-size-lg: 1.14rem !default; // custom
+$pagination-font-size-sm: 0.857rem !default; // custom

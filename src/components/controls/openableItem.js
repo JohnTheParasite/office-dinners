@@ -1,6 +1,16 @@
 export default {
+  data() {
+    return {
+      showOpenable: false
+    }
+  },
   methods: {
-    closeOpenable: () => {},
+    toggleOpenable() {
+      this.showOpenable = !this.showOpenable
+    },
+    closeOpenable() {
+      this.showOpenable = false
+    },
     onDocumentClick(e) {
       let element = e.target
 

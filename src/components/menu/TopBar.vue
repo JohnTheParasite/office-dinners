@@ -24,5 +24,6 @@ export default {
   border-radius: 0.428rem;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 </style>

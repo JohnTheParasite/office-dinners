@@ -1,0 +1,24 @@
+.table {
+  width: 100%;
+  color: #6e6b7b;
+  border-collapse: collapse;
+
+  th {
+    background-color: #f3f2f7;
+    outline: none;
+    vertical-align: top;
+    text-transform: uppercase;
+    font-size: 0.857rem;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+
+  th, td {
+    padding: 0.72rem 2rem;
+    vertical-align: middle;
+  }
+}
+
+.table-responsive {
+  overflow-x: visible;
+}

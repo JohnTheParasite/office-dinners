@@ -2,10 +2,17 @@
   "signIn": "Sign in",
   "email": "Email",
   "password": "Password",
+  "search": "Search...",
   "errors": {
     "fieldIsRequired": "Field <b>{field}</b> is required",
     "incorrectLoginOrPassword": "Incorrect login or password",
     "pageNotFound": "Page not found",
     "serverError": "Server error"
+  },
+  "user": {
+    "add": "Add User"
+  },
+  "table": {
+    "showItems": "Showing {from} - {to} of {total} entries"
   }
 }
