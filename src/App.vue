@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <toaster-container />
     <menu-container v-if="showMenu"></menu-container>
     <div class="content-container">
       <top-bar v-if="showMenu"></top-bar>
@@ -23,9 +24,10 @@
 <script>
 import MenuContainer from "@/components/menu/MenuContainer"
 import TopBar from "@/components/menu/TopBar"
+import ToasterContainer from "@/components/controls/ToastContainer"
 
 export default {
-  components: { TopBar, MenuContainer },
+  components: { ToasterContainer, TopBar, MenuContainer },
   computed: {
     showMenu() {
       return this.$route.name !== "Login" && this.$route.name !== null

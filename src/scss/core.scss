@@ -4,6 +4,17 @@ $fa-font-path: './../node_modules/font-awesome/fonts';
 @import "components/color";
 @import "components/buttons";
 
+// Required
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+@import "node_modules/bootstrap-vue/src/variables";
+
+@import "node_modules/bootstrap/scss/buttons";
+@import "node_modules/bootstrap/scss/toasts";
+@import "node_modules/bootstrap-vue/src/components/toast/index";
+
+
 :root {
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;

@@ -3,22 +3,20 @@
     <div class="inner-form">
       <div class="login-form">
         <div class="logo"><h2 class="brand-text text-primary">Logo</h2></div>
-        <span>
-          <form ref="form" class="auth-login-form" @submit="login">
-            <text-input :required="true" label="Username" warningMessage="The username field is required" @input="onInput('username', $event)" />
-            <text-input
-              :icon="passwordIcon"
-              :on-icon-click="toggleElementType"
-              :required="true"
-              :type="type"
-              label="Password"
-              warningMessage="The password field is required"
-              @input="onInput('password', $event)"
-            >
-            </text-input>
-            <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
-          </form>
-        </span>
+        <form ref="form" class="auth-login-form" @submit="login">
+          <text-input :required="true" label="Username" warningMessage="The username field is required" @input="onInput('username', $event)" />
+          <text-input
+            :icon="passwordIcon"
+            :on-icon-click="toggleElementType"
+            :required="true"
+            :type="type"
+            label="Password"
+            warningMessage="The password field is required"
+            @input="onInput('password', $event)"
+          >
+          </text-input>
+          <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="Sign in"></form-button>
+        </form>
       </div>
     </div>
   </div>
@@ -46,6 +44,24 @@ export default {
       this.errorMessage = ""
       this[field] = value
     },
+    getDefaultToastParameters(message, type = "danger") {
+      return {
+        type: type,
+        message: message
+      }
+    },
+    processErrorCode(errorCode) {
+      let errorMessage = ""
+      if (errorCode === 401) {
+        this.errorMessage = "Incorrect login or password"
+        errorMessage = this.getDefaultToastParameters("Incorrect username or password.")
+      } else if (errorCode === 404) {
+        errorMessage = this.getDefaultToastParameters("Resource not Found")
+      } else {
+        errorMessage = this.getDefaultToastParameters("Another error...")
+      }
+      this.$store.commit("notifications/addNotification", errorMessage)
+    },
     login(event) {
       if (!this.$refs.form.checkValidity()) {
         return
@@ -63,8 +79,16 @@ export default {
           this.$authService.loginUser(JSON.stringify(response.data))
           this.$router.push("/")
         })
-        .catch(() => {
-          this.errorMessage = "Incorrect login or password"
+        .catch((error) => {
+          this.errorMessage = ""
+          if (error.response) {
+            this.processErrorCode(error.response.data.status)
+          } else if (error.request) {
+            this.$store.commit("notifications/addNotification", this.getDefaultToastParameters(error.request))
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            this.$store.commit("notifications/addNotification", this.getDefaultToastParameters("We're doomed! call an ambulance"))
+          }
         })
         .finally(() => {
           this.loadInProgress = false
