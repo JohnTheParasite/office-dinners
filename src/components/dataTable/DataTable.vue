@@ -28,7 +28,7 @@
       <div class="pagination">
         <b-pagination
           v-model="currentPage"
-          :total-rows="totalUsers"
+          :total-rows="items.length"
           :per-page="perPage"
           first-number
           last-number
@@ -57,7 +57,6 @@ export default {
       sortKey: "id",
       currentPage: 1,
       perPage: 5,
-      totalUsers: 100,
       isSortDirDesc: false,
       searchValue: "",
       items: [
@@ -90,7 +89,7 @@ export default {
   },
   computed: {
     getItems() {
-      return this.items.slice(0, this.perPage)
+      return this.items.slice(this.perPage * (this.currentPage - 1), this.perPage * this.currentPage)
     }
   },
   methods: {
