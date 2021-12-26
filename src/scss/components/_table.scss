@@ -1,10 +1,12 @@
+@import "color";
+
 .table {
   width: 100%;
-  color: #6e6b7b;
+  color: $default-text-color;
   border-collapse: collapse;
 
   th {
-    background-color: #f3f2f7;
+    background-color: $table-header-bg;
     outline: none;
     vertical-align: top;
     text-transform: uppercase;

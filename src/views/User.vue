@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="router-container">
     <data-table
       :items="getItems"
       :pagination="pagination"
@@ -42,7 +42,7 @@ export default {
         { id: 17, name: "OPdslakj", surname: "WDs33", email: "ASdsa88as8", active: false }
       ],
       tableProperties: {
-        perPage: 10,
+        perPage: 50,
         currentPage: 1,
         searchValue: ""
       },

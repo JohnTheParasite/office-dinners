@@ -94,14 +94,18 @@ h2, .h2 {
 
 .content-block {
   margin-bottom: 2rem;
-  box-shadow: 0 4px 24px 0 rgb(34 41 47 / 10%);
-  background-color: #fff;
+  box-shadow: $box-shadow;
+  background-color: $white;
   background-clip: border-box;
   border: none;
   border-radius: 0.428rem;
   transition: all 0.3s ease-in-out, background 0s, color 0s, border-color 0s;
 }
 
+.router-container {
+  padding: 0 2rem;
+}
+
 .text-muted {
-  color: #b9b9c3 !important;
+  color: $text-muted !important;
 }

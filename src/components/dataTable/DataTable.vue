@@ -25,7 +25,7 @@
       show-empty
     >
       <template #cell(actions)="data">
-        <table-action-dropdown :on-click-delete="onClickDelete" :on-click-edit="onClickEdit" :object-id="data.item.id"></table-action-dropdown>
+        <table-action-dropdown :object-id="data.item.id" :on-click-delete="onClickDelete" :on-click-edit="onClickEdit"></table-action-dropdown>
       </template>
     </b-table>
     <div class="bottom-information">
@@ -127,6 +127,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../scss/components/color";
+
 .actions,
 .bottom-information {
   padding: 1.5rem;
@@ -135,7 +137,7 @@ export default {
   justify-content: space-between;
 
   .per-page {
-    color: #5e5873;
+    color: $input-label-color;
     font-size: 0.857rem;
   }
 
