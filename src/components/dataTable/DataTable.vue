@@ -2,39 +2,46 @@
   <div class="content-block">
     <div class="actions">
       <div class="per-page">
-        Show
-        <select v-model="perPage">
-          <option value="5">5</option>
+        {{ $t("table.show") }}
+        <select v-model="tableProperties.perPage">
           <option value="10">10</option>
           <option value="25">25</option>
           <option value="50">50</option>
         </select>
-        entries
+        {{ $t("table.entries") }}
       </div>
       <div class="search-actions">
         <text-input placeholder="search" @input="search($event)"></text-input>
-        <form-button label="user.add"></form-button>
+        <slot name="actionButton"></slot>
       </div>
     </div>
-    <b-table :fields="tableColumns" :items="getItems" :sort-by.sync="sortKey" :sort-desc.sync="isSortDirDesc" primary-key="id" responsive show-empty>
+    <b-table
+      :fields="getColumns"
+      :items="items"
+      :sort-by.sync="tableProperties.sortKey"
+      :sort-desc.sync="tableProperties.isSortDirDesc"
+      primary-key="id"
+      responsive
+      show-empty
+    >
       <template #cell(actions)="data">
-        <table-action-dropdown :data="data"></table-action-dropdown>
+        <table-action-dropdown :on-click-delete="onClickDelete" :on-click-edit="onClickEdit" :object-id="data.item.id"></table-action-dropdown>
       </template>
     </b-table>
     <div class="bottom-information">
       <div class="text-muted">
-        {{ $t("table.showItems", { from: 1, to: 20, total: 50 }) }}
+        {{ $t("table.showItems", { from: pagination.from, to: pagination.to, total: pagination.total }) }}
       </div>
       <div class="pagination">
         <b-pagination
-          v-model="currentPage"
-          :total-rows="items.length"
-          :per-page="perPage"
+          v-model="tableProperties.currentPage"
+          :per-page="tableProperties.perPage"
+          :total-rows="pagination.total"
+          class="mb-0 mt-1 mt-sm-0"
           first-number
           last-number
-          class="mb-0 mt-1 mt-sm-0"
-          prev-class="prev-item"
           next-class="next-item"
+          prev-class="prev-item"
         >
           <template #prev-text><span></span></template>
           <template #next-text><span></span></template>
@@ -45,56 +52,75 @@
 </template>
 
 <script>
-import TableActionDropdown from "@/components/controls/tableActionDropdown"
+import TableActionDropdown from "@/components/controls/TableActionDropdown"
 import TextInput from "@/components/controls/TextInput"
-import FormButton from "@/components/controls/FormButton"
 
 export default {
   name: "DataTable",
-  components: { FormButton, TextInput, TableActionDropdown },
+  components: { TextInput, TableActionDropdown },
+  props: {
+    items: {
+      type: Array,
+      default: () => []
+    },
+    pagination: {
+      type: Object,
+      required: true
+    },
+    withActions: {
+      type: Boolean,
+      default: true
+    },
+    onFilterChange: {
+      type: Function,
+      required: true
+    },
+    onClickDelete: {
+      type: Function
+    },
+    onClickEdit: {
+      type: Function
+    }
+  },
   data() {
     return {
-      sortKey: "id",
-      currentPage: 1,
-      perPage: 5,
-      isSortDirDesc: false,
-      searchValue: "",
-      items: [
-        { name: "Adsadsa", surname: "YUhjn", email: "Macdonald@dsadsa.cpm", active: false },
-        { name: "Bfsdfds", surname: "NMdhsja", email: "CZKJKL9", active: false },
-        { name: "Yersaddas", surname: "UIXzjn", email: "SAac3", active: false },
-        { name: "Vasadsa", surname: "JNMwq[p", email: "323232", active: true },
-        { name: "Adsadsa", surname: "YUhjn", email: "Macdonald@dsadsa.cpm", active: false },
-        { name: "Bfsdfds", surname: "NMdhsja", email: "CZKJKL9", active: false },
-        { name: "Yersaddas", surname: "UIXzjn", email: "SAac3", active: false },
-        { name: "Vasadsa", surname: "JNMwq[p", email: "323232", active: true },
-        { name: "Adsadsa", surname: "YUhjn", email: "Macdonald@dsadsa.cpm", active: false },
-        { name: "Bfsdfds", surname: "NMdhsja", email: "CZKJKL9", active: false },
-        { name: "Yersaddas", surname: "UIXzjn", email: "SAac3", active: false },
-        { name: "Vasadsa", surname: "JNMwq[p", email: "323232", active: true },
-        { name: "Adsadsa", surname: "YUhjn", email: "Macdonald@dsadsa.cpm", active: false },
-        { name: "Bfsdfds", surname: "NMdhsja", email: "CZKJKL9", active: false },
-        { name: "Yersaddas", surname: "UIXzjn", email: "SAac3", active: false },
-        { name: "Vasadsa", surname: "JNMwq[p", email: "323232", active: true },
-        { name: "OPdslakj", surname: "WDs33", email: "ASdsa88as8", active: false }
-      ],
-      tableColumns: [
-        { key: "name", sortable: true },
-        { key: "surname", sortable: true },
-        { key: "email", sortable: true },
-        { key: "active", sortable: true },
-        { key: "actions" }
-      ]
+      tableProperties: {
+        sortKey: "id",
+        currentPage: 1,
+        perPage: 10,
+        isSortDirDesc: false,
+        searchValue: ""
+      }
     }
   },
   computed: {
-    getItems() {
-      return this.items.slice(this.perPage * (this.currentPage - 1), this.perPage * this.currentPage)
+    getColumns() {
+      if (this.items.length === 0) {
+        return []
+      }
+      let columns = Object.keys(this.items[0]).map((k) => {
+        return {
+          key: k,
+          sortable: true
+        }
+      })
+      if (this.withActions) {
+        columns.push({ key: "actions", label: "" })
+      }
+      return columns
+    }
+  },
+  watch: {
+    tableProperties: {
+      deep: true,
+      handler: function (value) {
+        this.onFilterChange(value)
+      }
     }
   },
   methods: {
     search(value) {
-      this.searchValue = value
+      this.tableProperties.searchValue = value
     }
   }
 }
@@ -117,6 +143,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 15px;
+
     .form-group {
       margin: 0;
     }

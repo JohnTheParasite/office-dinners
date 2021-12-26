@@ -16,9 +16,15 @@
   th, td {
     padding: 0.72rem 2rem;
     vertical-align: middle;
+
+    &.right {
+      text-align: right;
+    }
   }
 }
 
-.table-responsive {
-  overflow-x: visible;
+@media all and (min-width: (992px)) {
+  .table-responsive {
+    overflow-x: visible;
+  }
 }

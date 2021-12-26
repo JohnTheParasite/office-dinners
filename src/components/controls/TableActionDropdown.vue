@@ -4,13 +4,13 @@
       <fa-icon icon="ellipsis-v"></fa-icon>
     </div>
     <div :class="{ show: showOpenable }" class="openable-options">
-      <div class="option">
+      <div class="option" @click="onClickEdit(objectId)">
         <fa-icon icon="edit"></fa-icon>
-        {{ $t("edit") }}
+        {{ $t("table.edit") }}
       </div>
-      <div class="option">
+      <div class="option" @click="onClickDelete(objectId)">
         <fa-icon icon="trash"></fa-icon>
-        {{ $t("delete") }}
+        {{ $t("table.delete") }}
       </div>
     </div>
   </div>
@@ -21,10 +21,20 @@ import openableItem from "@/components/controls/openableItem"
 import FaIcon from "@/components/icons/FaIcon"
 
 export default {
-  name: "tableActionDropdown",
+  name: "TableActionDropdown",
   components: { FaIcon },
   mixins: [openableItem],
   props: {
+    objectId: {
+      type: Number,
+      required: true
+    },
+    onClickDelete: {
+      type: Function
+    },
+    onClickEdit: {
+      type: Function
+    },
     options: {
       type: Array,
       default: () => []
@@ -36,10 +46,11 @@ export default {
 <style lang="scss" scoped>
 .table-action-dropdown {
   position: relative;
+  display: flex;
+  justify-content: flex-end;
 
   .icon-button {
     cursor: pointer;
-    flex: 1 1 auto;
     text-align: center;
     padding: 0.786rem 1.5rem;
   }

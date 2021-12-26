@@ -13,6 +13,10 @@
     "add": "Add User"
   },
   "table": {
-    "showItems": "Showing {from} - {to} of {total} entries"
+    "showItems": "Showing {from} - {to} of {total} entries",
+    "edit": "Edit",
+    "delete": "Delete",
+    "show": "Show",
+    "entries": "entries"
   }
 }
