@@ -3,24 +3,12 @@
     <toaster-container />
     <menu-container v-if="showMenu"></menu-container>
     <div class="content-container">
+      <div class="top-shadow"></div>
       <top-bar v-if="showMenu"></top-bar>
       <router-view />
     </div>
   </div>
 </template>
-
-<style lang="scss">
-@import "scss/core.scss";
-
-#app {
-  display: flex;
-}
-
-.content-container {
-  padding: 1.3rem 2rem 0;
-  width: 100%;
-}
-</style>
 <script>
 import MenuContainer from "@/components/menu/MenuContainer"
 import TopBar from "@/components/menu/TopBar"
@@ -35,3 +23,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+@import "scss/core.scss";
+
+#app {
+  display: flex;
+}
+
+.content-container {
+  width: 100%;
+}
+
+.top-shadow {
+  background: linear-gradient(180deg, rgba(248, 248, 248, 0.95) 44%, rgba(248, 248, 248, 0.46) 73%, rgba(255, 255, 255, 0));
+  left: 0;
+  display: block;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  height: 100px;
+}
+</style>

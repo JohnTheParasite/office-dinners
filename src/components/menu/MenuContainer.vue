@@ -30,6 +30,7 @@ export default {
   height: 100vh;
   box-shadow: 0 0 15px 0 rgba($black-border-color, 5%);
   font-size: 1.1rem;
+  z-index: 2;
 
   .logo {
     padding: 2rem;

@@ -7,7 +7,7 @@
           :id="_uid"
           v-model.trim="inputModel"
           :class="{ invalid: hasError }"
-          :placeholder="placeholder"
+          :placeholder="$t(placeholder)"
           :required="required"
           :type="type"
           class="form-control"
@@ -45,10 +45,6 @@ export default {
     warningMessage: {
       type: String,
       default: ""
-    },
-    itsPassword: {
-      type: Boolean,
-      default: false
     },
     icon: {
       type: String,

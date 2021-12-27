@@ -1,0 +1,32 @@
+@import "color";
+
+.table {
+  width: 100%;
+  color: $default-text-color;
+  border-collapse: collapse;
+
+  th {
+    background-color: $table-header-bg;
+    outline: none;
+    vertical-align: top;
+    text-transform: uppercase;
+    font-size: 0.857rem;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+
+  th, td {
+    padding: 0.72rem 2rem;
+    vertical-align: middle;
+
+    &.right {
+      text-align: right;
+    }
+  }
+}
+
+@media all and (min-width: (992px)) {
+  .table-responsive {
+    overflow-x: visible;
+  }
+}
