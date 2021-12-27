@@ -1,0 +1,11 @@
+{
+  "signIn": "Sign in",
+  "email": "Email",
+  "password": "Password",
+  "errors": {
+    "fieldIsRequired": "Field <b>{field}</b> is required",
+    "incorrectLoginOrPassword": "Incorrect login or password",
+    "pageNotFound": "Page not found",
+    "serverError": "Server error"
+  }
+}

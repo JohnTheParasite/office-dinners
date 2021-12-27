@@ -5,7 +5,7 @@
       <div class="form-group-input-container">
         <input
           :id="_uid"
-          v-model="inputModel"
+          v-model.trim="inputModel"
           :class="{ invalid: hasError }"
           :placeholder="placeholder"
           :required="required"
@@ -27,6 +27,7 @@
 <script>
 import control from "@/components/controls/control"
 import FaIcon from "@/components/icons/FaIcon"
+import i18n from "@/i18n"
 
 export default {
   name: "TextInput",
@@ -84,7 +85,7 @@ export default {
     focusout() {
       this.focused = false
       if (this.required && !this.inputModel.length) {
-        this.errorMessage = this.warningMessage
+        this.errorMessage = i18n.t(this.warningMessage, { field: this.getTranslatedLabel })
       }
     },
     input(event) {
@@ -119,6 +120,7 @@ export default {
     margin-bottom: 0.2857rem;
     color: $input-label-color;
     font-size: 0.857rem;
+    text-transform: capitalize;
   }
 
   .form-group-input-container {

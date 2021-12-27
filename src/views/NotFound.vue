@@ -1,5 +1,5 @@
 <template>
-  <div>notfound page</div>
+  <div>{{ $t("errors.pageNotFound") }}</div>
 </template>
 
 <script>
