@@ -1,6 +1,6 @@
 <template>
-  <div id="toastContainer" class="toast-container toaster-top-right">
-    <toast v-for="(toast, id) in getToasts" :key="id" :toast="toast"></toast>
+  <div id="toastContainer" class="toaster">
+    <toast v-for="(toast, id) in getToasts" :key="id" v-bind="toast"></toast>
   </div>
 </template>
 
@@ -12,14 +12,14 @@ export default {
   components: { Toast },
   computed: {
     getToasts() {
-      return this.$store.state.notifications.list
+      return this.$store.state.toasts.list
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.toaster-top-right {
+.toaster {
   position: fixed;
   top: 0;
   z-index: 200000;
@@ -28,7 +28,7 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  right: 0;
+  right: 10px;
   flex-direction: column-reverse;
 }
 </style>

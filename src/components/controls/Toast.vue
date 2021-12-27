@@ -1,11 +1,11 @@
 <template>
-  <transition name="notification" @leave="leave">
-    <div v-if="show" :class="type" class="toast-m">
-      <div class="toast-m-header">
-        <strong class="toast-m-header-message">{{ $t(messageHeader) }}</strong>
-        <button aria-label="Close" class="toast-close-button" type="button" @click="close">×</button>
+  <transition name="toast" @leave="leave">
+    <div v-if="show" :class="type" class="toast">
+      <div class="header">
+        <strong class="header-message">{{ $t(messageHeader) }}</strong>
+        <button aria-label="Close" class="close-button" type="button" @click="close">×</button>
       </div>
-      <div class="toast-m-body">{{ $t(message) }}</div>
+      <div class="body">{{ $t(message) }}</div>
     </div>
   </transition>
 </template>
@@ -16,7 +16,23 @@ import SystemTypes from "@/enums/systemTypes"
 export default {
   name: "Toast",
   props: {
-    toast: {}
+    type: {
+      default: SystemTypes.DEFAULT
+    },
+    timeout: {
+      default: 5000
+    },
+    autoClose: {
+      default: true
+    },
+    header: {
+      type: String,
+      default: ""
+    },
+    message: {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
@@ -50,29 +66,11 @@ export default {
     }
   },
   computed: {
-    text() {
-      return this.toast.text
-    },
-    type() {
-      return this.toast.type ?? SystemTypes.DEFAULT
-    },
-    timeout() {
-      return this.toast.timeout ?? 5000
-    },
-    autoClose() {
-      return this.toast.autoClose ?? false
-    },
-    messageLabel() {
-      return this.toast.messageLabel ?? ""
-    },
-    message() {
-      return this.toast.message ?? ""
-    },
     messageHeader() {
-      if (this.messageLabel.trim().length === 0) {
+      if (this.header.trim().length === 0) {
         return this.type
       }
-      return this.messageLabel
+      return this.header
     }
   }
 }
@@ -81,21 +79,21 @@ export default {
 <style lang="scss" scoped>
 @import "src/scss/components/_color.scss";
 
-.notification-enter-active,
-.notification-leave-active {
+.toast-enter-active,
+.toast-leave-active {
   overflow: hidden;
   max-height: 500px;
   transition: all 0.3s ease 0.05s, transform 0.3s ease, margin 0.25s ease, width 0.25s ease;
 }
 
-.notification-leave-to,
-.notification-enter {
+.toast-leave-to,
+.toast-enter {
   max-height: 0 !important;
   opacity: 0 !important;
   overflow: hidden;
 }
 
-.toast-m {
+.toast {
   position: relative;
   height: auto;
   overflow: hidden;
@@ -113,77 +111,77 @@ export default {
   &.default {
     background-color: rgba($white, 0.85);
 
-    .toast-m-header {
+    .header {
       background-color: $white;
-      color: #6e6b7b;
+      color: $default-text-color;
 
       .toast-close-button {
-        color: #6e6b7b;
+        color: $default-text-color;
       }
     }
   }
 
   &.primary {
-    background-color: rgba(249, 248, 254, 0.85);
-    border-color: rgba(216, 212, 251, 0.85);
-    color: #4c4993;
+    background-color: rgba($light-grey, 0.85);
+    border-color: rgba($purple-light, 0.85);
+    color: $purple-dark;
 
-    .toast-m-header {
-      background-color: #7367f0;
+    .header {
+      background-color: $primary;
     }
   }
 
   &.secondary {
-    background-color: rgba(243, 244, 244, 0.85);
-    border-color: rgba(220, 221, 223, 0.85);
-    color: #54595f;
+    background-color: rgba($light-grey, 0.85);
+    border-color: rgba($secondary-border-color, 0.85);
+    color: $grey-dark2;
 
-    .toast-m-header {
-      background-color: #82868b;
+    .header {
+      background-color: $secondary;
     }
   }
 
   &.warning {
     background-color: rgba($white, 0.85);
-    border-color: rgba(255, 228, 202, 0.85);
-    color: #956639;
+    border-color: rgba($orange-light, 0.85);
+    color: $brown;
 
-    .toast-m-header {
-      background-color: #ff9f43;
+    .header {
+      background-color: $warning;
     }
   }
 
   &.danger {
-    background-color: rgba(254, 244, 244, 0.85);
-    border-color: rgba(249, 207, 207, 0.85);
-    color: #8a3f43;
+    background-color: rgba($danger-background, 0.85);
+    border-color: rgba($danger-border-color, 0.85);
+    color: $danger-text-color;
 
-    .toast-m-header {
-      background-color: #ea5455;
+    .header {
+      background-color: $danger;
     }
   }
 
   &.success {
-    background-color: rgba(232, 249, 240, 0.85);
-    border-color: rgba(195, 239, 215, 0.85);
-    color: #257b50;
+    background-color: rgba($success-background, 0.85);
+    border-color: rgba($success-border-color, 0.85);
+    color: $success-text-color;
 
-    .toast-m-header {
-      background-color: #28c76f;
+    .header {
+      background-color: $green;
     }
   }
 
   &.info {
-    background-color: rgba(227, 250, 252, 0.85);
-    border-color: rgba(184, 242, 249, 0.85);
-    color: #107f8f;
+    background-color: rgba($info-background-color, 0.85);
+    border-color: rgba($info-border-color, 0.85);
+    color: $info-text-color;
 
-    .toast-m-header {
-      background-color: #00cfe8;
+    .header {
+      background-color: $info;
     }
   }
 
-  .toast-m-header {
+  .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -193,13 +191,13 @@ export default {
     user-select: none;
     color: $white;
 
-    .toast-m-header-message {
+    .header-message {
       margin-right: 1.5rem;
       font-weight: 600;
       text-transform: capitalize;
     }
 
-    .toast-close-button {
+    .close-button {
       padding: 0;
       background-color: transparent;
       border: 0;
@@ -218,7 +216,7 @@ export default {
     }
   }
 
-  .toast-m-body {
+  .body {
     display: block;
     box-sizing: border-box;
     padding: 1.14rem;

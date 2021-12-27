@@ -36,6 +36,26 @@ npm run build
 npm run lint
 ```
 
+## Components
+### Toast
+```
+example: this.$store.commit("toasts/addToast", Toast)
+
+Toast - {
+    type: SystemTypes default  SystemTypes.DEFAULT,
+    timeout: Number default 5000
+    autoClose: Boolean default true
+    header: String, would be filled by type if prop is empty
+    message: String
+}
+
+Also Toast could be just an message, other properties would be set by default.
+
+For Danger notification could be used addDangerToast function:
+example: this.$store.commit("toasts/addDangerToast", "Danger! dangeeer!")
+```
+
+
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).

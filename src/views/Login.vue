@@ -61,7 +61,7 @@ export default {
       } else if (errorCode === 404) {
         this.errorMessage = "errors.pageNotFound"
       }
-      this.$store.commit("notifications/addDangerNotification", this.errorMessage)
+      this.$store.commit("toasts/addDangerToast", this.errorMessage)
     },
     login(event) {
       if (!this.$refs.form.checkValidity()) {
@@ -81,10 +81,10 @@ export default {
           if (error.response) {
             this.processErrorCode(error.response.data.status)
           } else if (error.request) {
-            this.$store.commit("notifications/addDangerNotification", error.request)
+            this.$store.commit("toasts/addDangerToast", error.request)
           } else {
             // Something happened in setting up the request that triggered an Error
-            this.$store.commit("notifications/addDangerNotification", "errors.serverError")
+            this.$store.commit("toasts/addDangerToast", "errors.serverError")
           }
         })
         .finally(() => {
