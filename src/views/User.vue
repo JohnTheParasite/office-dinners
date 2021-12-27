@@ -33,17 +33,38 @@ export default {
     this.getItems()
   },
   methods: {
+    processErrorCode(errorCode) {
+      this.errorMessage = "errors.serverError"
+      if (errorCode === 401) {
+        this.errorMessage = "errors.incorrectLoginOrPassword"
+      } else if (errorCode === 404) {
+        this.errorMessage = "errors.pageNotFound"
+      }
+      this.$store.commit("toasts/addDangerToast", this.errorMessage)
+    },
     getItems(props) {
       if (props === undefined) {
         props = FormDataService.getDefaultListParameters()
       }
-      this.$axios.get(ApiEndpoints.USER_LIST, { params: props }).then((response) => {
-        if (response && response.data) {
-          this.items = response.data.items
-          this.tableProperties = response.data.tableProperties
-          this.pagination = response.data.pagination
-        }
-      })
+      this.$axios
+        .get(ApiEndpoints.USER_LIST, { params: props })
+        .then((response) => {
+          if (response && response.data) {
+            this.items = response.data.items
+            this.tableProperties = response.data.tableProperties
+            this.pagination = response.data.pagination
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            this.processErrorCode(error.response.data.status)
+          } else if (error.request) {
+            this.$store.commit("toasts/addDangerToast", error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            this.$store.commit("toasts/addDangerToast", "errors.serverError")
+          }
+        })
     },
     updateResults(tableProperties) {
       this.tableProperties = tableProperties
