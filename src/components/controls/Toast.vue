@@ -1,6 +1,6 @@
 <template>
   <transition name="toast" @leave="leave">
-    <div v-if="show" :class="type" class="toast-m">
+    <div v-if="show" :class="type" class="toast">
       <div class="header">
         <strong class="header-message">{{ $t(messageHeader) }}</strong>
         <button aria-label="Close" class="close-button" type="button" @click="close">×</button>
@@ -25,7 +25,7 @@ export default {
     autoClose: {
       default: true
     },
-    messageLabel: {
+    header: {
       type: String,
       default: ""
     },
@@ -67,10 +67,10 @@ export default {
   },
   computed: {
     messageHeader() {
-      if (this.messageLabel.trim().length === 0) {
+      if (this.header.trim().length === 0) {
         return this.type
       }
-      return this.messageLabel
+      return this.header
     }
   }
 }
@@ -93,7 +93,7 @@ export default {
   overflow: hidden;
 }
 
-.toast-m {
+.toast {
   position: relative;
   height: auto;
   overflow: hidden;

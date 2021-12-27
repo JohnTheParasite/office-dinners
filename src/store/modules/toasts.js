@@ -6,7 +6,7 @@ export default {
     list: []
   },
   mutations: {
-    addDangerNotification: (state, notification) => {
+    addDangerToast: (state, notification) => {
       if (typeof notification !== "object") {
         notification = {
           message: notification
@@ -17,10 +17,10 @@ export default {
         type: SystemTypes.DANGER
       })
     },
-    addNotification: (state, notification) => {
+    addToast: (state, notification) => {
       state.list.push(notification)
     },
-    removeNotification: (state, notification) => {
+    removeToast: (state, notification) => {
       state.list.splice(state.list.indexOf(notification), 1)
     }
   }

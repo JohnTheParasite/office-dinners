@@ -39,19 +39,20 @@ npm run lint
 ## Components
 ### Toast
 ```
-example: this.$store.commit("notifications/addNotification", Toast)
+example: this.$store.commit("toasts/addToast", Toast)
 
-Toast - object;
-Toast.type - type of the toast, default type is "default"
-Toast.timeout - ms to disappearing, default "5000"
-Toast.autoClose - auto closing toast after timeout. default "True"
-Toast.messageLabel - Header of the toast message, would be filled by type if prop is empty
-Toast.message - Toast message, default is empty.
+Toast - {
+    type: SystemTypes default  SystemTypes.DEFAULT,
+    timeout: Number default 5000
+    autoClose: Boolean default true
+    header: String, would be filled by type if prop is empty
+    message: String
+}
 
 Also Toast could be just an message, other properties would be set by default.
 
-For Danger notification could be used addDangerNotification function:
-example: this.$store.commit("notifications/addDangerNotification", "Danger! dangeeer!")
+For Danger notification could be used addDangerToast function:
+example: this.$store.commit("toasts/addDangerToast", "Danger! dangeeer!")
 ```
 
 

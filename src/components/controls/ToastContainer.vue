@@ -12,7 +12,7 @@ export default {
   components: { Toast },
   computed: {
     getToasts() {
-      return this.$store.state.notifications.list
+      return this.$store.state.toasts.list
     }
   }
 }
