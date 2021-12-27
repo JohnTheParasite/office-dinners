@@ -6,7 +6,7 @@
           <h2 class="brand-text text-primary">Logo</h2>
         </div>
         <form ref="form" class="auth-login-form" @submit="login">
-          <text-input :required="true" label="email" warningMessage="errors.fieldIsRequired" @input="onInput('username', $event)" />
+          <text-input :required="true" label="email" warningMessage="errors.fieldIsRequired" @input="onInput('email', $event)" />
           <text-input
             :icon="passwordInput.icon"
             :on-icon-click="toggleElementType"
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       formGroup: {
-        username: "",
+        email: "",
         password: ""
       },
       passwordInput: {
@@ -74,8 +74,12 @@ export default {
       this.$axios
         .post(ApiEndpoints.LOGIN, FormDataService.getFormData(this.formGroup))
         .then((response) => {
-          this.$authService.loginUser(JSON.stringify(response.data))
-          this.$router.push("/")
+          if (response.data.token.length > 0) {
+            this.$authService.loginUser(JSON.stringify(response.data))
+            this.$router.push("/")
+          } else {
+            this.$store.commit("toasts/addDangerToast", "errors.serverError")
+          }
         })
         .catch((error) => {
           if (error.response) {
@@ -98,7 +102,7 @@ export default {
   },
   computed: {
     enableSubmit() {
-      return this.formGroup.username.length && this.formGroup.password.length
+      return this.formGroup.email.length && this.formGroup.password.length
     }
   }
 }

@@ -54,6 +54,7 @@
 <script>
 import TableActionDropdown from "@/components/controls/TableActionDropdown"
 import TextInput from "@/components/controls/TextInput"
+import FormDataService from "@/services/formDataService"
 
 export default {
   name: "DataTable",
@@ -84,13 +85,7 @@ export default {
   },
   data() {
     return {
-      tableProperties: {
-        sortKey: "id",
-        currentPage: 1,
-        perPage: 10,
-        isSortDirDesc: false,
-        searchValue: ""
-      }
+      tableProperties: FormDataService.getDefaultListParameters()
     }
   },
   computed: {

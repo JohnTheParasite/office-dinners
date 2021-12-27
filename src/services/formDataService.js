@@ -6,4 +6,14 @@ export default class FormDataService {
     })
     return fd
   }
+
+  static getDefaultListParameters() {
+    return {
+      sortKey: "id",
+      currentPage: 1,
+      perPage: 10,
+      isSortDirDesc: false,
+      searchValue: ""
+    }
+  }
 }
