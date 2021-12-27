@@ -18,6 +18,7 @@ import DataTable from "@/components/dataTable/DataTable"
 import FormButton from "@/components/controls/FormButton"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
+import AuthService from "@/services/authService"
 
 export default {
   name: "User",
@@ -34,13 +35,14 @@ export default {
   },
   methods: {
     processErrorCode(errorCode) {
-      this.errorMessage = "errors.serverError"
+      let errorMessage = "errors.serverError"
       if (errorCode === 401) {
-        this.errorMessage = "errors.incorrectLoginOrPassword"
+        AuthService.logoutUser()
+        this.$router.push("/")
       } else if (errorCode === 404) {
-        this.errorMessage = "errors.pageNotFound"
+        errorMessage = "errors.pageNotFound"
       }
-      this.$store.commit("toasts/addDangerToast", this.errorMessage)
+      this.$store.commit("toasts/addDangerToast", errorMessage)
     },
     getItems(props) {
       if (props === undefined) {
