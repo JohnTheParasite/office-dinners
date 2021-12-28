@@ -14,7 +14,8 @@ export default {
       }
       state.list.push({
         ...notification,
-        type: SystemTypes.DANGER
+        type: SystemTypes.DANGER,
+        header: "errors.error"
       })
     },
     addToast: (state, notification) => {

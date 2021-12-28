@@ -11,7 +11,7 @@
         {{ $t("table.entries") }}
       </div>
       <div class="search-actions">
-        <text-input placeholder="search" @input="search($event)"></text-input>
+        <text-input :debounce="true" placeholder="search" @input="search($event)"></text-input>
         <slot name="actionButton"></slot>
       </div>
     </div>
@@ -24,6 +24,15 @@
       responsive
       show-empty
     >
+      <template #empty="">
+        <span class="text-primary"> {{ $t("table.noItems") }} </span>
+      </template>
+      <template #cell()="data">
+        <span v-html="data.value"></span>
+      </template>
+      <template #cell(active)="data">
+        {{ $t(data.item.active) }}
+      </template>
       <template #cell(actions)="data">
         <table-action-dropdown :object-id="data.item.id" :on-click-delete="onClickDelete" :on-click-edit="onClickEdit"></table-action-dropdown>
       </template>
@@ -54,6 +63,7 @@
 <script>
 import TableActionDropdown from "@/components/controls/TableActionDropdown"
 import TextInput from "@/components/controls/TextInput"
+import FormDataService from "@/services/formDataService"
 
 export default {
   name: "DataTable",
@@ -84,13 +94,7 @@ export default {
   },
   data() {
     return {
-      tableProperties: {
-        sortKey: "id",
-        currentPage: 1,
-        perPage: 10,
-        isSortDirDesc: false,
-        searchValue: ""
-      }
+      tableProperties: FormDataService.getDefaultListParameters()
     }
   },
   computed: {

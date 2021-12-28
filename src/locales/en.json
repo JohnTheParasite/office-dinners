@@ -7,7 +7,10 @@
     "fieldIsRequired": "Field <b>{field}</b> is required",
     "incorrectLoginOrPassword": "Incorrect login or password",
     "pageNotFound": "Page not found",
-    "serverError": "Server error"
+    "serverError": "Server error",
+    "youWasLoggedOut": "You was logged out",
+    "error": "Error",
+    "forbidden": "Access denied"
   },
   "user": {
     "add": "Add User"
@@ -17,6 +20,11 @@
     "edit": "Edit",
     "delete": "Delete",
     "show": "Show",
-    "entries": "entries"
+    "entries": "entries",
+    "noItems": "No items was found"
+  },
+  "interface": {
+    "yes": "Yes",
+    "no": "No"
   }
 }
