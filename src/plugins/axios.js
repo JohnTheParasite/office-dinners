@@ -18,7 +18,6 @@ const _axios = axios.create(config)
 
 _axios.interceptors.request.use(
   function (config) {
-    console.warn(AuthService.getUserData())
     if (AuthService.getUserData() !== null) {
       config.headers["x-token"] = AuthService.getUserData().token
     }
