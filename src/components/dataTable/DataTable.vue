@@ -24,6 +24,9 @@
       responsive
       show-empty
     >
+      <template #empty="">
+        <span class="text-primary"> {{ $t("table.noItems") }} </span>
+      </template>
       <template #cell()="data">
         <span v-html="data.value"></span>
       </template>

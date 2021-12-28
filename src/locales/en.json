@@ -19,7 +19,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "show": "Show",
-    "entries": "entries"
+    "entries": "entries",
+    "noItems": "No items was found"
   },
   "interface": {
     "yes": "Yes",
