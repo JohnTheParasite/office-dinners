@@ -11,7 +11,7 @@
         {{ $t("table.entries") }}
       </div>
       <div class="search-actions">
-        <text-input placeholder="search" @input="search($event)"></text-input>
+        <text-input :debounce="true" placeholder="search" @input="search($event)"></text-input>
         <slot name="actionButton"></slot>
       </div>
     </div>
@@ -24,6 +24,12 @@
       responsive
       show-empty
     >
+      <template #cell()="data">
+        <span v-html="data.value"></span>
+      </template>
+      <template #cell(active)="data">
+        {{ $t(data.item.active) }}
+      </template>
       <template #cell(actions)="data">
         <table-action-dropdown :object-id="data.item.id" :on-click-delete="onClickDelete" :on-click-edit="onClickEdit"></table-action-dropdown>
       </template>

@@ -53,12 +53,17 @@ export default {
     onIconClick: {
       type: Function,
       default: () => {}
+    },
+    debounce: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       inputModel: "",
-      focused: false
+      focused: false,
+      debounceTimeout: 0
     }
   },
   computed: {
@@ -86,7 +91,14 @@ export default {
     },
     input(event) {
       this.errorMessage = ""
-      this.$emit("input", this.value, this, event)
+      if (!this.debounce) {
+        this.$emit("input", this.value, this, event)
+      } else {
+        clearTimeout(this.debounceTimeout)
+        this.debounceTimeout = setTimeout(() => {
+          this.$emit("input", this.value, this, event)
+        }, 500)
+      }
     }
   }
 }

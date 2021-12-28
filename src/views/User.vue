@@ -37,6 +37,7 @@ export default {
     processErrorCode(errorCode) {
       let errorMessage = "errors.serverError"
       if (errorCode === 401) {
+        errorMessage = "errors.youWasLoggedOut"
         AuthService.logoutUser()
         this.$router.push("/")
       } else if (errorCode === 404) {

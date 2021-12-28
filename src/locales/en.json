@@ -7,7 +7,9 @@
     "fieldIsRequired": "Field <b>{field}</b> is required",
     "incorrectLoginOrPassword": "Incorrect login or password",
     "pageNotFound": "Page not found",
-    "serverError": "Server error"
+    "serverError": "Server error",
+    "youWasLoggedOut": "You was logged out",
+    "error": "Error"
   },
   "user": {
     "add": "Add User"
@@ -18,5 +20,9 @@
     "delete": "Delete",
     "show": "Show",
     "entries": "entries"
+  },
+  "interface": {
+    "yes": "Yes",
+    "no": "No"
   }
 }
