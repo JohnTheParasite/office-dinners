@@ -9,7 +9,8 @@
     "pageNotFound": "Page not found",
     "serverError": "Server error",
     "youWasLoggedOut": "You was logged out",
-    "error": "Error"
+    "error": "Error",
+    "forbidden": "Access denied"
   },
   "user": {
     "add": "Add User"

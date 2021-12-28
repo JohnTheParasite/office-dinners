@@ -18,11 +18,12 @@ import DataTable from "@/components/dataTable/DataTable"
 import FormButton from "@/components/controls/FormButton"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
-import AuthService from "@/services/authService"
+import ApiErrorHelper from "@/services/apiErrorHelper"
 
 export default {
   name: "User",
   components: { FormButton, DataTable },
+  mixins: [ApiErrorHelper],
   data() {
     return {
       items: [],
@@ -34,17 +35,6 @@ export default {
     this.getItems()
   },
   methods: {
-    processErrorCode(errorCode) {
-      let errorMessage = "errors.serverError"
-      if (errorCode === 401) {
-        errorMessage = "errors.youWasLoggedOut"
-        AuthService.logoutUser()
-        this.$router.push("/")
-      } else if (errorCode === 404) {
-        errorMessage = "errors.pageNotFound"
-      }
-      this.$store.commit("toasts/addDangerToast", errorMessage)
-    },
     getItems(props) {
       if (props === undefined) {
         props = FormDataService.getDefaultListParameters()
