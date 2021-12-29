@@ -13,7 +13,16 @@ export default {
     description: {
       type: String,
       default: ""
-    }
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    name: {
+      type: String,
+      default: ""
+    },
+    initValue: {}
   },
   data() {
     return {
@@ -33,6 +42,19 @@ export default {
         label = "<span>" + label + '<span class="required-star">*</span></span>'
       }
       return label
+    },
+    hasLabel() {
+      return this.getLabel.length > 0
+    }
+  },
+  methods: {
+    input(event) {
+      this.errorMessage = ""
+      this.$emit("input", this.value, this, event)
+    },
+    change(event) {
+      this.errorMessage = ""
+      this.$emit("change", this.value, this, event)
     }
   }
 }
