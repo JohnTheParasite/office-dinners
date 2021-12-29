@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 import Home from "../views/Home.vue"
 import AuthService from "@/services/authService"
 import User from "@/views/User"
+import Cafe from "@/views/Cafe"
 
 Vue.use(VueRouter)
 
@@ -20,7 +21,7 @@ const routes = [
   {
     path: "/cafe",
     name: "cafe",
-    component: User
+    component: Cafe
   },
   {
     path: "/refills",
