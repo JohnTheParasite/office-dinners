@@ -1,5 +1,5 @@
 <template>
-  <div class="user-menu">
+  <div class="openable-container" :class="{ show: showOpenable }">
     <div class="user" @click="toggleOpenable">
       <div class="text">
         <span class="username">{{ getName }}</span>
@@ -9,7 +9,7 @@
         <img src="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png" />
       </div>
     </div>
-    <div :class="{ show: showOpenable }" class="openable-options">
+    <div class="openable-options">
       <div class="option">
         <fa-icon icon="user"></fa-icon>
         Profile
@@ -89,7 +89,7 @@ export default {
   }
 }
 
-.user-menu {
+.openable-container {
   position: relative;
   .openable-options {
     top: 48px;

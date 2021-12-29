@@ -11,37 +11,11 @@
 </template>
 
 <script>
-import control from "./control"
+import checkbox from "@/components/controls/Checkbox"
 
 export default {
   name: "Toggle",
-  mixins: [control],
-  props: {
-    initValue: { default: false }
-  },
-  data() {
-    return {
-      checked: false
-    }
-  },
-  computed: {
-    value: {
-      get() {
-        return this.checked
-      },
-      set(value) {
-        this.checked = value
-      }
-    }
-  },
-  methods: {
-    reset() {
-      this.checked = this.initValue
-    }
-  },
-  created() {
-    this.reset()
-  }
+  mixins: [checkbox]
 }
 </script>
 

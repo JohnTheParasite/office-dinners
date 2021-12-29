@@ -1,9 +1,9 @@
 <template>
-  <div class="table-action-dropdown">
+  <div class="openable-container" :class="{ show: showOpenable }">
     <div class="icon-button" @click="toggleOpenable">
       <fa-icon icon="ellipsis-v"></fa-icon>
     </div>
-    <div :class="{ show: showOpenable }" class="openable-options">
+    <div class="openable-options">
       <div class="option" @click="onClickEdit(objectId)">
         <fa-icon icon="edit"></fa-icon>
         {{ $t("table.edit") }}
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-action-dropdown {
+.openable-container {
   position: relative;
   display: flex;
   justify-content: flex-end;

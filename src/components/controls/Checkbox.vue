@@ -63,10 +63,10 @@ export default {
     .input-label {
       margin: 0;
       cursor: pointer;
+      padding-left: 0.5rem;
     }
 
     .checkbox-control {
-      margin-right: 5px;
       width: 20px;
       height: 20px;
       border-radius: 2px;

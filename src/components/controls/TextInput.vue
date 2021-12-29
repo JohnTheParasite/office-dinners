@@ -12,9 +12,9 @@
           :required="required"
           :type="type"
           class="form-control"
+          @input="input"
           @focusin="focusin"
           @focusout="focusout"
-          @input="input"
           @click="click"
         />
         <span v-if="hasIcon" class="input-icon" @click="onIconClick">

@@ -25,6 +25,7 @@
   },
   "interface": {
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "noMatchingOptions": "No matching options"
   }
 }

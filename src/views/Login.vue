@@ -18,21 +18,6 @@
           >
           </text-input>
           <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="signIn"></form-button>
-          <select-input
-            name="testname"
-            :options="[
-              { text: 'Первый вариант', value: 'var1', selected: false },
-              { text: 'Второй вариант', value: 'var2', selected: false },
-              { text: 'Третий вариант', value: 'var3', selected: false },
-              { text: 'Четвертый вариант', value: 'var4', selected: true },
-              { text: 'Пятый вариант', value: 'var5', selected: false },
-              { text: 'Шестой вариант', value: 'var6', selected: false },
-              { text: 'Седьмой вариант', value: 'var7', selected: false },
-              { text: 'Восьмой вариант', value: 'var8', selected: false },
-              { text: 'Девятый вариант', value: 'var9', selected: false },
-              { text: 'Десятый вариант', value: 'var10', selected: false }
-            ]"
-          />
         </form>
       </div>
     </div>
@@ -46,11 +31,10 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import InputTypes from "@/enums/inputTypes"
 import IconNames from "@/enums/iconNames"
-import SelectInput from "@/components/controls/SelectInput"
 
 export default {
   name: "Login",
-  components: { SelectInput, FormButton, TextInput },
+  components: { FormButton, TextInput },
   data() {
     return {
       formGroup: {
