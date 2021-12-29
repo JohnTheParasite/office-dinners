@@ -5,15 +5,17 @@
       <div class="form-group-input-container">
         <input
           :id="_uid"
+          :name="name"
           v-model.trim="inputModel"
           :class="{ invalid: hasError }"
           :placeholder="$t(placeholder)"
           :required="required"
           :type="type"
           class="form-control"
+          @input="input"
           @focusin="focusin"
           @focusout="focusout"
-          @input="input"
+          @click="click"
         />
         <span v-if="hasIcon" class="input-icon" @click="onIconClick">
           <fa-icon :icon="icon"></fa-icon>
@@ -88,6 +90,7 @@ export default {
       if (this.required && !this.inputModel.length) {
         this.errorMessage = i18n.t(this.warningMessage, { field: this.getTranslatedLabel })
       }
+      this.$emit("focusout", this)
     },
     input(event) {
       this.errorMessage = ""
@@ -99,6 +102,9 @@ export default {
           this.$emit("input", this.value, this, event)
         }, 500)
       }
+    },
+    click(event) {
+      this.$emit("click", event)
     }
   }
 }
