@@ -13,13 +13,16 @@ $fa-font-path: './../node_modules/font-awesome/fonts';
 @import "node_modules/bootstrap/scss/buttons";
 @import "node_modules/bootstrap/scss/tables";
 @import "node_modules/bootstrap/scss/pagination";
+@import "node_modules/bootstrap/scss/modal";
 @import "node_modules/bootstrap-vue/src/components/table/index";
 @import "node_modules/bootstrap-vue/src/components/pagination/index";
+@import "node_modules/bootstrap-vue/src/components/modal/index";
 @import "vuexy/pagination";
 
 @import "components/buttons";
 @import "components/table";
 @import "components/dropdown";
+@import "components/modal";
 
 :root {
   --breakpoint-xs: 0;
@@ -68,6 +71,11 @@ a:hover {
 
 h2, .h2 {
   font-size: 1.714rem;
+}
+
+h5, .h5 {
+  font-size: 1.07rem;
+  font-weight: 500;
 }
 
 .text-primary {

@@ -1,11 +1,12 @@
 <template>
-  <button :class="getTypeClass" :disabled="disabled" :type="formType" class="btn">
+  <button :class="getTypeClass" :disabled="disabled" :type="formType" class="btn" @click="onclick">
     <template v-if="loadingInProgress">
       <CssLoader></CssLoader>
     </template>
     <template v-else>
       {{ $t(label) }}
     </template>
+    <slot />
   </button>
 </template>
 
@@ -35,6 +36,11 @@ export default {
     type: {
       type: String,
       default: "primary"
+    }
+  },
+  methods: {
+    onclick(event) {
+      this.$emit("click", event)
     }
   },
   computed: {

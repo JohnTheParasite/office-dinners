@@ -32,6 +32,33 @@
     }
   }
 
+  &-secondary {
+    border-color: $secondary;
+    background-color: $secondary;
+
+    &:hover, &:focus {
+      &:not(.disabled):not(:disabled) {
+        box-shadow: 0 8px 25px -8px $secondary;
+        border-color: $secondary;
+        background-color: darken($secondary, 2%);
+      }
+    }
+  }
+
+  &-warning {
+    border-color: $warning;
+    background-color: $warning;
+
+    &:hover, &:focus {
+      &:not(.disabled):not(:disabled) {
+        box-shadow: 0 8px 25px -8px $warning;
+        border-color: $warning;
+        background-color: darken($warning, 2%);
+        color: $white;
+      }
+    }
+  }
+
   &:not(.disabled):not(:disabled) {
     cursor: pointer;
   }

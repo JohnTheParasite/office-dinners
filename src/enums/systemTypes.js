@@ -3,4 +3,5 @@ export default class SystemTypes {
   static SUCCESS = "success"
   static DANGER = "danger"
   static WARNING = "warning"
+  static PRIMARY = "primary"
 }
