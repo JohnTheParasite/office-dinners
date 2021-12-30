@@ -13,7 +13,16 @@
     "forbidden": "Access denied"
   },
   "user": {
-    "add": "Add User"
+    "add": "Add User",
+    "name": "Name",
+    "surname": "Surname",
+    "superAdmin": "Super admin",
+    "admin": "Admin",
+    "user": "User",
+    "role": "Role",
+    "active": "Active",
+    "preferredLanguage": "Preferred language",
+    "created": "User created"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -26,6 +35,9 @@
   "interface": {
     "yes": "Yes",
     "no": "No",
-    "noMatchingOptions": "No matching options"
+    "noMatchingOptions": "No matching options",
+    "english": "English",
+    "polish": "Polish",
+    "success": "Success"
   }
 }

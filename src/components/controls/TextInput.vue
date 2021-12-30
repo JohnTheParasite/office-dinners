@@ -68,6 +68,9 @@ export default {
       debounceTimeout: 0
     }
   },
+  created() {
+    this.inputModel = this.initValue
+  },
   computed: {
     value: {
       get() {
@@ -114,8 +117,6 @@ export default {
 @import "../../scss/components/color";
 
 .form-group {
-  margin-bottom: 1rem;
-
   .input-icon {
     position: absolute;
     right: 0;
@@ -133,8 +134,6 @@ export default {
     flex-direction: column;
     margin-bottom: 0.2857rem;
     color: $input-label-color;
-    font-size: 0.857rem;
-    text-transform: capitalize;
   }
 
   .form-group-input-container {

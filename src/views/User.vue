@@ -10,7 +10,7 @@
     >
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
-    <user-form-modal ref="addUserRef" title="Primary Modal" variation="warning"></user-form-modal>
+    <user-form-modal ref="addUserRef" title="Primary Modal" variation="primary"></user-form-modal>
   </div>
 </template>
 
