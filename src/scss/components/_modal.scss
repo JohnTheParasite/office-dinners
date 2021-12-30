@@ -1,0 +1,57 @@
+@import "color";
+
+.modal {
+  .primary {
+    color: $primary;
+
+    i {
+      color: $primary;
+    }
+  }
+
+  .warning {
+    color: $warning;
+
+    i {
+      color: $warning;
+    }
+  }
+
+  .modal-content {
+    border: none;
+  }
+
+  .modal-header {
+    background-color: $light-grey;
+    border-bottom: none;
+
+    .close {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform: translate(3px, -3px);
+      transition: all 0.23s ease 0.1s;
+      position: relative;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      background: $white !important;
+      font-size: 1.25em;
+      width: 34px;
+      height: 34px;
+
+      &:hover {
+        transform: translate(0px, 0px);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
+        border: none;
+      }
+    }
+  }
+
+  .modal-footer {
+    .btn {
+      margin-left: 4px;
+    }
+  }
+}
