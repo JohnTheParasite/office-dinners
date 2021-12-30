@@ -8,8 +8,9 @@
       :pagination="pagination"
       :total="items.length"
     >
-      <form-button slot="actionButton" label="user.add"></form-button>
+      <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
+    <user-form-modal ref="addUserRef" title="Primary Modal" variation="warning"></user-form-modal>
   </div>
 </template>
 
@@ -19,10 +20,11 @@ import FormButton from "@/components/controls/FormButton"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import ApiErrorHelper from "@/services/apiErrorHelper"
+import UserFormModal from "@/views/modals/UserFormModal"
 
 export default {
   name: "User",
-  components: { FormButton, DataTable },
+  components: { UserFormModal, FormButton, DataTable },
   mixins: [ApiErrorHelper],
   data() {
     return {
@@ -68,6 +70,9 @@ export default {
     },
     openDelete(userId) {
       console.warn(userId)
+    },
+    onclick() {
+      this.$refs.addUserRef.show()
     }
   }
 }
