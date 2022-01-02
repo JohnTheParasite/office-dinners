@@ -19,6 +19,7 @@ import FormButton from "@/components/controls/FormButton"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import FormDataService from "@/services/formDataService"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
+import i18n from "@/i18n"
 
 export default {
   name: "Cafe",
@@ -43,7 +44,7 @@ export default {
         .get(ApiEndpoints.CAFE_LIST, { params: props })
         .then((response) => {
           if (response && response.data) {
-            this.items = response.data.items
+            this.items = this.addItemProperties(response.data.items)
             this.tableProperties = response.data.tableProperties
             this.pagination = response.data.pagination
           }
@@ -58,6 +59,12 @@ export default {
             this.$store.commit("toasts/addDangerToast", "errors.serverError")
           }
         })
+    },
+    addItemProperties(items) {
+      items.forEach((item) => {
+        item.last_order_date = item.last_order_date === "interface.never" ? i18n.t("interface.never") : item.last_order_date
+      })
+      return items
     },
     updateResults(tableProperties) {
       this.tableProperties = tableProperties

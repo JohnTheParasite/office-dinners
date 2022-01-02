@@ -15,6 +15,9 @@
   "user": {
     "add": "Add User"
   },
+  "cafe": {
+    "add": "Add Cafe"
+  },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
     "edit": "Edit",
@@ -26,6 +29,7 @@
   "interface": {
     "yes": "Yes",
     "no": "No",
-    "noMatchingOptions": "No matching options"
+    "noMatchingOptions": "No matching options",
+    "never": "Never"
   }
 }
