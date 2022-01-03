@@ -15,6 +15,16 @@ export default {
         errorMessage = "errors.pageNotFound"
       }
       this.$store.commit("toasts/addDangerToast", errorMessage)
+    },
+    catchAxiosError(error) {
+      if (error.response) {
+        this.processErrorCode(error.response.data.status)
+      } else if (error.request) {
+        this.$store.commit("toasts/addDangerToast", error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        this.$store.commit("toasts/addDangerToast", "errors.serverError")
+      }
     }
   }
 }

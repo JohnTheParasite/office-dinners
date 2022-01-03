@@ -1,6 +1,6 @@
 <template>
   <div class="router-container">
-    <data-table
+    <cafe-data-table
       :items="items"
       :on-click-delete="openDelete"
       :on-click-edit="openEdit"
@@ -9,21 +9,21 @@
       :total="items.length"
     >
       <form-button slot="actionButton" label="cafe.add"></form-button>
-    </data-table>
+    </cafe-data-table>
   </div>
 </template>
 
 <script>
-import DataTable from "@/components/dataTable/DataTable"
 import FormButton from "@/components/controls/FormButton"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import FormDataService from "@/services/formDataService"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import i18n from "@/i18n"
+import CafeDataTable from "@/components/dataTable/CafeDataTable"
 
 export default {
   name: "Cafe",
-  components: { FormButton, DataTable },
+  components: { CafeDataTable, FormButton },
   mixins: [ApiErrorHelper],
   data() {
     return {
@@ -50,14 +50,7 @@ export default {
           }
         })
         .catch((error) => {
-          if (error.response) {
-            this.processErrorCode(error.response.data.status)
-          } else if (error.request) {
-            this.$store.commit("toasts/addDangerToast", error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            this.$store.commit("toasts/addDangerToast", "errors.serverError")
-          }
+          this.catchAxiosError(error)
         })
     },
     addItemProperties(items) {

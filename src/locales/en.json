@@ -16,7 +16,9 @@
     "add": "Add User"
   },
   "cafe": {
-    "add": "Add Cafe"
+    "add": "Add Cafe",
+    "cafeSelected": "Cafe selected",
+    "cafeDeselected": "Cafe deselected"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
