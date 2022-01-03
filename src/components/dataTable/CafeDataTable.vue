@@ -35,6 +35,9 @@
           {{ data.item.comments.toString() }}
         </a>
       </template>
+      <template #cell(rating)="data">
+        <b-form-rating v-model="data.item.rating" readonly></b-form-rating>
+      </template>
       <template #cell(active)="data">
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
