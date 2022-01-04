@@ -1,0 +1,16 @@
+@import "color";
+
+.b-rating {
+  color: $orange;
+  display: flex;
+  align-items: center;
+
+  .b-rating-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .b-rating-value {
+    color: $default-text-color;
+  }
+}
