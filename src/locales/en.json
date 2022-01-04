@@ -22,7 +22,10 @@
     "role": "Role",
     "active": "Active",
     "preferredLanguage": "Preferred language",
-    "created": "User created"
+    "created": "User created",
+    "create": "Create user",
+    "modified": "User modified",
+    "edit": "Modify user"
   },
   "cafe": {
     "add": "Add Cafe",
@@ -44,6 +47,8 @@
     "never": "Never",
     "english": "English",
     "polish": "Polish",
-    "success": "Success"
+    "success": "Success",
+    "create": "Create",
+    "update": "Update"
   }
 }

@@ -10,7 +10,7 @@
     >
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
-    <user-form-modal ref="addUserRef" title="Primary Modal" variation="primary"></user-form-modal>
+    <user-form-modal ref="addUserRef" @refreshTable="refreshTable"></user-form-modal>
   </div>
 </template>
 
@@ -30,7 +30,8 @@ export default {
     return {
       items: [],
       tableProperties: {},
-      pagination: {}
+      pagination: {},
+      editUserData: {}
     }
   },
   beforeMount() {
@@ -46,7 +47,6 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.items = response.data.items
-            this.tableProperties = response.data.tableProperties
             this.pagination = response.data.pagination
           }
         })
@@ -66,13 +66,16 @@ export default {
       this.getItems(this.tableProperties)
     },
     openEdit(userId) {
-      console.warn(userId)
+      this.$refs.addUserRef.show(userId)
     },
     openDelete(userId) {
       console.warn(userId)
     },
     onclick() {
       this.$refs.addUserRef.show()
+    },
+    refreshTable() {
+      this.getItems(this.tableProperties)
     }
   }
 }
