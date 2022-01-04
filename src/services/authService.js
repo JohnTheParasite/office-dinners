@@ -1,15 +1,15 @@
 export default class AuthService {
-  authKey = "user"
+  static authKey = "user"
   static isAuthenticated = () => {
-    return localStorage.getItem(this.authKey)
+    return localStorage.getItem(AuthService.authKey)
   }
   static loginUser = (userData) => {
-    localStorage.setItem(this.authKey, userData)
+    localStorage.setItem(AuthService.authKey, userData)
   }
   static logoutUser = () => {
-    localStorage.removeItem(this.authKey)
+    localStorage.removeItem(AuthService.authKey)
   }
   static getUserData = () => {
-    return JSON.parse(localStorage.getItem(this.authKey))
+    return JSON.parse(localStorage.getItem(AuthService.authKey))
   }
 }

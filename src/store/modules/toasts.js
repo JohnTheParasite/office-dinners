@@ -18,6 +18,18 @@ export default {
         header: "errors.error"
       })
     },
+    addSuccessToast: (state, notification) => {
+      if (typeof notification !== "object") {
+        notification = {
+          message: notification
+        }
+      }
+      state.list.push({
+        ...notification,
+        type: SystemTypes.SUCCESS,
+        header: "interface.success"
+      })
+    },
     addToast: (state, notification) => {
       state.list.push(notification)
     },
