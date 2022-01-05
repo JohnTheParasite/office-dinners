@@ -108,7 +108,6 @@ export default {
         return []
       }
       let columns = Object.keys(this.items[0]).map((k) => {
-        console.log(k)
         return {
           key: k,
           label: this.$t("table.columns." + k),
