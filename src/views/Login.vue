@@ -7,16 +7,7 @@
         </div>
         <form ref="form" class="auth-login-form" @submit="login">
           <text-input :required="true" label="email" warningMessage="errors.fieldIsRequired" @input="onInput('email', $event)" />
-          <text-input
-            :icon="passwordInput.icon"
-            :on-icon-click="toggleElementType"
-            :required="true"
-            :type="passwordInput.type"
-            label="password"
-            warningMessage="errors.fieldIsRequired"
-            @input="onInput('password', $event)"
-          >
-          </text-input>
+          <password-input :required="true" @input="onInput('password', $event)"> </password-input>
           <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="signIn"></form-button>
         </form>
       </div>
@@ -27,14 +18,15 @@
 <script>
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
+import PasswordInput from "@/components/controls/PasswordInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
-import FormDataService from "@/services/formDataService"
 import InputTypes from "@/enums/inputTypes"
 import IconNames from "@/enums/iconNames"
+import FormDataService from "@/services/formDataService"
 
 export default {
   name: "Login",
-  components: { FormButton, TextInput },
+  components: { PasswordInput, FormButton, TextInput },
   data() {
     return {
       formGroup: {
@@ -94,10 +86,6 @@ export default {
         .finally(() => {
           this.loadInProgress = false
         })
-    },
-    toggleElementType() {
-      this.passwordInput.icon = this.passwordInput.type === InputTypes.PASSWORD ? IconNames.EYE_SLASH : IconNames.EYE
-      this.passwordInput.type = this.passwordInput.type === InputTypes.PASSWORD ? InputTypes.TEXT : InputTypes.PASSWORD
     }
   },
   computed: {

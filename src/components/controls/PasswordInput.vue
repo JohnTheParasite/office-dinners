@@ -1,7 +1,7 @@
 <template>
   <div :class="type" class="form-group" role="group">
     <label v-show="getLabel" :for="_uid" class="input-label" v-html="getLabel"></label>
-    <div :class="{ invalid: hasError, focused: focused }" class="input-group" role="group">
+    <div :class="{ invalid: hasError, focused: focused, icon: hasIcon }" class="input-group" role="group">
       <div class="form-group-input-container">
         <input
           :id="_uid"
@@ -10,13 +10,16 @@
           :class="{ invalid: hasError }"
           :placeholder="$t(placeholder)"
           :required="required"
-          :type="type"
+          :type="passwordType"
           class="form-control"
           @input="input"
           @focusin="focusin"
           @focusout="focusout"
           @click="click"
         />
+        <span v-if="hasIcon" class="input-icon" @click="toggleElementType">
+          <fa-icon :icon="icon"></fa-icon>
+        </span>
       </div>
       <small v-show="errorMessage" class="text-error" v-html="errorMessage"></small>
     </div>
@@ -25,73 +28,36 @@
 
 <script>
 import control from "@/components/controls/control"
-import i18n from "@/i18n"
+import FaIcon from "@/components/icons/FaIcon"
+import textInput from "@/components/controls/TextInput"
+import InputTypes from "@/enums/inputTypes"
+import IconNames from "@/enums/iconNames"
 
 export default {
-  name: "TextInput",
-  mixins: [control],
+  name: "PasswordInput",
+  components: { FaIcon },
+  mixins: [control, textInput],
   props: {
-    type: {
+    label: {
       type: String,
-      default: "text"
-    },
-    placeholder: {
-      type: String,
-      default: ""
-    },
-    warningMessage: {
-      type: String,
-      default: "errors.fieldIsRequired"
-    },
-    debounce: {
-      type: Boolean,
-      default: false
+      default: "password"
     }
   },
   data() {
     return {
-      inputModel: "",
-      focused: false,
-      debounceTimeout: 0
+      icon: IconNames.EYE,
+      passwordType: InputTypes.PASSWORD
     }
   },
-  created() {
-    this.inputModel = this.initValue
-  },
   computed: {
-    value: {
-      get() {
-        return this.inputModel
-      },
-      set(value) {
-        this.inputModel = value
-      }
+    hasIcon() {
+      return this.icon !== null && this.icon.length > 0
     }
   },
   methods: {
-    focusin() {
-      this.focused = true
-    },
-    focusout() {
-      this.focused = false
-      if (this.required && !this.inputModel.length) {
-        this.errorMessage = i18n.t(this.warningMessage, { field: this.getTranslatedLabel })
-      }
-      this.$emit("focusout", this)
-    },
-    input(event) {
-      this.errorMessage = ""
-      if (!this.debounce) {
-        this.$emit("input", this.value, this, event)
-      } else {
-        clearTimeout(this.debounceTimeout)
-        this.debounceTimeout = setTimeout(() => {
-          this.$emit("input", this.value, this, event)
-        }, 500)
-      }
-    },
-    click(event) {
-      this.$emit("click", event)
+    toggleElementType() {
+      this.icon = this.passwordType === InputTypes.PASSWORD ? IconNames.EYE_SLASH : IconNames.EYE
+      this.passwordType = this.passwordType === InputTypes.PASSWORD ? InputTypes.TEXT : InputTypes.PASSWORD
     }
   }
 }
@@ -125,6 +91,19 @@ export default {
   }
 
   .input-group {
+    &.icon {
+      .form-control {
+        padding-right: calc(1.45em + 1.5rem);
+      }
+
+      &.invalid {
+        .form-control {
+          padding-right: calc(1.45em + 0.876rem + 1.5rem);
+          background-position: right calc(0.3625em + 0.219rem + 1.5rem) center;
+        }
+      }
+    }
+
     &.focused {
       .form-control {
         box-shadow: 0 3px 10px 0 rgba($black, 0.1);

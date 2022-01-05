@@ -10,7 +10,7 @@
     >
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
-    <user-form-modal ref="addUserRef" @refreshTable="refreshTable"></user-form-modal>
+    <user-form-modal ref="UserDataModal" @refreshTable="refreshTable"></user-form-modal>
   </div>
 </template>
 
@@ -30,8 +30,7 @@ export default {
     return {
       items: [],
       tableProperties: {},
-      pagination: {},
-      editUserData: {}
+      pagination: {}
     }
   },
   beforeMount() {
@@ -51,14 +50,7 @@ export default {
           }
         })
         .catch((error) => {
-          if (error.response) {
-            this.processErrorCode(error.response.data.status)
-          } else if (error.request) {
-            this.$store.commit("toasts/addDangerToast", error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            this.$store.commit("toasts/addDangerToast", "errors.serverError")
-          }
+          this.catchAxiosError(error)
         })
     },
     updateResults(tableProperties) {
@@ -66,13 +58,13 @@ export default {
       this.getItems(this.tableProperties)
     },
     openEdit(userId) {
-      this.$refs.addUserRef.show(userId)
+      this.$refs.UserDataModal.show(userId)
     },
     openDelete(userId) {
       console.warn(userId)
     },
     onclick() {
-      this.$refs.addUserRef.show()
+      this.$refs.UserDataModal.show()
     },
     refreshTable() {
       this.getItems(this.tableProperties)
