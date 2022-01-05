@@ -30,7 +30,13 @@
   "cafe": {
     "add": "Add Cafe",
     "cafeSelected": "Cafe selected",
-    "cafeDeselected": "Cafe deselected"
+    "cafeDeselected": "Cafe deselected",
+    "name": "Name",
+    "link": "Link",
+    "create": "Create cafe",
+    "edit": "Modify cafe",
+    "created": "Cafe created",
+    "modified": "Cafe modified"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -38,7 +44,20 @@
     "delete": "Delete",
     "show": "Show",
     "entries": "entries",
-    "noItems": "No items was found"
+    "noItems": "No items was found",
+    "columns": {
+      "id": "id",
+      "name": "Name",
+      "surname": "Surname",
+      "mail": "Mail",
+      "active": "Active",
+      "role": "Role",
+      "selected_language": "Language",
+      "link": "Link",
+      "rating": "Rating",
+      "comments": "Comments",
+      "last_order_date": "Last order (date)"
+    }
   },
   "interface": {
     "yes": "Yes",

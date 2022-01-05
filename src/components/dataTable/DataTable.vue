@@ -3,11 +3,18 @@
     <div class="actions">
       <div class="per-page">
         {{ $t("table.show") }}
-        <select v-model="tableProperties.perPage">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
+        <div class="container">
+          <select-input
+            :options="[
+              { value: 10, text: '10', selected: true },
+              { value: 25, text: '25', selected: true },
+              { value: 50, text: '50', selected: true }
+            ]"
+            :init-value="tableProperties.perPage"
+            @change="onChangePerPage($event)"
+            :required="true"
+          />
+        </div>
         {{ $t("table.entries") }}
       </div>
       <div class="search-actions">
@@ -34,7 +41,7 @@
         {{ $t(data.item.active) }}
       </template>
       <template #cell(actions)="data">
-        <table-action-dropdown :object-id="data.item.id" :on-click-delete="onClickDelete" :on-click-edit="onClickEdit"></table-action-dropdown>
+        <table-action-dropdown :object-id="data.item.id" :on-click-edit="onClickEdit"></table-action-dropdown>
       </template>
     </b-table>
     <div class="bottom-information">
@@ -64,10 +71,11 @@
 import TableActionDropdown from "@/components/controls/TableActionDropdown"
 import TextInput from "@/components/controls/TextInput"
 import FormDataService from "@/services/formDataService"
+import SelectInput from "@/components/controls/SelectInput"
 
 export default {
   name: "DataTable",
-  components: { TextInput, TableActionDropdown },
+  components: { SelectInput, TextInput, TableActionDropdown },
   props: {
     items: {
       type: Array,
@@ -85,9 +93,6 @@ export default {
       type: Function,
       required: true
     },
-    onClickDelete: {
-      type: Function
-    },
     onClickEdit: {
       type: Function
     }
@@ -103,8 +108,10 @@ export default {
         return []
       }
       let columns = Object.keys(this.items[0]).map((k) => {
+        console.log(k)
         return {
           key: k,
+          label: this.$t("table.columns." + k),
           sortable: true
         }
       })
@@ -125,12 +132,15 @@ export default {
   methods: {
     search(value) {
       this.tableProperties.searchValue = value
+    },
+    onChangePerPage(value) {
+      this.tableProperties.perPage = value
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../../scss/components/color";
 
 .actions,
@@ -141,8 +151,26 @@ export default {
   justify-content: space-between;
 
   .per-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: $input-label-color;
-    font-size: 0.857rem;
+    font-size: 1rem;
+
+    .container {
+      margin-left: 6px;
+      margin-right: 6px;
+      width: 66px;
+
+      .openable-options {
+        top: 33px;
+        left: 0;
+      }
+
+      .form-group {
+        margin-bottom: 0;
+      }
+    }
   }
 
   .search-actions {

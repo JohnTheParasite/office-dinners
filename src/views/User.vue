@@ -1,13 +1,6 @@
 <template>
   <div class="router-container">
-    <data-table
-      :items="items"
-      :on-click-delete="openDelete"
-      :on-click-edit="openEdit"
-      :on-filter-change="updateResults"
-      :pagination="pagination"
-      :total="items.length"
-    >
+    <data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
     <user-form-modal ref="UserDataModal" @refreshTable="refreshTable"></user-form-modal>
@@ -59,9 +52,6 @@ export default {
     },
     openEdit(userId) {
       this.$refs.UserDataModal.show(userId)
-    },
-    openDelete(userId) {
-      console.warn(userId)
     },
     onclick() {
       this.$refs.UserDataModal.show()
