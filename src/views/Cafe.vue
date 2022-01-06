@@ -1,15 +1,9 @@
 <template>
   <div class="router-container">
-    <cafe-data-table
-      :items="items"
-      :on-click-delete="openDelete"
-      :on-click-edit="openEdit"
-      :on-filter-change="updateResults"
-      :pagination="pagination"
-      :total="items.length"
-    >
-      <form-button slot="actionButton" label="cafe.add"></form-button>
+    <cafe-data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
+      <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
     </cafe-data-table>
+    <cafe-form-modal ref="CafeDataModal" @refreshTable="refreshTable" />
   </div>
 </template>
 
@@ -20,10 +14,11 @@ import FormDataService from "@/services/formDataService"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import i18n from "@/i18n"
 import CafeDataTable from "@/components/dataTable/CafeDataTable"
+import CafeFormModal from "@/views/modals/CafeFormModal"
 
 export default {
   name: "Cafe",
-  components: { CafeDataTable, FormButton },
+  components: { CafeFormModal, CafeDataTable, FormButton },
   mixins: [ApiErrorHelper],
   data() {
     return {
@@ -63,11 +58,14 @@ export default {
       this.tableProperties = tableProperties
       this.getItems(this.tableProperties)
     },
-    openEdit(userId) {
-      console.warn(userId)
+    openEdit(cafeId) {
+      this.$refs.CafeDataModal.show(cafeId)
     },
-    openDelete(userId) {
-      console.warn(userId)
+    refreshTable() {
+      this.getItems(this.tableProperties)
+    },
+    onclickAddCafe() {
+      this.$refs.CafeDataModal.show()
     }
   }
 }

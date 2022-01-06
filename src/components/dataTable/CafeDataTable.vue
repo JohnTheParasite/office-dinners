@@ -1,13 +1,11 @@
 <template>
-  <div class="content-block">
+  <div class="content-block cafe-content">
     <div class="actions">
       <div class="per-page">
         {{ $t("table.show") }}
-        <select v-model="tableProperties.perPage">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </select>
+        <div class="container">
+          <select-input :options="paginationOptions" :init-value="tableProperties.perPage" @change="onChangePerPage($event)" :required="true" />
+        </div>
         {{ $t("table.entries") }}
       </div>
       <div class="search-actions">
@@ -42,7 +40,7 @@
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
       <template #cell(actions)="data">
-        <table-action-dropdown :object-id="data.item.id" :on-click-delete="onClickDelete" :on-click-edit="onClickEdit"></table-action-dropdown>
+        <table-action-dropdown :object-id="data.item.id" :on-click-edit="onClickEdit"></table-action-dropdown>
       </template>
     </b-table>
     <div class="bottom-information">
@@ -73,10 +71,11 @@ import DataTable from "@/components/dataTable/DataTable"
 import Toggle from "@/components/controls/Toggle"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
+import SelectInput from "@/components/controls/SelectInput"
 
 export default {
   name: "CafeDataTable",
-  components: { Toggle },
+  components: { SelectInput, Toggle },
   mixins: [DataTable],
   methods: {
     openCommentsModal(cafeId) {
@@ -99,7 +98,28 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+    },
+    onChangePerPage(value) {
+      this.tableProperties.perPage = value
     }
   }
 }
 </script>
+
+<style lang="scss">
+.container {
+  margin-left: 6px;
+  margin-right: 6px;
+  width: 66px;
+
+  .openable-options {
+    top: 33px;
+    left: 0;
+  }
+}
+.cafe-content {
+  .toggle {
+    margin-bottom: 0;
+  }
+}
+</style>

@@ -8,10 +8,6 @@
         <fa-icon icon="edit"></fa-icon>
         {{ $t("table.edit") }}
       </div>
-      <div class="option" @click="onClickDelete(objectId)">
-        <fa-icon icon="trash"></fa-icon>
-        {{ $t("table.delete") }}
-      </div>
     </div>
   </div>
 </template>
@@ -28,9 +24,6 @@ export default {
     objectId: {
       type: Number,
       required: true
-    },
-    onClickDelete: {
-      type: Function
     },
     onClickEdit: {
       type: Function
