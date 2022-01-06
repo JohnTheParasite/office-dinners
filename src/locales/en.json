@@ -36,7 +36,11 @@
     "create": "Create cafe",
     "edit": "Modify cafe",
     "created": "Cafe created",
-    "modified": "Cafe modified"
+    "modified": "Cafe modified",
+    "comments": "Comments:",
+    "delivery": "Delivery",
+    "food": "Food",
+    "addComment": "Add comment"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",

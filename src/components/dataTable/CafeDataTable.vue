@@ -63,6 +63,7 @@
         </b-pagination>
       </div>
     </div>
+    <comments-form-modal ref="commentsFormModal" />
   </div>
 </template>
 
@@ -72,14 +73,16 @@ import Toggle from "@/components/controls/Toggle"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import SelectInput from "@/components/controls/SelectInput"
+import CommentsFormModal from "@/views/modals/CommentsFormModal"
 
 export default {
   name: "CafeDataTable",
-  components: { SelectInput, Toggle },
+  components: { CommentsFormModal, SelectInput, Toggle },
   mixins: [DataTable],
   methods: {
     openCommentsModal(cafeId) {
       console.warn(cafeId)
+      this.$refs.commentsFormModal.show(cafeId)
     },
     toggleCafe(event, value) {
       this.$axios

@@ -13,4 +13,8 @@
   .b-rating-value {
     color: $default-text-color;
   }
+
+  &:not(.readonly) {
+    cursor: pointer;
+  }
 }

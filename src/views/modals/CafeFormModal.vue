@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="CafeDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
+  <b-modal id="cafeDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
@@ -47,8 +47,9 @@ export default {
   methods: {
     show(cafeId) {
       this.cafeId = cafeId
+      this.initFormGroup()
       if (this.isAddCafe) {
-        this.$bvModal.show("CafeDataModal")
+        this.$bvModal.show("cafeDataModal")
       } else {
         this.getCafeData(cafeId)
       }
@@ -56,13 +57,19 @@ export default {
     onChange(field, value) {
       this.formGroup[field] = value
     },
+    initFormGroup() {
+      this.formGroup = {
+        name: "",
+        link: ""
+      }
+    },
     create() {
       this.$axios
         .post(ApiEndpoints.CREATE_CAFE, FormDataService.getFormData(this.formGroup))
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "cafe.created")
           this.$emit("refreshTable")
-          this.$bvModal.hide("CafeDataModal")
+          this.$bvModal.hide("cafeDataModal")
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -74,7 +81,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "cafe.modified")
           this.$emit("refreshTable")
-          this.$bvModal.hide("CafeDataModal")
+          this.$bvModal.hide("cafeDataModal")
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -86,7 +93,7 @@ export default {
         .then((response) => {
           if (response && response.data) {
             Object.assign(this.formGroup, response.data)
-            this.$bvModal.show("CafeDataModal")
+            this.$bvModal.show("cafeDataModal")
           }
         })
         .catch((error) => {

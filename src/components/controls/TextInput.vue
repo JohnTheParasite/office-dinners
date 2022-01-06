@@ -3,7 +3,23 @@
     <label v-show="getLabel" :for="_uid" class="input-label" v-html="getLabel"></label>
     <div :class="{ invalid: hasError, focused: focused, icon: hasIcon }" class="input-group" role="group">
       <div class="form-group-input-container">
+        <textarea
+          v-if="multiline"
+          :id="_uid"
+          :name="name"
+          v-model.trim="inputModel"
+          :class="{ invalid: hasError }"
+          :placeholder="$t(placeholder)"
+          :required="required"
+          class="form-control"
+          @input="input"
+          @focusin="focusin"
+          @focusout="focusout"
+          @click="click"
+          rows="4"
+        />
         <input
+          v-else
           :id="_uid"
           :name="name"
           v-model.trim="inputModel"
@@ -57,6 +73,10 @@ export default {
       default: () => {}
     },
     debounce: {
+      type: Boolean,
+      default: false
+    },
+    multiline: {
       type: Boolean,
       default: false
     }
@@ -175,7 +195,6 @@ export default {
       background-color: $white;
       background-clip: padding-box;
       border-radius: 0.438rem;
-      height: 36px;
 
       margin: 0;
       width: 100%;
@@ -184,6 +203,12 @@ export default {
       line-height: 1.45;
       color: $default-text-color;
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+      resize: none;
+
+      &:not(textarea) {
+        height: 36px;
+      }
 
       &::placeholder {
         color: $grey;

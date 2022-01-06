@@ -3,7 +3,7 @@
     <data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
-    <user-form-modal ref="UserDataModal" @refreshTable="refreshTable"></user-form-modal>
+    <user-form-modal ref="userDataModal" @refreshTable="refreshTable"></user-form-modal>
   </div>
 </template>
 
@@ -51,10 +51,10 @@ export default {
       this.getItems(this.tableProperties)
     },
     openEdit(userId) {
-      this.$refs.UserDataModal.show(userId)
+      this.$refs.userDataModal.show(userId)
     },
     onclick() {
-      this.$refs.UserDataModal.show()
+      this.$refs.userDataModal.show()
     },
     refreshTable() {
       this.getItems(this.tableProperties)

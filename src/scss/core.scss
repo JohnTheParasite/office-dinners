@@ -124,3 +124,11 @@ h5, .h5 {
 .input-label {
   font-size: 0.857rem;
 }
+
+.separator {
+  border-top: 1px solid rgba($black-border-color, 8%);
+}
+
+.required-star {
+  color: $danger;
+}

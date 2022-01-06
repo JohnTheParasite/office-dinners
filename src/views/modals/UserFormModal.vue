@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="UserDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
+  <b-modal id="userDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
@@ -68,7 +68,7 @@ export default {
       this.userId = userId
       this.initFormGroup()
       if (this.isAddUser) {
-        this.$bvModal.show("UserDataModal")
+        this.$bvModal.show("userDataModal")
       } else {
         this.getUserData(userId)
       }
@@ -93,7 +93,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "user.created")
           this.$emit("refreshTable")
-          this.$bvModal.hide("UserDataModal")
+          this.$bvModal.hide("userDataModal")
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -105,7 +105,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "user.modified")
           this.$emit("refreshTable")
-          this.$bvModal.hide("UserDataModal")
+          this.$bvModal.hide("userDataModal")
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -117,7 +117,7 @@ export default {
         .then((response) => {
           if (response && response.data) {
             Object.assign(this.formGroup, response.data)
-            this.$bvModal.show("UserDataModal")
+            this.$bvModal.show("userDataModal")
           }
         })
         .catch((error) => {
