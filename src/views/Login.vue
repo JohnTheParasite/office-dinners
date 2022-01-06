@@ -6,7 +6,7 @@
           <h2 class="brand-text text-primary">Logo</h2>
         </div>
         <form ref="form" class="auth-login-form" @submit="login">
-          <text-input :required="true" label="email" warningMessage="errors.fieldIsRequired" @input="onInput('email', $event)" />
+          <text-input :required="true" label="email" @input="onInput('email', $event)" />
           <password-input :required="true" @input="onInput('password', $event)"> </password-input>
           <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="signIn"></form-button>
         </form>

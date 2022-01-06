@@ -1,7 +1,7 @@
 <template>
   <div :class="type" class="form-group" role="group">
     <label v-show="getLabel" :for="_uid" class="input-label" v-html="getLabel"></label>
-    <div :class="{ invalid: hasError, focused: focused }" class="input-group" role="group">
+    <div :class="{ invalid: hasError, focused: focused, icon: hasIcon }" class="input-group" role="group">
       <div class="form-group-input-container">
         <input
           :id="_uid"
@@ -17,6 +17,9 @@
           @focusout="focusout"
           @click="click"
         />
+        <span v-if="hasIcon" class="input-icon" @click="onIconClick">
+          <fa-icon :icon="icon"></fa-icon>
+        </span>
       </div>
       <small v-show="errorMessage" class="text-error" v-html="errorMessage"></small>
     </div>
@@ -25,10 +28,12 @@
 
 <script>
 import control from "@/components/controls/control"
+import FaIcon from "@/components/icons/FaIcon"
 import i18n from "@/i18n"
 
 export default {
   name: "TextInput",
+  components: { FaIcon },
   mixins: [control],
   props: {
     type: {
@@ -42,6 +47,14 @@ export default {
     warningMessage: {
       type: String,
       default: "errors.fieldIsRequired"
+    },
+    icon: {
+      type: String,
+      default: ""
+    },
+    onIconClick: {
+      type: Function,
+      default: () => {}
     },
     debounce: {
       type: Boolean,
@@ -66,6 +79,9 @@ export default {
       set(value) {
         this.inputModel = value
       }
+    },
+    hasIcon() {
+      return this.icon !== null && this.icon.length > 0
     }
   },
   methods: {
@@ -125,6 +141,19 @@ export default {
   }
 
   .input-group {
+    &.icon {
+      .form-control {
+        padding-right: calc(1.45em + 1.5rem);
+      }
+
+      &.invalid {
+        .form-control {
+          padding-right: calc(1.45em + 0.876rem + 1.5rem);
+          background-position: right calc(0.3625em + 0.219rem + 1.5rem) center;
+        }
+      }
+    }
+
     &.focused {
       .form-control {
         box-shadow: 0 3px 10px 0 rgba($black, 0.1);

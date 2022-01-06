@@ -40,7 +40,7 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.items = this.addItemProperties(response.data.items)
-            this.tableProperties = response.data.tableProperties
+            // this.tableProperties = response.data.tableProperties
             this.pagination = response.data.pagination
           }
         })
