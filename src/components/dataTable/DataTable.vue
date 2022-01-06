@@ -4,16 +4,7 @@
       <div class="per-page">
         {{ $t("table.show") }}
         <div class="container">
-          <select-input
-            :options="[
-              { value: 10, text: '10', selected: true },
-              { value: 25, text: '25', selected: true },
-              { value: 50, text: '50', selected: true }
-            ]"
-            :init-value="tableProperties.perPage"
-            @change="onChangePerPage($event)"
-            :required="true"
-          />
+          <select-input :options="paginationOptions" :init-value="tableProperties.perPage" @change="onChangePerPage($event)" :required="true" />
         </div>
         {{ $t("table.entries") }}
       </div>
@@ -99,7 +90,8 @@ export default {
   },
   data() {
     return {
-      tableProperties: FormDataService.getDefaultListParameters()
+      tableProperties: FormDataService.getDefaultListParameters(),
+      paginationOptions: FormDataService.getDefaultPaginationOptions()
     }
   },
   computed: {

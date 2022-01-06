@@ -19,4 +19,12 @@ export default class FormDataService {
       searchValue: ""
     }
   }
+
+  static getDefaultPaginationOptions() {
+    return [
+      { value: 10, text: "10", selected: true },
+      { value: 25, text: "25", selected: true },
+      { value: 50, text: "50", selected: true }
+    ]
+  }
 }

@@ -1,19 +1,10 @@
 <template>
-  <div class="content-block">
+  <div class="content-block cafe-content">
     <div class="actions">
       <div class="per-page">
         {{ $t("table.show") }}
         <div class="container">
-          <select-input
-            :options="[
-              { value: 10, text: '10', selected: true },
-              { value: 25, text: '25', selected: true },
-              { value: 50, text: '50', selected: true }
-            ]"
-            :init-value="tableProperties.perPage"
-            @change="onChangePerPage($event)"
-            :required="true"
-          />
+          <select-input :options="paginationOptions" :init-value="tableProperties.perPage" @change="onChangePerPage($event)" :required="true" />
         </div>
         {{ $t("table.entries") }}
       </div>
@@ -125,8 +116,9 @@ export default {
     top: 33px;
     left: 0;
   }
-
-  .form-group {
+}
+.cafe-content {
+  .toggle {
     margin-bottom: 0;
   }
 }

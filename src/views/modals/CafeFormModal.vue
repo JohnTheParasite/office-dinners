@@ -24,6 +24,7 @@ import FaIcon from "@/components/icons/FaIcon"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
+import { httpRegex } from "@/helpers/validatorHelper"
 
 export default {
   name: "CafeFormModal",
@@ -101,7 +102,8 @@ export default {
       return this.$t(this.isAddCafe ? "cafe.create" : "cafe.edit")
     },
     verified() {
-      return this.formGroup.name.length && this.formGroup.link.length
+      let linkValidator = new RegExp(httpRegex)
+      return this.formGroup.name.length && this.formGroup.link.length && linkValidator.test(this.formGroup.link)
     },
     isAddCafe() {
       return this.cafeId === undefined
