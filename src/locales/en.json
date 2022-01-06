@@ -13,7 +13,19 @@
     "forbidden": "Access denied"
   },
   "user": {
-    "add": "Add User"
+    "add": "Add User",
+    "name": "Name",
+    "surname": "Surname",
+    "superAdmin": "Super admin",
+    "admin": "Admin",
+    "user": "User",
+    "role": "Role",
+    "active": "Active",
+    "preferredLanguage": "Preferred language",
+    "created": "User created",
+    "create": "Create user",
+    "modified": "User modified",
+    "edit": "Modify user"
   },
   "cafe": {
     "add": "Add Cafe",
@@ -32,6 +44,11 @@
     "yes": "Yes",
     "no": "No",
     "noMatchingOptions": "No matching options",
-    "never": "Never"
+    "never": "Never",
+    "english": "English",
+    "polish": "Polish",
+    "success": "Success",
+    "create": "Create",
+    "update": "Update"
   }
 }

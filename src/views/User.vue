@@ -10,7 +10,7 @@
     >
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
-    <user-form-modal ref="addUserRef" title="Primary Modal" variation="warning"></user-form-modal>
+    <user-form-modal ref="UserDataModal" @refreshTable="refreshTable"></user-form-modal>
   </div>
 </template>
 
@@ -46,19 +46,11 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.items = response.data.items
-            this.tableProperties = response.data.tableProperties
             this.pagination = response.data.pagination
           }
         })
         .catch((error) => {
-          if (error.response) {
-            this.processErrorCode(error.response.data.status)
-          } else if (error.request) {
-            this.$store.commit("toasts/addDangerToast", error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            this.$store.commit("toasts/addDangerToast", "errors.serverError")
-          }
+          this.catchAxiosError(error)
         })
     },
     updateResults(tableProperties) {
@@ -66,13 +58,16 @@ export default {
       this.getItems(this.tableProperties)
     },
     openEdit(userId) {
-      console.warn(userId)
+      this.$refs.UserDataModal.show(userId)
     },
     openDelete(userId) {
       console.warn(userId)
     },
     onclick() {
-      this.$refs.addUserRef.show()
+      this.$refs.UserDataModal.show()
+    },
+    refreshTable() {
+      this.getItems(this.tableProperties)
     }
   }
 }

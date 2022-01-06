@@ -1,5 +1,5 @@
 <template>
-  <div class="input checkbox" :class="{ invalid: hasError, readonly: readonly }">
+  <div class="input checkbox form-group" :class="{ invalid: hasError, readonly: readonly }">
     <label :for="_uid">
       <input :id="_uid" @change="change" :disabled="readonly" :required="required" v-model="checked" type="checkbox" />
       <span class="checkbox-control">
@@ -58,7 +58,7 @@ export default {
     flex-direction: row;
     position: relative;
     justify-content: flex-start;
-    margin: 0 5px;
+    align-items: center;
 
     .input-label {
       margin: 0;

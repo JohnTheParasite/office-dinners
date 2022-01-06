@@ -1,5 +1,5 @@
 <template>
-  <div class="input toggle" :class="{ invalid: hasError, readonly: readonly }">
+  <div class="input toggle form-group" :class="{ invalid: hasError, readonly: readonly }">
     <label :for="_uid">
       <input :id="_uid" @change="change" :disabled="readonly" :required="required" v-model="checked" type="checkbox" />
       <span class="toggle-body">
@@ -28,7 +28,7 @@ export default {
     flex-direction: row;
     position: relative;
     justify-content: flex-start;
-    margin: 0 5px;
+    align-items: center;
 
     .input-label {
       margin: 0;

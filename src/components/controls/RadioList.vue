@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ invalid: hasError, readonly: readonly, horizontal: orientation !== 'vertical' }" class="input radio-list">
+  <div :class="{ invalid: hasError, readonly: readonly, horizontal: orientation !== 'vertical' }" class="input radio-list form-group">
     <span v-show="hasLabel" class="input-label" v-html="getLabel"></span>
     <span class="input-block">
       <label v-for="option in options" :key="option.value" :for="generateId(option)" class="option">
@@ -8,7 +8,7 @@
           <span class="radio-border"></span>
           <span class="radio-checked"></span>
         </span>
-        <span v-html="option.text"></span>
+        <span v-html="$t(option.text)"></span>
       </label>
     </span>
   </div>
@@ -38,6 +38,10 @@ export default {
 @import "../../scss/components/color";
 
 .radio-list {
+  .input-label {
+    margin-bottom: 0.2857rem;
+  }
+
   .input-block {
     flex-direction: column;
     align-items: flex-start;

@@ -1,7 +1,7 @@
 <template>
   <div :class="{ show: showOpenable }" class="openable-container">
     <div class="input-select">
-      <text-input ref="input" :name="name" :placeholder="selectedOptionName" @click="enableOpenable" @focusout="clearInput" @input="setValue" />
+      <text-input ref="input" :name="name" :placeholder="selectedOptionName" @click="enableOpenable" @focusout="clearInput" @input="setValue" :label="label" />
       <div class="square" @click="enableOpenable">
         <fa-icon icon="chevron-down" />
       </div>
@@ -9,7 +9,7 @@
     <div class="openable-options">
       <template v-if="filteredOptions.length > 0">
         <div v-for="option in filteredOptions" :key="option.value" :class="{ selected: option.value === value }" class="option" @click="selectOption(option)">
-          <div class="text" v-html="option.text"></div>
+          <div class="text" v-html="$t(option.text)"></div>
           <fa-icon v-if="option.value === value" icon="check" />
         </div>
       </template>
@@ -44,6 +44,7 @@ export default {
       this.value = option.value
       this.closeOpenable()
       this.clearInput()
+      this.change()
     },
     enableOpenable() {
       this.filter = ""
@@ -73,7 +74,7 @@ export default {
   position: relative;
 
   .openable-options {
-    top: 36px;
+    top: 56px;
     width: 100%;
     padding: 0;
     border-radius: 0.5rem;
@@ -120,7 +121,7 @@ export default {
       position: absolute;
       height: 36px;
       width: 36px;
-      top: 0;
+      bottom: 0;
       right: 0;
 
       i {
