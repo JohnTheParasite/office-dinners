@@ -60,7 +60,8 @@
       "link": "Link",
       "rating": "Rating",
       "comments": "Comments",
-      "last_order_date": "Last order (date)"
+      "last_order_date": "Last order (date)",
+      "vote": "Vote here!"
     }
   },
   "interface": {

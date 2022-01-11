@@ -39,6 +39,15 @@
       <template #cell(active)="data">
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
+      <template #cell(vote)="data">
+        <div class="like" :class="{ active: data.item.active }">
+          <div class="like-button" @click="clickLike(data.item.id)">
+            <fa-icon icon="thumbs-up"></fa-icon>
+            Like
+          </div>
+          <div class="like-counter">{{ data.item.id }}</div>
+        </div>
+      </template>
       <template #cell(actions)="data">
         <table-action-dropdown :object-id="data.item.id" :on-click-edit="onClickEdit"></table-action-dropdown>
       </template>
@@ -74,14 +83,14 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import SelectInput from "@/components/controls/SelectInput"
 import CommentsFormModal from "@/views/modals/CommentsFormModal"
+import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "CafeDataTable",
-  components: { CommentsFormModal, SelectInput, Toggle },
+  components: { FaIcon, CommentsFormModal, SelectInput, Toggle },
   mixins: [DataTable],
   methods: {
     openCommentsModal(cafeId) {
-      console.warn(cafeId)
       this.$refs.commentsFormModal.show(cafeId)
     },
     toggleCafe(event, value) {
@@ -104,12 +113,31 @@ export default {
     },
     onChangePerPage(value) {
       this.tableProperties.perPage = value
+    },
+    clickLike(value) {
+      console.log(value)
+    }
+  },
+  computed: {
+    getColumns() {
+      return [
+        { key: "active", label: this.$t("table.columns.active"), sortable: true },
+        { key: "vote", label: this.$t("table.columns.vote"), sortable: false },
+        { key: "name", label: this.$t("table.columns.name"), sortable: true },
+        { key: "link", label: this.$t("table.columns.link"), sortable: true },
+        { key: "rating", label: this.$t("table.columns.rating"), sortable: true },
+        { key: "comments", label: this.$t("table.columns.comments"), sortable: true },
+        { key: "last_order_date", label: this.$t("table.columns.last_order_date"), sortable: true },
+        { key: "actions", label: "", sortable: false }
+      ]
     }
   }
 }
 </script>
 
 <style lang="scss">
+@import "../../scss/components/color";
+
 .container {
   margin-left: 6px;
   margin-right: 6px;
@@ -123,6 +151,52 @@ export default {
 .cafe-content {
   .toggle {
     margin-bottom: 0;
+  }
+}
+
+.like {
+  display: flex;
+  justify-content: center;
+  font-size: 0.8rem;
+
+  .like-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $white;
+    padding: 2px 6px;
+    border: 1px solid $primary;
+    border-radius: 4px;
+    cursor: pointer;
+    color: $primary;
+    transition: 0.3s ease;
+
+    &:hover {
+      color: $white;
+      box-shadow: 0 8px 25px -8px $primary;
+      border-color: $primary;
+      background-color: $primary;
+    }
+  }
+
+  .like-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $primary;
+    border-radius: 4px;
+    margin-left: 4px;
+    height: 2rem;
+    width: 2rem;
+    background-color: $primary;
+    color: $white;
+  }
+}
+
+.active {
+  .like-button {
+    color: $white;
+    background-color: $primary;
   }
 }
 </style>
