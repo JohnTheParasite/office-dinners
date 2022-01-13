@@ -1,18 +1,22 @@
 .openable-container {
+  position: relative;
+
   .openable-options {
-    border-radius: 0.358rem;
+    top: 56px;
+    width: 100%;
+    padding: 0;
+    border-radius: 0.5rem;
+    max-height: 18.5rem;
+    overflow: auto;
     box-shadow: 0 5px 25px rgba($black-border-color, 10%);
     position: absolute;
     background-color: $white;
     background-clip: padding-box;
     border: 1px solid rgba($black-border-color, 5%);
-    padding: 0.5rem 0;
     z-index: 10;
     min-width: 10rem;
     font-size: 1rem;
     right: 0;
-    width: 12rem;
-    top: 24px;
     margin-top: 0.5rem;
     animation-duration: 0.3s;
     animation-fill-mode: both;
@@ -40,10 +44,61 @@
       }
     }
 
+    .option.selected {
+      color: $white;
+      background-color: $primary;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      i {
+        margin: 0;
+      }
+    }
+
+    .no-matching {
+      cursor: default;
+      user-select: none;
+    }
   }
 
+  .form-control {
+    &::placeholder {
+      color: $default-text-color !important;
+    }
+
+    &:focus {
+      &::placeholder {
+        color: $grey !important;
+      }
+    }
+  }
+
+  .input-select {
+    position: relative;
+
+    .square {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      height: 36px;
+      width: 36px;
+      bottom: 0;
+      right: 0;
+
+      i {
+        transition: transform 0.2s ease;
+      }
+    }
+  }
 
   &.show {
+    .input-select {
+      i {
+        transform: rotate(-180deg);
+      }
+    }
     .openable-options {
       display: block;
       transform: scale(1);

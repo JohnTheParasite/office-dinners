@@ -1,7 +1,7 @@
 <template>
   <div class="top-bar-container">
     <div class="top-bar">
-      <div></div>
+      <order-menu />
       <user-menu></user-menu>
     </div>
   </div>
@@ -9,10 +9,11 @@
 
 <script>
 import UserMenu from "@/components/menu/UserMenu"
+import OrderMenu from "@/components/menu/OrderMenu"
 
 export default {
   name: "TopBar",
-  components: { UserMenu }
+  components: { OrderMenu, UserMenu }
 }
 </script>
 

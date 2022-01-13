@@ -1,5 +1,5 @@
 <template>
-  <button :class="getTypeClass" :disabled="disabled" :type="formType" class="btn" @click="onclick">
+  <button :class="[getTypeClass, size]" :disabled="disabled" :type="formType" class="btn" @click="onclick">
     <template v-if="loadingInProgress">
       <CssLoader></CssLoader>
     </template>
@@ -36,6 +36,10 @@ export default {
     type: {
       type: String,
       default: "primary"
+    },
+    size: {
+      type: String,
+      default: ""
     }
   },
   methods: {
