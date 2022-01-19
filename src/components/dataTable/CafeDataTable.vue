@@ -8,6 +8,9 @@
         </div>
         {{ $t("table.entries") }}
       </div>
+      <div class="time-picker">
+        <b-form-timepicker v-model="time" locale="en" right :placeholder="$t('interface.empty')"></b-form-timepicker>
+      </div>
       <div class="search-actions">
         <text-input :debounce="true" placeholder="search" @input="search($event)"></text-input>
         <slot name="actionButton"></slot>
@@ -91,7 +94,7 @@ export default {
   mixins: [DataTable],
   data() {
     return {
-      date: ""
+      time: this.setTime()
     }
   },
   methods: {
@@ -121,6 +124,11 @@ export default {
     },
     clickLike(value) {
       console.log(value)
+    },
+    setTime() {
+      let currentDate = new Date()
+      currentDate.setTime(currentDate.getTime() + 30 * 60 * 1000)
+      return currentDate.getHours() + ":" + currentDate.getMinutes()
     }
   },
   computed: {
@@ -207,5 +215,9 @@ export default {
     color: $white;
     background-color: $primary;
   }
+}
+
+.time-picker {
+  width: 150px;
 }
 </style>

@@ -82,6 +82,7 @@
     "update": "Update",
     "cancel": "Cancel",
     "add": "Add",
-    "noDate": "No date selected"
+    "noDate": "No date selected",
+    "empty": "empty"
   }
 }
