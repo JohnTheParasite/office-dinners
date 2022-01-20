@@ -107,7 +107,6 @@ $calendar-grey: darken($grey, 40%);
   &.show {
     border-color: $primary;
     box-shadow: 0 3px 10px 0 rgba($black, 0.1);
-
   }
 
   label {
@@ -116,6 +115,11 @@ $calendar-grey: darken($grey, 40%);
     width: 100%;
     order: -1;
     padding-left: 14px;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
   }
 
 }
@@ -155,6 +159,7 @@ $calendar-grey: darken($grey, 40%);
     color: $calendar-grey;
     padding: 5px 4px;
   }
+
   .b-calendar-nav {
 
     display: flex;
@@ -169,7 +174,7 @@ $calendar-grey: darken($grey, 40%);
       color: $calendar-grey;
       font-size: 1.3rem;
 
-      &:active{
+      &:active {
         background-color: $input-border-color;
       }
 
@@ -201,6 +206,7 @@ $calendar-grey: darken($grey, 40%);
       justify-content: center;
       margin: 4px 0;
       border-bottom: 1px solid lighten($grey, 15%);
+
       small {
         text-align: center;
         font-size: 12px;

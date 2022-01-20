@@ -83,6 +83,7 @@
     "cancel": "Cancel",
     "add": "Add",
     "noDate": "No date selected",
-    "empty": "empty"
+    "empty": "empty",
+    "order": "Order"
   }
 }
