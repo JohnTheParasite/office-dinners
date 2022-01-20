@@ -1,5 +1,5 @@
 <template>
-  <div class="order">
+  <div class="order-top-bar">
     <div class="order-menu">
       <div class="cafe-button" v-for="item in topCafe" :key="item.id">
         <form-button :label="item.name" @click="cafeMakeOrder(item)" type="success" size="btn-sm" />
@@ -41,10 +41,10 @@ export default {
 <style lang="scss">
 @import "../../scss/components/color";
 
-.order {
-  //display: flex;
+.order-top-bar {
+  display: flex;
   //justify-content: center;
-  //align-items: center;
+  align-items: center;
 
   .order-menu {
     display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <div class="router-container">
+  <div class="router-container cafe-orders-page">
     <div class="table-container" v-for="cafe in cafeItems" :key="cafe.cafeId">
       <div class="content-block">
         <div class="cafe-actions">
@@ -66,22 +66,22 @@ export default {
               user: "Иван",
               order: "печеньки",
               price: 3.14,
-              deliveryPrice: 0.16,
-              packingPrice: 1
+              shipping: 0.16,
+              packing: 1
             },
             {
               user: "Игорь",
               order: "хлебные корочки",
               price: 3.16,
-              deliveryPrice: 0.14,
-              packingPrice: 1
+              shipping: 0.14,
+              packing: 1
             },
             {
               user: "Саня",
               order: "Чего нибудь набрать до сотки",
               price: 3.16,
-              deliveryPrice: 0.14,
-              packingPrice: 1
+              shipping: 0.14,
+              packing: 1
             }
           ]
         },
@@ -96,22 +96,22 @@ export default {
               user: "Иван",
               order: "чаю",
               price: 3.14,
-              deliveryPrice: 0.16,
-              packingPrice: 1
+              shipping: 0.16,
+              packing: 1
             },
             {
               user: "Игорь",
               order: "оладушки",
               price: 4.16,
-              deliveryPrice: 0.14,
-              packingPrice: 1
+              shipping: 0.14,
+              packing: 1
             },
             {
               user: "Саня",
               order: "Чего нибудь еще бы",
               price: 5.16,
-              deliveryPrice: 0.14,
-              packingPrice: 1
+              shipping: 0.14,
+              packing: 1
             }
           ]
         }
@@ -151,72 +151,84 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import "../scss/components/color";
 
-.cafe-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-
-  .cafe-name-link {
+.cafe-orders-page {
+  .cafe-actions {
     display: flex;
-    flex-direction: column;
-    width: 350px;
-    .cafe-name {
-      color: $primary;
-      font-size: 1.3rem;
-      font-weight: 500;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+
+    .cafe-name-link {
+      display: flex;
+      flex-direction: column;
+      width: 350px;
+
+      .cafe-name {
+        color: $primary;
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
+
+      .cafe-link {
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
-    .cafe-link {
-      font-size: 0.9rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+
+    .date-picker {
+      width: 380px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .dec-button {
+        padding: 0;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0 0.5rem;
+      }
+    }
+
+    .order-user {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      label {
+        margin-right: 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 0;
+      }
     }
   }
 
-  .date-picker {
-    width: 380px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    .dec-button {
-      padding: 0;
-      width: 1.6rem;
-      height: 1.6rem;
-      margin: 0 0.5rem;
-    }
+  .table-responsive {
+    margin-bottom: 0;
+    border-bottom: 1px solid $input-border-color;
   }
 
-  .order-user {
+  .footer {
     display: flex;
-    justify-content: center;
     align-items: center;
+    background-color: $white;
+    height: 3rem;
+    justify-content: right;
 
     label {
-      margin-right: 1rem;
+      font-weight: 600;
+      margin-right: 1.5rem;
     }
   }
-}
 
-.footer {
-  display: flex;
-  align-items: center;
-  background-color: $table-header-bg;
-  height: 3rem;
-  overflow: auto;
-  justify-content: right;
-
-  label {
-    font-weight: 600;
-    margin-right: 1.5rem;
+  .content-block {
+    overflow: hidden;
   }
-}
-
-.form-group {
-  margin-bottom: 0 !important;
 }
 </style>
