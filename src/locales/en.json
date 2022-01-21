@@ -46,7 +46,9 @@
     "user": "User",
     "order": "Order",
     "price": "Price",
-    "clicklink": "Click to order"
+    "clicklink": "Click to order",
+    "orderDate": "Orders for date",
+    "userPay": "User to pay"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",

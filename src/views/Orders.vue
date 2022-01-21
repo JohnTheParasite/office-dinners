@@ -1,26 +1,29 @@
 <template>
   <div class="router-container cafe-orders-page">
+    <div class="content-block date-block">
+      <label class="dateLabel">{{ $t("order.orderDate") }}:</label>
+      <div class="date-picker">
+        <form-button label="<" class="button" type="secondary" @click="changeDate(-1)"></form-button>
+        <b-form-datepicker
+          id="example-datepicker"
+          v-model="date"
+          class="mb-2"
+          start-weekday="1"
+          right
+          :placeholder="$t('interface.noDate')"
+          :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+        ></b-form-datepicker>
+        <form-button label=">" class="button" type="secondary" @click="changeDate(1)"></form-button>
+      </div>
+    </div>
     <div class="table-container" v-for="cafe in cafeItems" :key="cafe.cafeId">
       <div class="content-block">
         <div class="cafe-actions">
           <div class="cafe-name-link">
-            <label class="cafe-name"> {{ cafe.cafeName }} </label>
-            <a class="cafe-link" :href="cafe.link" target="_blank"> {{ cafe.link }} </a>
-          </div>
-          <div class="date-picker">
-            <form-button label="<" class="dec-button" type="secondary" @click="cafe.date = changeDate(cafe.date, -1)"></form-button>
-            <b-form-datepicker
-              id="example-datepicker"
-              v-model="cafe.date"
-              class="mb-2"
-              start-weekday="1"
-              right
-              :placeholder="$t('interface.noDate')"
-            ></b-form-datepicker>
-            <form-button label=">" class="dec-button" type="secondary" @click="cafe.date = changeDate(cafe.date, 1)"></form-button>
+            <a class="cafe-name" :href="cafe.link" target="_blank"> {{ cafe.cafeName }} </a>
           </div>
           <div class="order-user" v-if="currentUserIsAdmin">
-            <label>{{ $t("order.user") }}</label>
+            <label>{{ $t("order.userPay") }}:</label>
             <select-input :options="users" :init-value="cafe.orderUser" />
           </div>
           <div class="order-button">
@@ -54,12 +57,12 @@ export default {
   mixins: [ApiErrorHelper],
   data() {
     return {
+      date: this.today(),
       cafeItems: [
         {
           cafeName: "Pasibus",
           cafeId: "1",
           link: "https://www.pasidostawa.pl/pasibus-pasaz-grunwaldzki",
-          date: "",
           orderUser: "",
           orders: [
             {
@@ -89,7 +92,6 @@ export default {
           cafeName: "Słowianka",
           cafeId: "2",
           link: "https://www.pyszne.pl/menu/slowianka-jednosci-narodowej",
-          date: "",
           orderUser: "",
           orders: [
             {
@@ -127,14 +129,23 @@ export default {
     //this.getItems()
   },
   methods: {
-    changeDate(dateString, daysAmount) {
-      if (!dateString.length) {
-        return ""
+    changeDate(daysAmount) {
+      if (!this.date.length) {
+        return
       }
 
-      let date = new Date(dateString)
+      let date = new Date(this.date)
       date.setDate(date.getDate() + daysAmount)
 
+      this.dateToString(date)
+
+      this.date = this.dateToString(date)
+    },
+    today() {
+      let date = new Date()
+      return this.dateToString(date)
+    },
+    dateToString(date) {
       let month = "" + (date.getMonth() + 1)
       let day = "" + date.getDate()
       let year = date.getFullYear()
@@ -155,6 +166,30 @@ export default {
 @import "../scss/components/color";
 
 .cafe-orders-page {
+  .date-block {
+    display: flex;
+    align-items: center;
+
+    .dateLabel {
+      margin-left: 1.5rem;
+    }
+    .date-picker {
+      width: 200px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+
+      .button {
+        padding: 0;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0 0.5rem;
+      }
+    }
+  }
+
   .cafe-actions {
     display: flex;
     align-items: center;
@@ -171,27 +206,6 @@ export default {
         font-size: 1.3rem;
         font-weight: 500;
       }
-
-      .cafe-link {
-        font-size: 0.9rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-
-    .date-picker {
-      width: 380px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      .dec-button {
-        padding: 0;
-        width: 1.6rem;
-        height: 1.6rem;
-        margin: 0 0.5rem;
-      }
     }
 
     .order-user {
@@ -205,6 +219,10 @@ export default {
 
       .form-group {
         margin-bottom: 0;
+      }
+
+      .openable-options {
+        top: 33px;
       }
     }
   }

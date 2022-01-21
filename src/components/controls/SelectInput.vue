@@ -65,3 +65,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.openable-container {
+  .input-select {
+    .form-control {
+      padding-right: 2.5rem !important;
+    }
+  }
+}
+</style>
