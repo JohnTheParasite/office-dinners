@@ -7,14 +7,14 @@
       </form-button>
     </template>
     <div class="new-comment">
-      <text-input label="user.name" :init-value="formGroup.name" @input="onChange('name', $event)" :required="true" />
+      <text-input label="user.name" :init-value="formGroup.username" @input="onChange('username', $event)" :required="true" />
       <div class="comment-grade">
         <b>{{ $t("cafe.food") }}</b>
-        <b-form-rating v-model="formGroup.food_grade"></b-form-rating>
+        <b-form-rating v-model="formGroup.rating_food"></b-form-rating>
       </div>
       <div class="comment-grade">
         <b>{{ $t("cafe.delivery") }}</b>
-        <b-form-rating v-model="formGroup.delivery_grade"></b-form-rating>
+        <b-form-rating v-model="formGroup.rating_delivery"></b-form-rating>
       </div>
       <text-input label="Comment" :multiline="true" class="comment" :init-value="formGroup.comment" @input="onChange('comment', $event)" />
       <form-button :disabled="!verified" label="cafe.addComment" @click="addComment" />
@@ -22,15 +22,15 @@
     </div>
     <div class="comments">
       <div class="comment-container" v-for="comment in comments" :key="comment.id">
-        <div class="commentator-name">{{ comment.name }}</div>
-        <div class="comment-date">{{ comment.date }}</div>
+        <div class="commentator-name">{{ comment.username }}</div>
+        <div class="comment-date">{{ comment.create_date }}</div>
         <div class="comment-grade">
           <b>{{ $t("cafe.food") }}</b>
-          <b-form-rating v-model="comment.food_grade" readonly></b-form-rating>
+          <b-form-rating v-model="comment.rating_food" readonly></b-form-rating>
         </div>
         <div class="comment-grade">
           <b>{{ $t("cafe.delivery") }}</b>
-          <b-form-rating v-model="comment.delivery_grade" readonly></b-form-rating>
+          <b-form-rating v-model="comment.rating_delivery" readonly></b-form-rating>
         </div>
         <div class="comment">{{ comment.comment }}</div>
       </div>
@@ -44,6 +44,8 @@ import SystemTypes from "@/enums/systemTypes"
 import FaIcon from "@/components/icons/FaIcon"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import TextInput from "@/components/controls/TextInput"
+import { ApiEndpoints } from "@/enums/apiEndpoints"
+import FormDataService from "@/services/formDataService"
 
 export default {
   name: "CommentsFormModal",
@@ -57,69 +59,13 @@ export default {
   data() {
     return {
       formGroup: {
-        name: "Anonymous",
-        food_grade: 0,
-        delivery_grade: 0,
+        username: "Anonymous",
+        cafe_id: "",
+        rating_food: 0,
+        rating_delivery: 0,
         comment: ""
       },
-      comments: [
-        {
-          id: 1,
-          name: "Ivan Ivanovich",
-          date: "Vtornik, 04.01.2022",
-          delivery_grade: 3,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: хавчик заебочек но можно было и салфетки дать. потому -4 бала."
-        },
-        {
-          id: 2,
-          name: "Igor Igorevich",
-          date: "Sreda, 05.01.2022",
-          delivery_grade: 4,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: под такую херовую РПГ любой хавчик найс"
-        },
-        {
-          id: 3,
-          name: "Igor Igorevich",
-          date: "Sreda, 05.01.2022",
-          delivery_grade: 4,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: под такую херовую РПГ любой хавчик найс"
-        },
-        {
-          id: 4,
-          name: "Igor Igorevich",
-          date: "Sreda, 05.01.2022",
-          delivery_grade: 4,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: под такую херовую РПГ любой хавчик найс"
-        },
-        {
-          id: 5,
-          name: "Igor Igorevich",
-          date: "Sreda, 05.01.2022",
-          delivery_grade: 4,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: под такую херовую РПГ любой хавчик найс"
-        },
-        {
-          id: 6,
-          name: "Igor Igorevich",
-          date: "Sreda, 05.01.2022",
-          delivery_grade: 4,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: под такую херовую РПГ любой хавчик найс"
-        },
-        {
-          id: 7,
-          name: "Igor Igorevich",
-          date: "Sreda, 05.01.2022",
-          delivery_grade: 4,
-          food_grade: 5,
-          comment: "ну кароче сам комментарий: под такую херовую РПГ любой хавчик найс"
-        }
-      ],
+      comments: [],
       cafeId: undefined
     }
   },
@@ -127,27 +73,51 @@ export default {
     show(cafeId) {
       this.cafeId = cafeId
       this.initFormGroup()
+      this.getCafeComments(cafeId)
       this.$bvModal.show("commentsDataModal")
-      // this.getCafeData(cafeId) todo after API changes get cafe data here
     },
     onChange(field, value) {
       this.formGroup[field] = value
     },
     initFormGroup() {
       this.formGroup = {
-        name: "Anonymous",
-        food_grade: 0,
-        delivery_grade: 0,
+        username: "Anonymous",
+        cafe_id: this.cafeId,
+        rating_food: 0,
+        rating_delivery: 0,
         comment: ""
       }
+      this.comments = []
     },
     addComment() {
-      console.log(this.cafeId)
+      this.$axios
+        .post(ApiEndpoints.CREATE_COMMENT, FormDataService.getFormData(this.formGroup))
+        .then((response) => {
+          this.$store.commit("toasts/addSuccessToast", "cafe.commentAdded")
+          this.$emit("refreshTable")
+          this.comments = response.data
+          this.initFormGroup()
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    },
+    getCafeComments(cafeId) {
+      this.$axios
+        .get(ApiEndpoints.CAFE_COMMENTS + "/" + cafeId)
+        .then((response) => {
+          if (response && response.data) {
+            this.comments = response.data
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     }
   },
   computed: {
     verified() {
-      return this.formGroup.name.length > 0 && this.formGroup.food_grade > 0 && this.formGroup.delivery_grade > 0
+      return this.formGroup.username.length > 0 && this.formGroup.rating_food > 0 && this.formGroup.rating_delivery > 0
     }
   }
 }

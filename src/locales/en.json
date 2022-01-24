@@ -40,7 +40,8 @@
     "comments": "Comments:",
     "delivery": "Delivery",
     "food": "Food",
-    "addComment": "Add comment"
+    "addComment": "Add comment",
+    "commentAdded": "Comment added"
   },
   "order": {
     "user": "User",
