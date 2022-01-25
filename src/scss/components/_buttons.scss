@@ -48,6 +48,7 @@
   &-warning {
     border-color: $warning;
     background-color: $warning;
+    color: $white;
 
     &:hover, &:focus {
       &:not(.disabled):not(:disabled) {
@@ -56,6 +57,10 @@
         background-color: darken($warning, 2%);
         color: $white;
       }
+    }
+
+    &:disabled {
+      color: $white;
     }
   }
 

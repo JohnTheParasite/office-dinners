@@ -3,7 +3,7 @@
     <cafe-data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
       <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
     </cafe-data-table>
-    <cafe-form-modal ref="CafeDataModal" @refreshTable="refreshTable" />
+    <cafe-form-modal ref="cafeDataModal" @refreshTable="refreshTable" />
   </div>
 </template>
 
@@ -59,13 +59,13 @@ export default {
       this.getItems(this.tableProperties)
     },
     openEdit(cafeId) {
-      this.$refs.CafeDataModal.show(cafeId)
+      this.$refs.cafeDataModal.show(cafeId)
     },
     refreshTable() {
       this.getItems(this.tableProperties)
     },
     onclickAddCafe() {
-      this.$refs.CafeDataModal.show()
+      this.$refs.cafeDataModal.show()
     }
   }
 }
