@@ -32,6 +32,19 @@
     }
   }
 
+  &-success {
+    border-color: $success;
+    background-color: $success;
+
+    &:hover, &:focus {
+      &:not(.disabled):not(:disabled) {
+        box-shadow: 0 8px 25px -8px $success;
+        border-color: $success;
+        background-color: darken($success, 2%);
+      }
+    }
+  }
+
   &-secondary {
     border-color: $secondary;
     background-color: $secondary;
@@ -72,5 +85,10 @@
 .btn-block {
   display: block;
   width: 100%;
+}
+
+.btn-sm {
+  font-size: 1rem;
+  padding: 0.486rem 1rem;
 }
 

@@ -1,0 +1,230 @@
+$calendar-grey: darken($grey, 40%);
+
+.b-calendar .b-calendar-grid-body .col[data-date] .btn {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  line-height: 1;
+  margin: 3px auto;
+  padding: 9px 0;
+}
+
+
+.b-form-datepicker {
+  display: flex;
+  align-items: stretch;
+  height: auto;
+  padding: 0;
+  background-image: none;
+  position: relative;
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    float: left;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: $white;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 0.25rem;
+
+    &.show {
+      display: flex;
+    }
+  }
+
+  .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+
+  .text-dark {
+    color: #343a40 !important;
+  }
+
+  .font-weight-bold {
+    font-weight: 700 !important;
+  }
+
+  .text-nowrap {
+    white-space: nowrap !important;
+  }
+
+  .rounded-circle {
+    border-radius: 50% !important;
+  }
+
+  .border-0 {
+    border: 0 !important;
+  }
+
+  .btn-outline-light {
+    color: #f8f9fa;
+    border-color: #f8f9fa;
+  }
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+    h-auto {
+      z-index: 2;
+    }
+  }
+
+
+}
+
+.b-form-btn-label-control.dropdown.b-form-datepicker.mb-2.form-control {
+  border: 1px solid $input-border-color;
+  border-radius: 0.438rem;
+  height: 36px;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &.show {
+    border-color: $primary;
+    box-shadow: 0 3px 10px 0 rgba($black, 0.1);
+
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    order: -1;
+    padding-left: 14px;
+  }
+
+}
+
+.b-calendar .b-calendar-grid .row {
+  flex-wrap: nowrap;
+}
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+.b-calendar-inner {
+
+  .b-calendar-header {
+    display: flex;
+    justify-content: center;
+    border: 1px solid $input-border-color;
+    border-radius: 0.438rem;
+    font-size: 11px;
+    color: $calendar-grey;
+    padding: 5px 4px;
+  }
+  .b-calendar-nav {
+
+    display: flex;
+    justify-content: space-between;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      box-shadow: none;
+      color: $calendar-grey;
+      font-size: 1.3rem;
+
+      &:active{
+        background-color: $input-border-color;
+      }
+
+      &:focus {
+        box-shadow: none !important;
+      }
+
+      div {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .b-calendar-grid {
+
+    border: 1px solid $primary;
+    border-radius: 0.438rem;
+
+
+    .b-calendar-grid-caption {
+      text-align: center;
+      margin-top: 4px;
+      color: $calendar-grey;
+    }
+
+    .b-calendar-grid-weekdays {
+      display: flex;
+      justify-content: center;
+      margin: 4px 0;
+      border-bottom: 1px solid lighten($grey, 15%);
+      small {
+        text-align: center;
+        font-size: 12px;
+      }
+    }
+
+    .b-calendar-grid-body {
+      .col {
+        text-align: center;
+
+        &:hover {
+          background-color: lighten($grey, 15%);
+          border-radius: 50%;
+        }
+      }
+
+      .active {
+        background-color: $primary;
+        box-shadow: $primary;
+      }
+    }
+
+    .b-calendar-grid-help {
+      display: none;
+    }
+  }
+}

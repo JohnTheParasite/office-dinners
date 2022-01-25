@@ -42,7 +42,7 @@
       <template #cell(vote)="data">
         <div class="like" :class="{ active: data.item.active }">
           <div class="like-button" @click="clickLike(data.item.id)">
-            <fa-icon icon="thumbs-up"></fa-icon>
+            <fa-icon icon="thumbs-up" class="icon"></fa-icon>
             Like
           </div>
           <div class="like-counter">{{ data.item.id }}</div>
@@ -89,6 +89,11 @@ export default {
   name: "CafeDataTable",
   components: { FaIcon, CommentsFormModal, SelectInput, Toggle },
   mixins: [DataTable],
+  data() {
+    return {
+      date: ""
+    }
+  },
   methods: {
     openCommentsModal(cafeId) {
       this.$refs.commentsFormModal.show(cafeId)
@@ -164,12 +169,16 @@ export default {
     justify-content: center;
     align-items: center;
     background-color: $white;
-    padding: 2px 6px;
+    padding: 4px 12px;
     border: 1px solid $primary;
     border-radius: 4px;
     cursor: pointer;
     color: $primary;
     transition: 0.3s ease;
+
+    .icon {
+      margin-right: 6px;
+    }
 
     &:hover {
       color: $white;
@@ -186,8 +195,8 @@ export default {
     border: 1px solid $primary;
     border-radius: 4px;
     margin-left: 4px;
-    height: 2rem;
-    width: 2rem;
+    margin: 4px 8px;
+    width: 1.5rem;
     background-color: $primary;
     color: $white;
   }

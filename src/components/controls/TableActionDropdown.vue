@@ -45,7 +45,11 @@ export default {
   .icon-button {
     cursor: pointer;
     text-align: center;
-    padding: 0.786rem 1.5rem;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .openable-options {
+    top: 25px;
   }
 }
 </style>
