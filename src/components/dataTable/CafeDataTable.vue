@@ -8,8 +8,21 @@
         </div>
         {{ $t("table.entries") }}
       </div>
-      <div class="time-picker">
-        <b-form-timepicker v-model="time" locale="en" right :placeholder="$t('interface.empty')"></b-form-timepicker>
+      <div v-if="currentUserIsAdmin">
+        <div class="time-picker" v-if="votesOpened">
+          <div class="close-votes-button">
+            <slot name="closeVotes"></slot>
+          </div>
+          <div class="time-picker-element">
+            <b-form-timepicker v-model="time" locale="en" right :placeholder="$t('interface.empty')"></b-form-timepicker>
+          </div>
+          <div class="set-auto-close-time">
+            <slot name="setAutoCloseTime"></slot>
+          </div>
+        </div>
+        <div class="open-votes-button" v-if="!votesOpened">
+          <slot name="openVotes"></slot>
+        </div>
       </div>
       <div class="search-actions">
         <text-input :debounce="true" placeholder="search" @input="search($event)"></text-input>
@@ -36,19 +49,22 @@
           {{ data.item.comments.toString() }}
         </a>
       </template>
-      <template #cell(rating)="data">
-        <b-form-rating v-model="data.item.rating" readonly></b-form-rating>
+      <template #cell(rating_food)="data">
+        <b-form-rating v-model="data.item.rating_food" readonly></b-form-rating>
+      </template>
+      <template #cell(rating_delivery)="data">
+        <b-form-rating v-model="data.item.rating_delivery" readonly></b-form-rating>
       </template>
       <template #cell(active)="data">
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
       <template #cell(vote)="data">
-        <div class="like" :class="{ active: data.item.active }">
+        <div class="like" :class="{ active: data.item.liked }">
           <div class="like-button" @click="clickLike(data.item.id)">
             <fa-icon icon="thumbs-up" class="icon"></fa-icon>
             Like
           </div>
-          <div class="like-counter">{{ data.item.id }}</div>
+          <div class="like-counter">{{ data.item.likes }}</div>
         </div>
       </template>
       <template #cell(actions)="data">
@@ -94,7 +110,8 @@ export default {
   mixins: [DataTable],
   data() {
     return {
-      time: this.setTime()
+      time: this.setTime(),
+      votesClosed: true
     }
   },
   methods: {
@@ -123,7 +140,16 @@ export default {
       this.tableProperties.perPage = value
     },
     clickLike(value) {
-      console.log(value)
+      this.$axios
+        .post(
+          ApiEndpoints.VOTE,
+          FormDataService.getFormData({
+            cafe_id: value
+          })
+        )
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     },
     setTime() {
       let currentDate = new Date()
@@ -138,11 +164,18 @@ export default {
         { key: "vote", label: this.$t("table.columns.vote"), sortable: false },
         { key: "name", label: this.$t("table.columns.name"), sortable: true },
         { key: "link", label: this.$t("table.columns.link"), sortable: true },
-        { key: "rating", label: this.$t("table.columns.rating"), sortable: true },
+        { key: "rating_food", label: this.$t("table.columns.rating_food"), sortable: true },
+        { key: "rating_delivery", label: this.$t("table.columns.rating_delivery"), sortable: true },
         { key: "comments", label: this.$t("table.columns.comments"), sortable: true },
         { key: "last_order_date", label: this.$t("table.columns.last_order_date"), sortable: true },
         { key: "actions", label: "", sortable: false }
       ]
+    },
+    currentUserIsAdmin() {
+      return this.$authService.getUserData().roleId < 2
+    },
+    votesOpened() {
+      return this.$store.state.global.votesOpened
     }
   }
 }
@@ -218,6 +251,31 @@ export default {
 }
 
 .time-picker {
-  width: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+
+  .close-votes-button {
+    button {
+      //width: 125px;
+    }
+  }
+
+  .time-picker-element {
+    width: 125px;
+  }
+
+  .set-auto-close-time {
+    button {
+      //width: 125px;
+    }
+  }
+}
+
+.open-votes-button {
+  button {
+    //width: 125px;
+  }
 }
 </style>

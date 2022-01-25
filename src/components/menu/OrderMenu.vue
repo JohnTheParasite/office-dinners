@@ -12,6 +12,8 @@
 <script>
 import FormButton from "@/components/controls/FormButton"
 import OrderFormModal from "@/views/modals/OrderFormModal"
+import { ApiEndpoints } from "@/enums/apiEndpoints"
+
 export default {
   name: "OrderMenu",
   components: { OrderFormModal, FormButton },
@@ -30,9 +32,27 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.$axios
+      .get(ApiEndpoints.CAFE_HEADER)
+      .then((response) => {
+        if (response && response.data) {
+          console.log(response.data.closed)
+          this.$store.commit("global/isVotesOpened", !response.data.closed)
+        }
+      })
+      .catch((error) => {
+        this.catchAxiosError(error)
+      })
+  },
   methods: {
     cafeMakeOrder(cafe) {
       this.$refs.orderDataModal.show(cafe)
+    }
+  },
+  computed: {
+    votesOpened() {
+      return this.$store.state.global.votesOpened
     }
   }
 }
@@ -43,7 +63,6 @@ export default {
 
 .order-top-bar {
   display: flex;
-  //justify-content: center;
   align-items: center;
 
   .order-menu {

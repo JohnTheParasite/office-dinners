@@ -9,4 +9,8 @@ export class ApiEndpoints {
   static CAFE_DATA = process.env.VUE_APP_API_URL + "/cafe/update"
   static CAFE_COMMENTS = process.env.VUE_APP_API_URL + "/comment/cafe"
   static CREATE_COMMENT = process.env.VUE_APP_API_URL + "/comment/add"
+  static VOTE = process.env.VUE_APP_API_URL + "/cafe/vote"
+  static CAFE_HEADER = process.env.VUE_APP_API_URL + "/cafe/header-data"
+  static VOTES_OPEN = process.env.VUE_APP_API_URL + "/cafe/open-votes"
+  static VOTES_CLOSE = process.env.VUE_APP_API_URL + "/cafe/close-votes"
 }

@@ -7,7 +7,7 @@
       </form-button>
     </template>
     <div class="new-comment">
-      <text-input label="user.name" :init-value="formGroup.username" @input="onChange('username', $event)" :required="true" />
+      <text-input label="user.name" :init-value="formGroup.username" @input="onChange('username', $event)" :required="true" ref="usernameInput" />
       <div class="comment-grade">
         <b>{{ $t("cafe.food") }}</b>
         <b-form-rating v-model="formGroup.rating_food"></b-form-rating>
@@ -16,7 +16,7 @@
         <b>{{ $t("cafe.delivery") }}</b>
         <b-form-rating v-model="formGroup.rating_delivery"></b-form-rating>
       </div>
-      <text-input label="Comment" :multiline="true" class="comment" :init-value="formGroup.comment" @input="onChange('comment', $event)" />
+      <text-input label="Comment" :multiline="true" class="comment" :init-value="formGroup.comment" @input="onChange('comment', $event)" ref="commentInput" />
       <form-button :disabled="!verified" label="cafe.addComment" @click="addComment" />
       <div class="separator"></div>
     </div>
@@ -58,13 +58,7 @@ export default {
   },
   data() {
     return {
-      formGroup: {
-        username: "Anonymous",
-        cafe_id: "",
-        rating_food: 0,
-        rating_delivery: 0,
-        comment: ""
-      },
+      formGroup: this.initFormGroup(),
       comments: [],
       cafeId: undefined
     }
@@ -72,7 +66,7 @@ export default {
   methods: {
     show(cafeId) {
       this.cafeId = cafeId
-      this.initFormGroup()
+      this.formGroup = this.initFormGroup()
       this.getCafeComments(cafeId)
       this.$bvModal.show("commentsDataModal")
     },
@@ -80,23 +74,21 @@ export default {
       this.formGroup[field] = value
     },
     initFormGroup() {
-      this.formGroup = {
+      return {
         username: "Anonymous",
         cafe_id: this.cafeId,
         rating_food: 0,
         rating_delivery: 0,
         comment: ""
       }
-      this.comments = []
     },
     addComment() {
       this.$axios
         .post(ApiEndpoints.CREATE_COMMENT, FormDataService.getFormData(this.formGroup))
         .then((response) => {
           this.$store.commit("toasts/addSuccessToast", "cafe.commentAdded")
-          this.$emit("refreshTable")
+          this.resetFormGroup()
           this.comments = response.data
-          this.initFormGroup()
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -113,6 +105,11 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+    },
+    resetFormGroup() {
+      this.formGroup = this.initFormGroup()
+      this.$refs.commentInput.value = ""
+      this.$refs.usernameInput.value = "Anonymous"
     }
   },
   computed: {

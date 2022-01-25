@@ -1,6 +1,9 @@
 <template>
   <div class="router-container">
     <cafe-data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
+      <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes('close')"></form-button>
+      <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes('open')"></form-button>
+      <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
       <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
     </cafe-data-table>
     <cafe-form-modal ref="cafeDataModal" @refreshTable="refreshTable" />
@@ -23,12 +26,15 @@ export default {
   data() {
     return {
       items: [],
-      tableProperties: {},
+      tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
     }
   },
   beforeMount() {
     this.getItems()
+  },
+  mounted() {
+    window.setInterval(this.refreshTable, 2000)
   },
   methods: {
     getItems(props) {
@@ -40,7 +46,6 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.items = this.addItemProperties(response.data.items)
-            // this.tableProperties = response.data.tableProperties
             this.pagination = response.data.pagination
           }
         })
@@ -66,7 +71,24 @@ export default {
     },
     onclickAddCafe() {
       this.$refs.cafeDataModal.show()
-    }
+    },
+    onclickOpenCloseVotes(action) {
+      let endpoint = ApiEndpoints.VOTES_CLOSE
+      if (action === "open") {
+        endpoint = ApiEndpoints.VOTES_OPEN
+      }
+      this.$axios
+        .post(endpoint)
+        .then((response) => {
+          if (response && response.data) {
+            this.$store.commit("toasts/addSuccessToast", endpoint === ApiEndpoints.VOTES_CLOSE ? "cafe.votesClosed" : "cafe.votesOpened")
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    },
+    onclickSetTimer() {}
   }
 }
 </script>

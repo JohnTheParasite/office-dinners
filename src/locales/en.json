@@ -41,7 +41,12 @@
     "delivery": "Delivery",
     "food": "Food",
     "addComment": "Add comment",
-    "commentAdded": "Comment added"
+    "commentAdded": "Comment added",
+    "closeVotes": "Close votes",
+    "openVotes": "Open votes",
+    "setAutoCloseTime": "Set autoclose time",
+    "votesClosed": "Votes closed",
+    "votesOpened": "Votes opened"
   },
   "order": {
     "user": "User",
@@ -67,7 +72,8 @@
       "role": "Role",
       "selected_language": "Language",
       "link": "Link",
-      "rating": "Rating",
+      "rating_food": "Food",
+      "rating_delivery": "Delivery",
       "comments": "Comments",
       "last_order_date": "Last order",
       "vote": "Vote here!"
