@@ -8,17 +8,20 @@
     </template>
     <div class="cafe-link-rating">
       <a :href="formGroup.link" target="_blank">{{ $t("order.clicklink") }}</a>
-      <b-form-rating v-model="formGroup.rating"></b-form-rating>
+      <b-form-rating v-model="formGroup.rating_food" readonly></b-form-rating>
     </div>
-    <div class="date">
-      <div class="last-order-label">{{ $t("table.columns.last_order_date") }}:</div>
-      <div class="last-order-date">{{ formGroup.last_order_date }}</div>
+    <div class="date-delivery-rating">
+      <div class="date">
+        <div class="last-order-label">{{ $t("table.columns.last_order_date") }}:</div>
+        <div class="last-order-date">{{ formGroup.last_order_date }}</div>
+      </div>
+      <b-form-rating v-model="formGroup.rating_delivery" readonly></b-form-rating>
     </div>
     <div class="inputs">
-      <text-input class="order" label="order.order" :init-value="formGroup.order" @input="onChange('order', $event)" :required="true" />
+      <text-input class="order" label="order.order" :init-value="formGroup.order_name" @input="onChange('order_name', $event)" :required="true" />
       <text-input label="order.price" :init-value="formGroup.price" @input="onChange('price', $event)" type="Number" :required="true" />
     </div>
-    <select-input v-if="currentUserIsAdmin" :options="users" :init-value="formGroup.user" label="order.user" @change="onChange('user', $event)" />
+    <select-input v-if="currentUserIsAdmin" :options="users" :init-value="formGroup.user_id" label="order.user" @change="onChange('user_id', $event)" />
     <template #modal-footer="{ cancel }">
       <form-button label="interface.cancel" @click="cancel" type="secondary" />
       <form-button label="interface.add" @click="add()" :disabled="!verified" />
@@ -32,6 +35,8 @@ import FormButton from "@/components/controls/FormButton"
 import FaIcon from "@/components/icons/FaIcon"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import SelectInput from "@/components/controls/SelectInput"
+import { ApiEndpoints } from "@/enums/apiEndpoints"
+import FormDataService from "@/services/formDataService"
 
 export default {
   name: "OrderFormModal",
@@ -39,37 +44,28 @@ export default {
   mixins: [ApiErrorHelper],
   data() {
     return {
-      formGroup: {
-        id: undefined,
-        name: "",
-        link: "",
-        rating: 0,
-        last_order_date: "",
-        price: "",
-        order: "",
-        user: this.$authService.getUserData().id
-      },
-      users: [],
-      cafeId: undefined
+      formGroup: this.initFormGroup(),
+      users: []
     }
   },
   methods: {
     show(cafe) {
-      this.initFormGroup()
+      this.formGroup = this.initFormGroup()
       Object.assign(this.formGroup, cafe)
       this.getItems()
       this.$bvModal.show("orderDataModal")
     },
     initFormGroup() {
-      this.formGroup = {
+      return {
         id: undefined,
         name: "",
         link: "",
-        rating: 0,
+        rating_food: 0,
+        rating_delivery: 0,
         last_order_date: "",
         price: "",
-        order: "",
-        user: this.$authService.getUserData().id
+        order_name: "",
+        user_id: this.$authService.getUserData().id
       }
     },
     onChange(field, value) {
@@ -83,13 +79,30 @@ export default {
       ]
     },
     add() {
-      this.$store.commit("toasts/addSuccessToast", "order.added")
-      this.$bvModal.hide("orderDataModal")
+      this.$axios
+        .post(
+          ApiEndpoints.ORDER_ADD,
+          FormDataService.getFormData({
+            cafe_id: this.formGroup.id,
+            order_name: this.formGroup.order_name,
+            price: this.formGroup.price,
+            user_id: this.formGroup.user_id
+          })
+        )
+        .then((response) => {
+          if (response && response.data) {
+            this.$store.commit("toasts/addSuccessToast", "order.added")
+            this.$bvModal.hide("orderDataModal")
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     }
   },
   computed: {
     verified() {
-      return this.formGroup.order.length > 0 && this.formGroup.price > 0
+      return this.formGroup.order_name.length > 0 && this.formGroup.price > 0
     },
     currentUserIsAdmin() {
       return this.$authService.getUserData().roleId < 2
@@ -99,7 +112,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cafe-link-rating {
+.cafe-link-rating,
+.date-delivery-rating {
   display: flex;
   justify-content: space-between;
 

@@ -44,6 +44,12 @@
       <template #cell()="data">
         <span v-html="data.value"></span>
       </template>
+      <template #cell(name)="data">
+        <a :href="data.item.link">
+          {{ data.item.name }}
+          <fa-icon icon="external-link"></fa-icon>
+        </a>
+      </template>
       <template #cell(comments)="data">
         <a href="#" @click="openCommentsModal(data.item.id)">
           {{ data.item.comments.toString() }}
@@ -60,7 +66,7 @@
       </template>
       <template #cell(vote)="data">
         <div class="like" :class="{ active: data.item.liked }">
-          <div class="like-button" @click="clickLike(data.item.id)">
+          <div class="like-button" @click="clickLike(data.item.id)" v-if="votesOpened">
             <fa-icon icon="thumbs-up" class="icon"></fa-icon>
             Like
           </div>
@@ -150,6 +156,7 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+      this.$emit("refreshTable")
     },
     setTime() {
       let currentDate = new Date()
@@ -163,10 +170,9 @@ export default {
         { key: "active", label: this.$t("table.columns.active"), sortable: true },
         { key: "vote", label: this.$t("table.columns.vote"), sortable: false },
         { key: "name", label: this.$t("table.columns.name"), sortable: true },
-        { key: "link", label: this.$t("table.columns.link"), sortable: true },
         { key: "rating_food", label: this.$t("table.columns.rating_food"), sortable: true },
         { key: "rating_delivery", label: this.$t("table.columns.rating_delivery"), sortable: true },
-        { key: "comments", label: this.$t("table.columns.comments"), sortable: true },
+        { key: "comments", label: this.$t("table.columns.comments"), class: "align-right", sortable: true },
         { key: "last_order_date", label: this.$t("table.columns.last_order_date"), sortable: true },
         { key: "actions", label: "", sortable: false }
       ]
@@ -235,8 +241,7 @@ export default {
     align-items: center;
     border: 1px solid $primary;
     border-radius: 4px;
-    margin-left: 4px;
-    margin: 4px 8px;
+    margin: 4px 8px 4px 4px;
     width: 1.5rem;
     background-color: $primary;
     color: $white;
@@ -256,26 +261,8 @@ export default {
   align-items: center;
   gap: 1rem;
 
-  .close-votes-button {
-    button {
-      //width: 125px;
-    }
-  }
-
   .time-picker-element {
     width: 125px;
-  }
-
-  .set-auto-close-time {
-    button {
-      //width: 125px;
-    }
-  }
-}
-
-.open-votes-button {
-  button {
-    //width: 125px;
   }
 }
 </style>

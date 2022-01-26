@@ -13,4 +13,7 @@ export class ApiEndpoints {
   static CAFE_HEADER = process.env.VUE_APP_API_URL + "/cafe/header-data"
   static VOTES_OPEN = process.env.VUE_APP_API_URL + "/cafe/open-votes"
   static VOTES_CLOSE = process.env.VUE_APP_API_URL + "/cafe/close-votes"
+  static VOTES_AUTOCLOSE = process.env.VUE_APP_API_URL + "/cafe/set-auto-close-time"
+  static ORDER_ADD = process.env.VUE_APP_API_URL + "/cafe/add-order"
+  static ORDER_CHANGE = process.env.VUE_APP_API_URL + "/cafe/change-order"
 }

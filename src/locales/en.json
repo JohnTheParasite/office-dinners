@@ -46,15 +46,17 @@
     "openVotes": "Open votes",
     "setAutoCloseTime": "Set autoclose time",
     "votesClosed": "Votes closed",
-    "votesOpened": "Votes opened"
+    "votesOpened": "Votes opened",
+    "votesTimeoutSet": "Autoclose time set"
   },
   "order": {
     "user": "User",
     "order": "Order",
     "price": "Price",
-    "clicklink": "Click to order",
+    "clicklink": "Open cafe",
     "orderDate": "Orders for date",
-    "userPay": "User to pay"
+    "userPay": "User to pay",
+    "added": "Order added"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",

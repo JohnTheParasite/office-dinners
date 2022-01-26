@@ -23,6 +23,8 @@
 
   .btn {
     color: lighten($black, 15%);
+    display: flex;
+    align-items: center;
 
     &.h-auto {
       padding: 11px 11px;
@@ -30,7 +32,6 @@
   }
 
   .dropdown-menu {
-
     z-index: 1000;
     display: none;
     float: left;
