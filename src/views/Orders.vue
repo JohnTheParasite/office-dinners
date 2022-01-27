@@ -31,15 +31,37 @@
           </div>
         </div>
 
-        <b-table :items="cafe.orders" primary-key="id" responsive show-empty>
+        <b-table :items="cafe.orders" :fields="getColumns" primary-key="id" responsive show-empty>
           <template #empty="">
             <span class="text-primary"> {{ $t("table.noItems") }} </span>
           </template>
+          <template #cell(order_name)="data">
+            <div v-if="data.item.edit">
+              <input v-model="data.item.order_name" class="cafe-input" />
+            </div>
+            <div v-else>
+              {{ data.item.order_name }}
+            </div>
+          </template>
+          <template #cell(actions)="data">
+            <div class="action-buttons" v-if="data.item.edit">
+              <div class="button" @click="onClickApply(data.item)">
+                <fa-icon icon="check-square-o" />
+              </div>
+              <div class="button" @click="onClickDecline(data.item)">
+                <fa-icon icon="ban" />
+              </div>
+            </div>
+            <div class="action-buttons" v-else>
+              <div class="button" @click="onClickEdit(data.item)">
+                <fa-icon icon="pencil-square-o" />
+              </div>
+              <div class="button" @click="onClickDelete(data.item)">
+                <fa-icon icon="times" />
+              </div>
+            </div>
+          </template>
         </b-table>
-
-        <div class="footer">
-          <label>Result: 3.50</label>
-        </div>
       </div>
     </div>
   </div>
@@ -49,10 +71,11 @@
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import FormButton from "@/components/controls/FormButton"
 import SelectInput from "@/components/controls/SelectInput"
+import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "Orders",
-  components: { SelectInput, FormButton },
+  components: { FaIcon, SelectInput, FormButton },
 
   mixins: [ApiErrorHelper],
   data() {
@@ -63,28 +86,34 @@ export default {
           cafeName: "Pasibus",
           cafeId: "1",
           link: "https://www.pasidostawa.pl/pasibus-pasaz-grunwaldzki",
-          orderUser: "",
+          orderUser: undefined,
           orders: [
             {
+              order_id: 1,
               user: "Иван",
-              order: "печеньки",
+              order_name: "печеньки",
               price: 3.14,
               shipping: 0.16,
-              packing: 1
+              packing: 1,
+              edit: false
             },
             {
+              order_id: 2,
               user: "Игорь",
-              order: "хлебные корочки",
+              order_name: "хлебные корочки",
               price: 3.16,
               shipping: 0.14,
-              packing: 1
+              packing: 1,
+              edit: false
             },
             {
+              order_id: 3,
               user: "Саня",
-              order: "Чего нибудь набрать до сотки",
+              order_name: "Чего нибудь набрать до сотки",
               price: 3.16,
               shipping: 0.14,
-              packing: 1
+              packing: 1,
+              edit: false
             }
           ]
         },
@@ -92,28 +121,34 @@ export default {
           cafeName: "Słowianka",
           cafeId: "2",
           link: "https://www.pyszne.pl/menu/slowianka-jednosci-narodowej",
-          orderUser: "",
+          orderUser: undefined,
           orders: [
             {
+              order_id: 4,
               user: "Иван",
-              order: "чаю",
+              order_name: "чаю",
               price: 3.14,
               shipping: 0.16,
-              packing: 1
+              packing: 1,
+              edit: false
             },
             {
+              order_id: 5,
               user: "Игорь",
-              order: "оладушки",
+              order_name: "оладушки",
               price: 4.16,
               shipping: 0.14,
-              packing: 1
+              packing: 1,
+              edit: false
             },
             {
+              order_id: 6,
               user: "Саня",
-              order: "Чего нибудь еще бы",
+              order_name: "Чего нибудь еще бы",
               price: 5.16,
               shipping: 0.14,
-              packing: 1
+              packing: 1,
+              edit: false
             }
           ]
         }
@@ -124,9 +159,6 @@ export default {
         { text: "WqZOPFp0Hk eAf5AQd4yp", value: 153, selected: false }
       ]
     }
-  },
-  beforeMount() {
-    //this.getItems()
   },
   methods: {
     changeDate(daysAmount) {
@@ -152,11 +184,24 @@ export default {
 
       return year + "-" + month + "-" + day
     },
+    onClickEdit(row) {
+      row.edit = !row.edit
+    },
     makeOrder() {}
   },
   computed: {
     currentUserIsAdmin() {
       return this.$authService.getUserData().roleId < 2
+    },
+    getColumns() {
+      return [
+        { key: "user", label: this.$t("table.orderColumns.user"), sortable: true },
+        { key: "order_name", label: this.$t("table.orderColumns.order"), sortable: false },
+        { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right", sortable: true },
+        { key: "shipping", label: this.$t("table.orderColumns.shipping"), class: "align-right", sortable: true },
+        { key: "packing", label: this.$t("table.orderColumns.packing"), class: "align-right", sortable: true },
+        { key: "actions", label: "", sortable: false }
+      ]
     }
   }
 }
@@ -207,7 +252,6 @@ export default {
         font-weight: 500;
       }
     }
-
     .order-user {
       display: flex;
       justify-content: center;
@@ -232,21 +276,17 @@ export default {
     border-bottom: 1px solid $input-border-color;
   }
 
-  .footer {
+  .action-buttons {
     display: flex;
-    align-items: center;
-    background-color: $white;
-    height: 3rem;
-    justify-content: right;
+    justify-content: center;
 
-    label {
-      font-weight: 600;
-      margin-right: 1.5rem;
+    i {
+      padding: 2px 8px;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
-  }
-
-  .content-block {
-    overflow: hidden;
   }
 }
 </style>

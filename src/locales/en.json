@@ -79,6 +79,13 @@
       "comments": "Comments",
       "last_order_date": "Last order",
       "vote": "Vote here!"
+    },
+    "orderColumns": {
+      "user": "user",
+      "order": "order",
+      "price": "price",
+      "shipping": "shipping",
+      "packing": "packing"
     }
   },
   "interface": {
