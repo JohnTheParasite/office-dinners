@@ -3,31 +3,43 @@
     <div class="content-block date-block">
       <label class="dateLabel">{{ $t("order.orderDate") }}:</label>
       <div class="date-picker">
-        <form-button label="<" class="button" type="secondary" @click="changeDate(-1)"></form-button>
-        <b-form-datepicker
-          id="example-datepicker"
-          v-model="date"
-          class="mb-2"
-          start-weekday="1"
-          right
-          :placeholder="$t('interface.noDate')"
-          :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-        ></b-form-datepicker>
-        <form-button label=">" class="button" type="secondary" @click="changeDate(1)"></form-button>
+        <div class="button" @click="changeDate(-1)">&lt;</div>
+        <div class="datepicker-element">
+          <b-form-datepicker
+            id="example-datepicker"
+            v-model="date"
+            class="mb-2"
+            start-weekday="1"
+            right
+            :placeholder="$t('interface.noDate')"
+            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+          ></b-form-datepicker>
+        </div>
+        <div class="button" @click="changeDate(1)">&gt;</div>
       </div>
     </div>
     <div class="table-container" v-for="cafe in cafeItems" :key="cafe.cafeId">
       <div class="content-block">
         <div class="cafe-actions">
           <div class="cafe-name-link">
-            <a class="cafe-name" :href="cafe.link" target="_blank"> {{ cafe.cafeName }} </a>
+            <a class="cafe-name" :href="cafe.link" target="_blank"> {{ cafe.cafeName }} <fa-icon icon="external-link" /> </a>
           </div>
-          <div class="order-user" v-if="currentUserIsAdmin">
-            <label>{{ $t("order.userPay") }}:</label>
-            <select-input :options="users" :init-value="cafe.orderUser" />
-          </div>
-          <div class="order-button">
-            <form-button label="interface.order" @click="makeOrder()"></form-button>
+          <div class="order-block">
+            <div class="order-user" v-if="currentUserIsAdmin">
+              <label>{{ $t("order.userPay") }}:</label>
+              <select-input :options="users" :init-value="cafe.orderUser" />
+              <form-button label="interface.select" @click="selectUser()"></form-button>
+            </div>
+            <div v-else>
+              <label>{{ $t("order.userPay") }}: {{ cafe.orderUser }}</label>
+            </div>
+            <div class="close-order-button" v-if="cafe.closed">
+              <form-button label="interface.openOrder" @click="openOrder(cafe)"></form-button>
+              <form-button label="interface.ordered" @click="ordered(cafe)"></form-button>
+            </div>
+            <div v-else>
+              <form-button label="interface.closeOrder" @click="closeOrder(cafe)"></form-button>
+            </div>
           </div>
         </div>
 
@@ -39,31 +51,40 @@
             <div v-if="data.item.edit">
               <input v-model="data.item.order_name" class="cafe-input" />
             </div>
-            <div v-else>
+            <div v-else class="text">
               {{ data.item.order_name }}
+            </div>
+          </template>
+          <template #cell(price)="data">
+            <div v-if="data.item.edit">
+              <input v-model="data.item.price" class="cafe-input number" type="number" />
+            </div>
+            <div v-else class="text">
+              {{ data.item.price }}
             </div>
           </template>
           <template #cell(actions)="data">
             <div class="action-buttons" v-if="data.item.edit">
-              <div class="button" @click="onClickApply(data.item)">
+              <div class="apply" @click="onClickApply(data.item)">
                 <fa-icon icon="check-square-o" />
               </div>
-              <div class="button" @click="onClickDecline(data.item)">
+              <div class="decline" @click="onClickDecline(data.item)">
                 <fa-icon icon="ban" />
               </div>
             </div>
             <div class="action-buttons" v-else>
-              <div class="button" @click="onClickEdit(data.item)">
+              <div class="edit" @click="onClickEdit(data.item)">
                 <fa-icon icon="pencil-square-o" />
               </div>
-              <div class="button" @click="onClickDelete(data.item)">
-                <fa-icon icon="times" />
+              <div class="delete" @click="onClickDelete(data.item)">
+                <fa-icon icon="trash-o" />
               </div>
             </div>
           </template>
         </b-table>
       </div>
     </div>
+    <modal-question ref="orderApprovedModal " modalId="orderApprovedModal" title="correct?" content="vse zbs?" :apply="apply" />
   </div>
 </template>
 
@@ -72,10 +93,12 @@ import ApiErrorHelper from "@/services/apiErrorHelper"
 import FormButton from "@/components/controls/FormButton"
 import SelectInput from "@/components/controls/SelectInput"
 import FaIcon from "@/components/icons/FaIcon"
+import ModalQuestion from "@/components/modalQuestion"
+//import { ApiEndpoints } from "@/enums/apiEndpoints"
 
 export default {
   name: "Orders",
-  components: { FaIcon, SelectInput, FormButton },
+  components: { ModalQuestion, FaIcon, SelectInput, FormButton },
 
   mixins: [ApiErrorHelper],
   data() {
@@ -87,6 +110,7 @@ export default {
           cafeId: "1",
           link: "https://www.pasidostawa.pl/pasibus-pasaz-grunwaldzki",
           orderUser: undefined,
+          closed: false,
           orders: [
             {
               order_id: 1,
@@ -122,6 +146,7 @@ export default {
           cafeId: "2",
           link: "https://www.pyszne.pl/menu/slowianka-jednosci-narodowej",
           orderUser: undefined,
+          closed: false,
           orders: [
             {
               order_id: 4,
@@ -185,9 +210,50 @@ export default {
       return year + "-" + month + "-" + day
     },
     onClickEdit(row) {
-      row.edit = !row.edit
+      row.edit = true
+      row.old_order_name = row.order_name
+      row.old_price = row.price
     },
-    makeOrder() {}
+    onClickApply(row) {
+      // let updatedOrder = {
+      //   order_id: row.order_id,
+      //   order_name: row.order_name,
+      //   price: row.price
+      // }
+      //
+      // this.$axios
+      //   .patch(ApiEndpoints.ORDER_CHANGE, updatedOrder)
+      //   .then(() => {
+      //     this.$store.commit("toasts/addSuccessToast", "order.updated")
+      //     row.edit = false
+      //   })
+      //   .catch((error) => {
+      //     this.catchAxiosError(error)
+      //   })
+      row.edit = false
+    },
+    onClickDecline(row) {
+      row.edit = false
+      row.order_name = row.old_order_name
+      row.price = row.old_price
+    },
+    onClickDelete(row) {
+      console.log("delete order " + row.order_id)
+    },
+    selectUser() {},
+    closeOrder(cafe) {
+      cafe.closed = true
+    },
+    openOrder(cafe) {
+      cafe.closed = false
+    },
+    ordered() {
+      console.log(this.$refs.orderApprovedModal)
+      //this.$refs.orderApprovedModal.show()
+    },
+    apply() {
+      console.log("apply")
+    }
   },
   computed: {
     currentUserIsAdmin() {
@@ -197,10 +263,10 @@ export default {
       return [
         { key: "user", label: this.$t("table.orderColumns.user"), sortable: true },
         { key: "order_name", label: this.$t("table.orderColumns.order"), sortable: false },
-        { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right", sortable: true },
-        { key: "shipping", label: this.$t("table.orderColumns.shipping"), class: "align-right", sortable: true },
-        { key: "packing", label: this.$t("table.orderColumns.packing"), class: "align-right", sortable: true },
-        { key: "actions", label: "", sortable: false }
+        { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width", sortable: true },
+        { key: "shipping", label: this.$t("table.orderColumns.shipping"), class: "align-right column-width", sortable: true },
+        { key: "packing", label: this.$t("table.orderColumns.packing"), class: "align-right column-width", sortable: true },
+        { key: "actions", label: "", class: "column-width", sortable: false }
       ]
     }
   }
@@ -219,18 +285,27 @@ export default {
       margin-left: 1.5rem;
     }
     .date-picker {
-      width: 200px;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
       margin: 1rem 0;
 
+      .datepicker-element {
+        width: 150px;
+      }
+
       .button {
-        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $primary;
+        border-radius: 4px;
+        margin: 4px 8px;
         width: 1.6rem;
-        height: 1.6rem;
-        margin: 0 0.5rem;
+        background-color: $primary;
+        color: $white;
+        cursor: pointer;
       }
     }
   }
@@ -243,7 +318,7 @@ export default {
 
     .cafe-name-link {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       width: 350px;
 
       .cafe-name {
@@ -252,21 +327,29 @@ export default {
         font-weight: 500;
       }
     }
-    .order-user {
+    .order-block {
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 1rem;
+      .order-user {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
 
-      label {
-        margin-right: 1rem;
+        .form-group {
+          margin-bottom: 0;
+        }
+
+        .openable-options {
+          top: 33px;
+        }
       }
 
-      .form-group {
-        margin-bottom: 0;
-      }
-
-      .openable-options {
-        top: 33px;
+      .close-order-button {
+        display: flex;
+        gap: 1rem;
       }
     }
   }
@@ -274,6 +357,25 @@ export default {
   .table-responsive {
     margin-bottom: 0;
     border-bottom: 1px solid $input-border-color;
+
+    .column-width {
+      width: 9rem;
+    }
+
+    .cafe-input {
+      width: 100%;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid $primary;
+
+      &.number {
+        text-align: right;
+      }
+    }
+
+    .text {
+      padding: 1px 0 2px 0;
+    }
   }
 
   .action-buttons {
@@ -282,10 +384,17 @@ export default {
 
     i {
       padding: 2px 8px;
+      cursor: pointer;
+    }
 
-      &:hover {
-        cursor: pointer;
-      }
+    .delete:hover,
+    .decline:hover {
+      color: $danger;
+    }
+
+    .edit:hover,
+    .apply:hover {
+      color: $success;
     }
   }
 }

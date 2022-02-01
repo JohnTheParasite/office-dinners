@@ -56,7 +56,8 @@
     "clicklink": "Open cafe",
     "orderDate": "Orders for date",
     "userPay": "User to pay",
-    "added": "Order added"
+    "added": "Order added",
+    "updated": "Order updated"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -102,6 +103,9 @@
     "add": "Add",
     "noDate": "No date selected",
     "empty": "empty",
-    "order": "Order"
+    "ordered": "Ordered",
+    "closeOrder": "Close orders",
+    "openOrder": "Open orders",
+    "select": "Select"
   }
 }

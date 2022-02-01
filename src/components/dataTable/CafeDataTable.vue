@@ -168,7 +168,7 @@ export default {
     getColumns() {
       return [
         { key: "active", label: this.$t("table.columns.active"), sortable: true },
-        { key: "vote", label: this.$t("table.columns.vote"), sortable: false },
+        { key: "vote", label: this.$t("table.columns.vote"), class: "align-center", sortable: false },
         { key: "name", label: this.$t("table.columns.name"), sortable: true },
         { key: "rating_food", label: this.$t("table.columns.rating_food"), sortable: true },
         { key: "rating_delivery", label: this.$t("table.columns.rating_delivery"), sortable: true },
@@ -210,6 +210,7 @@ export default {
   display: flex;
   justify-content: center;
   font-size: 0.8rem;
+  gap: 4px;
 
   .like-button {
     display: flex;
@@ -241,7 +242,7 @@ export default {
     align-items: center;
     border: 1px solid $primary;
     border-radius: 4px;
-    margin: 4px 8px 4px 4px;
+    margin: 4px 0;
     width: 1.5rem;
     background-color: $primary;
     color: $white;

@@ -7,7 +7,7 @@
       </form-button>
     </template>
     <div class="cafe-link-rating">
-      <a :href="formGroup.link" target="_blank">{{ $t("order.clicklink") }}</a>
+      <a :href="formGroup.link" target="_blank">{{ $t("order.clicklink") }} <fa-icon icon="external-link"></fa-icon></a>
       <b-form-rating v-model="formGroup.rating_food" readonly></b-form-rating>
     </div>
     <div class="date-delivery-rating">
