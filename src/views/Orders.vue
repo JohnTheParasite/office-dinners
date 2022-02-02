@@ -47,6 +47,7 @@
           <template #empty="">
             <span class="text-primary"> {{ $t("table.noItems") }} </span>
           </template>
+
           <template #cell(order_name)="data">
             <div v-if="data.item.edit">
               <input v-model="data.item.order_name" class="cafe-input" />
@@ -55,6 +56,7 @@
               {{ data.item.order_name }}
             </div>
           </template>
+
           <template #cell(price)="data">
             <div v-if="data.item.edit">
               <input v-model="data.item.price" class="cafe-input number" type="number" />
@@ -63,28 +65,78 @@
               {{ data.item.price }}
             </div>
           </template>
+
           <template #cell(actions)="data">
             <div class="action-buttons" v-if="data.item.edit">
-              <div class="apply" @click="onClickApply(data.item)">
+              <div class="action apply" @click="onClickApply(data.item)">
                 <fa-icon icon="check-square-o" />
               </div>
-              <div class="decline" @click="onClickDecline(data.item)">
+              <div class="action decline" @click="onClickDecline(data.item)">
                 <fa-icon icon="ban" />
               </div>
             </div>
             <div class="action-buttons" v-else>
-              <div class="edit" @click="onClickEdit(data.item)">
+              <div class="action edit" @click="onClickEdit(data.item)">
                 <fa-icon icon="pencil-square-o" />
               </div>
-              <div class="delete" @click="onClickDelete(data.item)">
+              <div class="action delete" @click="onClickDelete(data.item)">
                 <fa-icon icon="trash-o" />
               </div>
             </div>
           </template>
+
+          <template v-slot:custom-foot="">
+            <b-tr class="footer footer-row">
+              <b-td></b-td>
+              <b-td>Total:</b-td>
+              <b-td>
+                <div v-if="cafe.footer.edit">
+                  <input v-model="cafe.footer.price" class="cafe-input number footer" type="number" />
+                </div>
+                <div v-else class="text">
+                  {{ cafe.footer.price }}
+                </div>
+              </b-td>
+              <b-td>
+                <div v-if="cafe.footer.edit">
+                  <input v-model="cafe.footer.shipping" class="cafe-input number footer" type="number" />
+                </div>
+                <div v-else class="text">
+                  {{ cafe.footer.shipping }}
+                </div>
+              </b-td>
+              <b-td
+                ><div v-if="cafe.footer.edit">
+                  <input v-model="cafe.footer.packing" class="cafe-input number footer" type="number" />
+                </div>
+                <div v-else class="text">
+                  {{ cafe.footer.packing }}
+                </div>
+              </b-td>
+              <b-td>
+                <div v-if="currentUserIsAdmin">
+                  <div class="action-buttons" v-if="cafe.footer.edit">
+                    <div class="action apply" @click="onClickApplyFooter(cafe.footer)">
+                      <fa-icon icon="check-square-o" />
+                    </div>
+                    <div class="action decline" @click="onClickDeclineFooter(cafe.footer)">
+                      <fa-icon icon="ban" />
+                    </div>
+                  </div>
+                  <div class="action-buttons" v-else>
+                    <div class="action edit" @click="onClickEditFooter(cafe.footer)">
+                      <fa-icon icon="pencil-square-o" />
+                    </div>
+                  </div>
+                </div>
+                <div v-else></div>
+              </b-td>
+            </b-tr>
+          </template>
         </b-table>
       </div>
     </div>
-    <modal-question ref="orderApprovedModal " modalId="orderApprovedModal" title="correct?" content="vse zbs?" :apply="apply" />
+    <modal-question ref="orderApprovedModal" modalId="orderApprovedModal" title="correct?" content="vse zbs?" :apply="apply" />
   </div>
 </template>
 
@@ -94,7 +146,7 @@ import FormButton from "@/components/controls/FormButton"
 import SelectInput from "@/components/controls/SelectInput"
 import FaIcon from "@/components/icons/FaIcon"
 import ModalQuestion from "@/components/modalQuestion"
-//import { ApiEndpoints } from "@/enums/apiEndpoints"
+import { ApiEndpoints } from "@/enums/apiEndpoints"
 
 export default {
   name: "Orders",
@@ -111,6 +163,12 @@ export default {
           link: "https://www.pasidostawa.pl/pasibus-pasaz-grunwaldzki",
           orderUser: undefined,
           closed: false,
+          footer: {
+            price: 9.99,
+            shipping: 2,
+            packing: 1,
+            edit: false
+          },
           orders: [
             {
               order_id: 1,
@@ -147,6 +205,12 @@ export default {
           link: "https://www.pyszne.pl/menu/slowianka-jednosci-narodowej",
           orderUser: undefined,
           closed: false,
+          footer: {
+            price: 9.99,
+            shipping: 2,
+            packing: 1,
+            edit: false
+          },
           orders: [
             {
               order_id: 4,
@@ -215,22 +279,20 @@ export default {
       row.old_price = row.price
     },
     onClickApply(row) {
-      // let updatedOrder = {
-      //   order_id: row.order_id,
-      //   order_name: row.order_name,
-      //   price: row.price
-      // }
-      //
-      // this.$axios
-      //   .patch(ApiEndpoints.ORDER_CHANGE, updatedOrder)
-      //   .then(() => {
-      //     this.$store.commit("toasts/addSuccessToast", "order.updated")
-      //     row.edit = false
-      //   })
-      //   .catch((error) => {
-      //     this.catchAxiosError(error)
-      //   })
-      row.edit = false
+      let updatedOrder = {
+        order_id: row.order_id,
+        order_name: row.order_name,
+        price: row.price
+      }
+      this.$axios
+        .patch(ApiEndpoints.ORDER_CHANGE, updatedOrder)
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          row.edit = false
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     },
     onClickDecline(row) {
       row.edit = false
@@ -240,6 +302,21 @@ export default {
     onClickDelete(row) {
       console.log("delete order " + row.order_id)
     },
+    onClickEditFooter(footer) {
+      footer.edit = true
+      footer.old_price = footer.price
+      footer.old_shipping = footer.shipping
+      footer.old_packing = footer.packing
+    },
+    onClickApplyFooter(footer) {
+      footer.edit = false // + some api
+    },
+    onClickDeclineFooter(footer) {
+      footer.edit = false
+      footer.price = footer.old_price
+      footer.shipping = footer.old_shipping
+      footer.packing = footer.old_packing
+    },
     selectUser() {},
     closeOrder(cafe) {
       cafe.closed = true
@@ -247,12 +324,12 @@ export default {
     openOrder(cafe) {
       cafe.closed = false
     },
-    ordered() {
-      console.log(this.$refs.orderApprovedModal)
-      //this.$refs.orderApprovedModal.show()
+    ordered(cafe) {
+      this.$refs.orderApprovedModal.show(() => this.apply(cafe))
     },
-    apply() {
-      console.log("apply")
+    apply(cafe) {
+      console.log(cafe.cafeId)
+      this.$refs.orderApprovedModal.hide()
     }
   },
   computed: {
@@ -261,13 +338,19 @@ export default {
     },
     getColumns() {
       return [
-        { key: "user", label: this.$t("table.orderColumns.user"), sortable: true },
+        { key: "user", label: this.$t("table.orderColumns.user"), class: "user-column", sortable: true },
         { key: "order_name", label: this.$t("table.orderColumns.order"), sortable: false },
         { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width", sortable: true },
         { key: "shipping", label: this.$t("table.orderColumns.shipping"), class: "align-right column-width", sortable: true },
         { key: "packing", label: this.$t("table.orderColumns.packing"), class: "align-right column-width", sortable: true },
         { key: "actions", label: "", class: "column-width", sortable: false }
       ]
+    },
+    aTotal() {
+      return 5
+    },
+    bTotal() {
+      return 6
     }
   }
 }
@@ -362,6 +445,10 @@ export default {
       width: 9rem;
     }
 
+    .user-column {
+      width: 25%;
+    }
+
     .cafe-input {
       width: 100%;
       outline: none;
@@ -370,6 +457,10 @@ export default {
 
       &.number {
         text-align: right;
+
+        &.footer {
+          background: #f3f2f7;
+        }
       }
     }
 
@@ -381,20 +472,56 @@ export default {
   .action-buttons {
     display: flex;
     justify-content: center;
+    gap: 0.6rem;
 
     i {
       padding: 2px 8px;
       cursor: pointer;
     }
 
-    .delete:hover,
-    .decline:hover {
-      color: $danger;
-    }
+    .action {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid $primary;
+      border-radius: 4px;
+      width: 2rem;
+      background-color: $primary;
+      color: $white;
+      cursor: pointer;
+      padding-top: 3px;
+      padding-bottom: 3px;
 
-    .edit:hover,
-    .apply:hover {
-      color: $success;
+      &.edit {
+        background-color: $primary;
+        border-color: $primary;
+        padding: 3px 0 3px 3px;
+      }
+
+      &.delete {
+        background-color: $danger;
+        border-color: $danger;
+        padding: 0 1px;
+      }
+
+      &.decline {
+        background-color: $warning;
+        border-color: $warning;
+      }
+
+      &.apply {
+        background-color: $success;
+        border-color: $success;
+        padding-left: 2px;
+      }
+    }
+  }
+
+  .footer {
+    background: #f3f2f7;
+
+    &.footer-row {
+      text-align: right;
     }
   }
 }

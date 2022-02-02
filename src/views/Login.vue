@@ -7,6 +7,14 @@
         </div>
         <form ref="form" class="auth-login-form" @submit="login">
           <text-input :required="true" label="email" @input="onInput('email', $event)" />
+          <b-form-datepicker
+            id="example-datepicker"
+            class="mb-2"
+            start-weekday="1"
+            right
+            :placeholder="$t('interface.noDate')"
+            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+          ></b-form-datepicker>
           <password-input :required="true" @input="onInput('password', $event)"> </password-input>
           <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="signIn"></form-button>
         </form>

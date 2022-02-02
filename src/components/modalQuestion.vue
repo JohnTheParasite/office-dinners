@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="orderApprovedModal" centered :header-class="buttonVariant" no-close-on-backdrop>
+  <b-modal :id="modalId" centered :header-class="buttonVariant" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
@@ -39,14 +39,20 @@ export default {
     },
     buttonVariant: {
       default: SystemTypes.PRIMARY
-    },
-    apply: {
-      type: Function
+    }
+  },
+  data() {
+    return {
+      apply: () => {}
     }
   },
   methods: {
-    show() {
-      this.$bvModal.show("orderApprovedModal")
+    show(apply) {
+      this.apply = apply
+      this.$bvModal.show(this.modalId)
+    },
+    hide() {
+      this.$bvModal.hide(this.modalId)
     }
   }
 }
