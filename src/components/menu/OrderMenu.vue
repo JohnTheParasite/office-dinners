@@ -1,7 +1,7 @@
 <template>
-  <div class="order-top-bar" v-if="votesOpened">
+  <div v-if="votesOpened" class="order-top-bar">
     <div class="order-menu">
-      <div class="cafe-with-counter" v-for="item in topCafe" :key="item.id">
+      <div v-for="item in topCafe" :key="item.id" class="cafe-with-counter">
         <div class="cafe-button">
           {{ item.name }}
         </div>
@@ -9,10 +9,10 @@
       </div>
     </div>
   </div>
-  <div class="order-top-bar" v-else>
+  <div v-else class="order-top-bar">
     <div class="order-menu">
-      <div class="cafe-button" v-for="item in topCafe" :key="item.id">
-        <form-button :label="item.name" @click="cafeMakeOrder(item)" type="success" size="btn-sm" />
+      <div v-for="item in topCafe" :key="item.id" class="cafe-button">
+        <form-button :label="item.name" size="btn-sm" type="success" @click="cafeMakeOrder(item)" />
       </div>
     </div>
     <order-form-modal ref="orderDataModal"></order-form-modal>
@@ -33,7 +33,11 @@ export default {
     }
   },
   mounted() {
-    window.setInterval(this.getVoteResults, 2000)
+    if (process.env.VUE_APP_ENV === "dev") {
+      this.getVoteResults()
+    } else {
+      window.setInterval(this.getVoteResults, 2000)
+    }
   },
   methods: {
     cafeMakeOrder(cafe) {

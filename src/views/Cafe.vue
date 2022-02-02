@@ -1,13 +1,13 @@
 <template>
   <div class="router-container">
     <cafe-data-table
+      ref="cafeDataTable"
       :items="items"
       :on-click-edit="openEdit"
       :on-filter-change="updateResults"
       :pagination="pagination"
       :total="items.length"
       @refreshTable="refreshTable"
-      ref="cafeDataTable"
     >
       <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
       <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
@@ -42,7 +42,11 @@ export default {
     this.getItems()
   },
   mounted() {
-    window.setInterval(this.refreshTable, 2000)
+    if (process.env.VUE_APP_ENV === "dev") {
+      this.refreshTable()
+    } else {
+      window.setInterval(this.refreshTable, 2000)
+    }
   },
   methods: {
     getItems(props) {
