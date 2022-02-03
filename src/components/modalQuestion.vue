@@ -7,7 +7,8 @@
       </form-button>
     </template>
     <div class="content">
-      {{ content }}
+      {{ $t(content) }}
+      <slot></slot>
     </div>
     <template #modal-footer="{ cancel }">
       <form-button label="Cancel" @click="cancel" type="secondary" />

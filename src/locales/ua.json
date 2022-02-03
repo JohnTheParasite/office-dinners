@@ -106,10 +106,6 @@
     "ordered": "Ordered",
     "closeOrder": "Close orders",
     "openOrder": "Open orders",
-    "select": "Select",
-    "selectDiscount": "Select discount",
-    "percent": "Percent",
-    "orderedTitleQuestion": "Question title",
-    "orderedQuestion": "How are you man?"
+    "select": "Select"
   }
 }

@@ -2,7 +2,8 @@ export default {
   namespaced: true,
   state: {
     errors: [],
-    votesOpened: false
+    votesOpened: false,
+    usersList: []
   },
   mutations: {
     addErrors: (state, errors) => {
@@ -10,6 +11,14 @@ export default {
     },
     isVotesOpened: (state, value) => {
       state.votesOpened = value
+    },
+    setUsersList: (state, usersList) => {
+      state.usersList = usersList
+    }
+  },
+  actions: {
+    setUsersList({ commit }, usersList) {
+      commit("setUsersList", usersList)
     }
   }
 }

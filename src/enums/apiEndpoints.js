@@ -16,4 +16,5 @@ export class ApiEndpoints {
   static VOTES_AUTOCLOSE = process.env.VUE_APP_API_URL + "/cafe/set-auto-close-time"
   static ORDER_ADD = process.env.VUE_APP_API_URL + "/cafe/add-order"
   static ORDER_CHANGE = process.env.VUE_APP_API_URL + "/cafe/change-order"
+  static ORDERS_GET = process.env.VUE_APP_API_URL + "/order/get-for-date"
 }

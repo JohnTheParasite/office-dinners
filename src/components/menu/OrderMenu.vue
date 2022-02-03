@@ -50,6 +50,7 @@ export default {
           if (response && response.data) {
             this.topCafe = response.data.cafes
             this.$store.commit("global/isVotesOpened", !response.data.closed)
+            this.$store.dispatch("global/setUsersList", response.data.usersList)
           }
         })
         .catch((error) => {

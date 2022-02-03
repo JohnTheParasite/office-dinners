@@ -21,7 +21,13 @@
       <text-input class="order" label="order.order" :init-value="formGroup.order_name" @input="onChange('order_name', $event)" :required="true" />
       <text-input label="order.price" :init-value="formGroup.price" @input="onChange('price', $event)" type="Number" :required="true" />
     </div>
-    <select-input v-if="currentUserIsAdmin" :options="users" :init-value="formGroup.user_id" label="order.user" @change="onChange('user_id', $event)" />
+    <select-input
+      v-if="currentUserIsAdmin"
+      :options="$store.state.global.usersList"
+      :init-value="formGroup.user_id"
+      label="order.user"
+      @change="onChange('user_id', $event)"
+    />
     <template #modal-footer="{ cancel }">
       <form-button label="interface.cancel" @click="cancel" type="secondary" />
       <form-button label="interface.add" @click="add()" :disabled="!verified" />
@@ -52,7 +58,6 @@ export default {
     show(cafe) {
       this.formGroup = this.initFormGroup()
       Object.assign(this.formGroup, cafe)
-      this.getItems()
       this.$bvModal.show("orderDataModal")
     },
     initFormGroup() {
@@ -70,13 +75,6 @@ export default {
     },
     onChange(field, value) {
       this.formGroup[field] = value
-    },
-    getItems() {
-      this.users = [
-        { text: "Ihor Kyryliuk", value: 7, selected: false },
-        { text: "ivan Barbashov", value: 154, selected: false },
-        { text: "WqZOPFp0Hk eAf5AQd4yp", value: 153, selected: false }
-      ]
     },
     add() {
       this.$axios

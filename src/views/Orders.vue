@@ -8,6 +8,7 @@
           <b-form-datepicker
             id="example-datepicker"
             v-model="date"
+            @input="dateInput(date)"
             class="mb-2"
             start-weekday="1"
             right
@@ -18,20 +19,23 @@
         <div class="button" @click="changeDate(1)">&gt;</div>
       </div>
     </div>
-    <div class="table-container" v-for="cafe in cafeItems" :key="cafe.cafeId">
+    <div class="table-container" v-for="(cafe, index) in cafeItems" :key="index">
       <div class="content-block">
         <div class="cafe-actions">
           <div class="cafe-name-link">
-            <a class="cafe-name" :href="cafe.link" target="_blank"> {{ cafe.cafeName }} <fa-icon icon="external-link" /> </a>
+            <a class="cafe-name" :href="cafe.link" target="_blank">
+              {{ cafe.name }}
+              <fa-icon icon="external-link" />
+            </a>
           </div>
           <div class="order-block">
             <div class="order-user" v-if="currentUserIsAdmin">
               <label>{{ $t("order.userPay") }}:</label>
-              <select-input :options="users" :init-value="cafe.orderUser" />
+              <select-input :options="$store.state.global.usersList" :init-value="cafe.order_person" />
               <form-button label="interface.select" @click="selectUser()"></form-button>
             </div>
             <div v-else>
-              <label>{{ $t("order.userPay") }}: {{ cafe.orderUser }}</label>
+              <label>{{ $t("order.userPay") }}: {{ cafe.order_person }}</label>
             </div>
             <div class="close-order-button" v-if="cafe.closed">
               <form-button label="interface.openOrder" @click="openOrder(cafe)"></form-button>
@@ -90,10 +94,7 @@
               <b-td></b-td>
               <b-td>Total:</b-td>
               <b-td>
-                <div v-if="cafe.footer.edit">
-                  <input v-model="cafe.footer.price" class="cafe-input number footer" type="number" />
-                </div>
-                <div v-else class="text">
+                <div class="text">
                   {{ cafe.footer.price }}
                 </div>
               </b-td>
@@ -105,8 +106,8 @@
                   {{ cafe.footer.shipping }}
                 </div>
               </b-td>
-              <b-td
-                ><div v-if="cafe.footer.edit">
+              <b-td>
+                <div v-if="cafe.footer.edit">
                   <input v-model="cafe.footer.packing" class="cafe-input number footer" type="number" />
                 </div>
                 <div v-else class="text">
@@ -127,6 +128,9 @@
                     <div class="action edit" @click="onClickEditFooter(cafe.footer)">
                       <fa-icon icon="pencil-square-o" />
                     </div>
+                    <div class="action" @click="onClickDiscount(cafe)">
+                      <fa-icon icon="percent" />
+                    </div>
                   </div>
                 </div>
                 <div v-else></div>
@@ -136,7 +140,21 @@
         </b-table>
       </div>
     </div>
-    <modal-question ref="orderApprovedModal" modalId="orderApprovedModal" title="correct?" content="vse zbs?" :apply="apply" />
+    <modal-question
+      ref="orderApprovedModal"
+      modalId="orderApprovedModal"
+      title="interface.orderedTitleQuestion"
+      content="interface.orderedQuestion"
+      :apply="apply"
+    ></modal-question>
+    <modal-question ref="discountModal" modalId="discountModal" title="interface.selectDiscount" :apply="applyDiscount">
+      <div class="discount-area">
+        <div class="discount-input">
+          <text-input type="number" @input="onChange('discount', $event)"></text-input>
+        </div>
+        <toggle label="interface.percent" :init-value="percent" @change="onChange('percent', $event)"></toggle>
+      </div>
+    </modal-question>
   </div>
 </template>
 
@@ -147,107 +165,24 @@ import SelectInput from "@/components/controls/SelectInput"
 import FaIcon from "@/components/icons/FaIcon"
 import ModalQuestion from "@/components/modalQuestion"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
+import TextInput from "@/components/controls/TextInput"
+import Toggle from "@/components/controls/Toggle"
 
 export default {
   name: "Orders",
-  components: { ModalQuestion, FaIcon, SelectInput, FormButton },
+  components: { Toggle, TextInput, ModalQuestion, FaIcon, SelectInput, FormButton },
 
   mixins: [ApiErrorHelper],
   data() {
     return {
       date: this.today(),
-      cafeItems: [
-        {
-          cafeName: "Pasibus",
-          cafeId: "1",
-          link: "https://www.pasidostawa.pl/pasibus-pasaz-grunwaldzki",
-          orderUser: undefined,
-          closed: false,
-          footer: {
-            price: 9.99,
-            shipping: 2,
-            packing: 1,
-            edit: false
-          },
-          orders: [
-            {
-              order_id: 1,
-              user: "Иван",
-              order_name: "печеньки",
-              price: 3.14,
-              shipping: 0.16,
-              packing: 1,
-              edit: false
-            },
-            {
-              order_id: 2,
-              user: "Игорь",
-              order_name: "хлебные корочки",
-              price: 3.16,
-              shipping: 0.14,
-              packing: 1,
-              edit: false
-            },
-            {
-              order_id: 3,
-              user: "Саня",
-              order_name: "Чего нибудь набрать до сотки",
-              price: 3.16,
-              shipping: 0.14,
-              packing: 1,
-              edit: false
-            }
-          ]
-        },
-        {
-          cafeName: "Słowianka",
-          cafeId: "2",
-          link: "https://www.pyszne.pl/menu/slowianka-jednosci-narodowej",
-          orderUser: undefined,
-          closed: false,
-          footer: {
-            price: 9.99,
-            shipping: 2,
-            packing: 1,
-            edit: false
-          },
-          orders: [
-            {
-              order_id: 4,
-              user: "Иван",
-              order_name: "чаю",
-              price: 3.14,
-              shipping: 0.16,
-              packing: 1,
-              edit: false
-            },
-            {
-              order_id: 5,
-              user: "Игорь",
-              order_name: "оладушки",
-              price: 4.16,
-              shipping: 0.14,
-              packing: 1,
-              edit: false
-            },
-            {
-              order_id: 6,
-              user: "Саня",
-              order_name: "Чего нибудь еще бы",
-              price: 5.16,
-              shipping: 0.14,
-              packing: 1,
-              edit: false
-            }
-          ]
-        }
-      ],
-      users: [
-        { text: "Ihor Kyryliuk", value: 7, selected: false },
-        { text: "ivan Barbashov", value: 154, selected: false },
-        { text: "WqZOPFp0Hk eAf5AQd4yp", value: 153, selected: false }
-      ]
+      percent: false,
+      discount: 0,
+      cafeItems: []
     }
+  },
+  beforeMount() {
+    this.updateOrders()
   },
   methods: {
     changeDate(daysAmount) {
@@ -261,6 +196,8 @@ export default {
       this.dateToString(date)
 
       this.date = this.dateToString(date)
+
+      this.updateOrders()
     },
     today() {
       let date = new Date()
@@ -268,7 +205,11 @@ export default {
     },
     dateToString(date) {
       let month = "" + (date.getMonth() + 1)
+      month = month.length === 1 ? "0" + month : month
+
       let day = "" + date.getDate()
+      day = day.length === 1 ? "0" + day : day
+
       let year = date.getFullYear()
 
       return year + "-" + month + "-" + day
@@ -317,6 +258,11 @@ export default {
       footer.shipping = footer.old_shipping
       footer.packing = footer.old_packing
     },
+    onClickDiscount(cafe) {
+      this.discount = 0
+      this.percent = false
+      this.$refs.discountModal.show(() => this.applyDiscount(cafe))
+    },
     selectUser() {},
     closeOrder(cafe) {
       cafe.closed = true
@@ -330,6 +276,29 @@ export default {
     apply(cafe) {
       console.log(cafe.cafeId)
       this.$refs.orderApprovedModal.hide()
+    },
+    applyDiscount(cafe) {
+      console.log(cafe.cafeId)
+      this.$refs.discountModal.hide()
+    },
+    onChange(field, value) {
+      this[field] = value
+    },
+    dateInput() {
+      this.updateOrders()
+    },
+    updateOrders() {
+      this.$axios
+        .get(ApiEndpoints.ORDERS_GET + "?date=" + this.date)
+        .then((response) => {
+          if (response && response.data) {
+            console.log(response.data)
+            this.cafeItems = response.data
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     }
   },
   computed: {
@@ -341,16 +310,20 @@ export default {
         { key: "user", label: this.$t("table.orderColumns.user"), class: "user-column", sortable: true },
         { key: "order_name", label: this.$t("table.orderColumns.order"), sortable: false },
         { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width", sortable: true },
-        { key: "shipping", label: this.$t("table.orderColumns.shipping"), class: "align-right column-width", sortable: true },
-        { key: "packing", label: this.$t("table.orderColumns.packing"), class: "align-right column-width", sortable: true },
+        {
+          key: "shipping",
+          label: this.$t("table.orderColumns.shipping"),
+          class: "align-right column-width",
+          sortable: true
+        },
+        {
+          key: "packing",
+          label: this.$t("table.orderColumns.packing"),
+          class: "align-right column-width",
+          sortable: true
+        },
         { key: "actions", label: "", class: "column-width", sortable: false }
       ]
-    },
-    aTotal() {
-      return 5
-    },
-    bTotal() {
-      return 6
     }
   }
 }
@@ -367,6 +340,7 @@ export default {
     .dateLabel {
       margin-left: 1.5rem;
     }
+
     .date-picker {
       display: flex;
       flex-direction: row;
@@ -410,11 +384,13 @@ export default {
         font-weight: 500;
       }
     }
+
     .order-block {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 1rem;
+
       .order-user {
         display: flex;
         justify-content: center;
@@ -523,6 +499,17 @@ export default {
     &.footer-row {
       text-align: right;
     }
+  }
+}
+
+.discount-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+
+  .discount-input {
+    width: 100%;
   }
 }
 </style>

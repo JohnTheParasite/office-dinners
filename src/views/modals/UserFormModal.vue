@@ -18,7 +18,7 @@
       @change="onChange('selected_language', $event)"
       :required="true"
     />
-    <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('role', $event)" />
+    <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
       <form-button label="Cancel" @click="cancel" type="secondary" />
       <form-button v-if="isAddUser" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />

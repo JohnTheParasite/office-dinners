@@ -45,7 +45,7 @@
         <span v-html="data.value"></span>
       </template>
       <template #cell(name)="data">
-        <a :href="data.item.link">
+        <a :href="data.item.link" target="_blank">
           {{ data.item.name }}
           <fa-icon icon="external-link"></fa-icon>
         </a>
@@ -64,7 +64,7 @@
       <template #cell(active)="data">
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
-      <template #cell(vote)="data">
+      <template #cell(likes)="data">
         <div class="like" :class="{ active: data.item.liked }">
           <div class="like-button" @click="clickLike(data.item.id)" v-if="votesOpened">
             <fa-icon icon="thumbs-up" class="icon"></fa-icon>
@@ -168,7 +168,7 @@ export default {
     getColumns() {
       return [
         { key: "active", label: this.$t("table.columns.active"), sortable: true },
-        { key: "vote", label: this.$t("table.columns.vote"), class: "align-center", sortable: false },
+        { key: "likes", label: this.$t("table.columns.vote"), class: "align-center", sortable: true },
         { key: "name", label: this.$t("table.columns.name"), sortable: true },
         { key: "rating_food", label: this.$t("table.columns.rating_food"), sortable: true },
         { key: "rating_delivery", label: this.$t("table.columns.rating_delivery"), sortable: true },
