@@ -19,7 +19,14 @@
         <div class="button" @click="changeDate(1)">&gt;</div>
       </div>
     </div>
-    <div class="table-container" v-for="(cafe, index) in cafeItems" :key="index">
+    <div v-if="loadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <CssLoader></CssLoader>
+        </div>
+      </div>
+    </div>
+    <div v-else class="table-container" v-for="(cafe, index) in cafeItems" :key="index">
       <div class="content-block">
         <div class="cafe-actions">
           <div class="cafe-name-link">
@@ -53,7 +60,7 @@
           </template>
 
           <template #cell(order_name)="data">
-            <div v-if="data.item.edit">
+            <div v-if="editOrder(data.item.id)">
               <input v-model="data.item.order_name" class="cafe-input" />
             </div>
             <div v-else class="text">
@@ -62,7 +69,7 @@
           </template>
 
           <template #cell(price)="data">
-            <div v-if="data.item.edit">
+            <div v-if="editOrder(data.item.id)">
               <input v-model="data.item.price" class="cafe-input number" type="number" />
             </div>
             <div v-else class="text">
@@ -71,20 +78,22 @@
           </template>
 
           <template #cell(actions)="data">
-            <div class="action-buttons" v-if="data.item.edit">
-              <div class="action apply" @click="onClickApply(data.item)">
-                <fa-icon icon="check-square-o" />
+            <div v-if="data.item.can_edit">
+              <div class="action-buttons" v-if="editOrder(data.item.id)">
+                <div class="action apply" @click="onClickApply(data.item)">
+                  <fa-icon icon="check-square-o" />
+                </div>
+                <div class="action decline" @click="onClickDecline(data.item)">
+                  <fa-icon icon="ban" />
+                </div>
               </div>
-              <div class="action decline" @click="onClickDecline(data.item)">
-                <fa-icon icon="ban" />
-              </div>
-            </div>
-            <div class="action-buttons" v-else>
-              <div class="action edit" @click="onClickEdit(data.item)">
-                <fa-icon icon="pencil-square-o" />
-              </div>
-              <div class="action delete" @click="onClickDelete(data.item)">
-                <fa-icon icon="trash-o" />
+              <div class="action-buttons" v-else>
+                <div class="action edit" @click="onClickEdit(data.item)">
+                  <fa-icon icon="pencil-square-o" />
+                </div>
+                <div class="action delete" @click="onClickDelete(data.item)">
+                  <fa-icon icon="trash-o" />
+                </div>
               </div>
             </div>
           </template>
@@ -95,37 +104,37 @@
               <b-td>Total:</b-td>
               <b-td>
                 <div class="text">
-                  {{ cafe.footer.price }}
+                  {{ cafe.total_price }}
                 </div>
               </b-td>
               <b-td>
-                <div v-if="cafe.footer.edit">
-                  <input v-model="cafe.footer.shipping" class="cafe-input number footer" type="number" />
+                <div v-if="cafe.total_edit">
+                  <input v-model="cafe.total_shipping_price" class="cafe-input number footer" type="number" />
                 </div>
                 <div v-else class="text">
-                  {{ cafe.footer.shipping }}
+                  {{ cafe.total_shipping_price }}
                 </div>
               </b-td>
               <b-td>
-                <div v-if="cafe.footer.edit">
-                  <input v-model="cafe.footer.packing" class="cafe-input number footer" type="number" />
+                <div v-if="cafe.total_edit">
+                  <input v-model="cafe.total_packing_price" class="cafe-input number footer" type="number" />
                 </div>
                 <div v-else class="text">
-                  {{ cafe.footer.packing }}
+                  {{ cafe.total_packing_price }}
                 </div>
               </b-td>
               <b-td>
-                <div v-if="currentUserIsAdmin">
-                  <div class="action-buttons" v-if="cafe.footer.edit">
-                    <div class="action apply" @click="onClickApplyFooter(cafe.footer)">
+                <div v-if="cafe.can_edit">
+                  <div class="action-buttons" v-if="cafe.total_edit">
+                    <div class="action apply" @click="onClickApplyFooter(cafe)">
                       <fa-icon icon="check-square-o" />
                     </div>
-                    <div class="action decline" @click="onClickDeclineFooter(cafe.footer)">
+                    <div class="action decline" @click="onClickDeclineFooter(cafe)">
                       <fa-icon icon="ban" />
                     </div>
                   </div>
                   <div class="action-buttons" v-else>
-                    <div class="action edit" @click="onClickEditFooter(cafe.footer)">
+                    <div class="action edit" @click="onClickEditFooter(cafe)">
                       <fa-icon icon="pencil-square-o" />
                     </div>
                     <div class="action" @click="onClickDiscount(cafe)">
@@ -167,10 +176,11 @@ import ModalQuestion from "@/components/modalQuestion"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import TextInput from "@/components/controls/TextInput"
 import Toggle from "@/components/controls/Toggle"
+import CssLoader from "@/components/CssLoader"
 
 export default {
   name: "Orders",
-  components: { Toggle, TextInput, ModalQuestion, FaIcon, SelectInput, FormButton },
+  components: { CssLoader, Toggle, TextInput, ModalQuestion, FaIcon, SelectInput, FormButton },
 
   mixins: [ApiErrorHelper],
   data() {
@@ -178,7 +188,9 @@ export default {
       date: this.today(),
       percent: false,
       discount: 0,
-      cafeItems: []
+      selectedOrders: [],
+      cafeItems: [],
+      loadInProgress: false
     }
   },
   beforeMount() {
@@ -215,9 +227,11 @@ export default {
       return year + "-" + month + "-" + day
     },
     onClickEdit(row) {
-      row.edit = true
-      row.old_order_name = row.order_name
-      row.old_price = row.price
+      this.selectedOrders.push({
+        id: row.id,
+        old_order_name: row.order_name,
+        old_price: row.price
+      })
     },
     onClickApply(row) {
       let updatedOrder = {
@@ -229,31 +243,37 @@ export default {
         .patch(ApiEndpoints.ORDER_CHANGE, updatedOrder)
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "order.updated")
-          row.edit = false
         })
         .catch((error) => {
           this.catchAxiosError(error)
         })
     },
     onClickDecline(row) {
-      row.edit = false
-      row.order_name = row.old_order_name
-      row.price = row.old_price
+      let element = this.selectedOrders.find((item) => item.id === row.id)
+      if (element === undefined) {
+        return
+      }
+
+      row.order_name = element.old_order_name
+      row.price = element.old_price
+
+      let index = this.selectedOrders.indexOf(element)
+      this.selectedOrders.splice(index, 1)
     },
     onClickDelete(row) {
-      console.log("delete order " + row.order_id)
+      console.log("delete order " + row.id)
     },
     onClickEditFooter(footer) {
-      footer.edit = true
+      footer.total_edit = true
       footer.old_price = footer.price
       footer.old_shipping = footer.shipping
       footer.old_packing = footer.packing
     },
     onClickApplyFooter(footer) {
-      footer.edit = false // + some api
+      footer.total_edit = false // + some api
     },
     onClickDeclineFooter(footer) {
-      footer.edit = false
+      footer.total_edit = false
       footer.price = footer.old_price
       footer.shipping = footer.old_shipping
       footer.packing = footer.old_packing
@@ -273,12 +293,10 @@ export default {
     ordered(cafe) {
       this.$refs.orderApprovedModal.show(() => this.apply(cafe))
     },
-    apply(cafe) {
-      console.log(cafe.cafeId)
+    apply() {
       this.$refs.orderApprovedModal.hide()
     },
-    applyDiscount(cafe) {
-      console.log(cafe.cafeId)
+    applyDiscount() {
       this.$refs.discountModal.hide()
     },
     onChange(field, value) {
@@ -288,17 +306,23 @@ export default {
       this.updateOrders()
     },
     updateOrders() {
+      this.loadInProgress = true
       this.$axios
         .get(ApiEndpoints.ORDERS_GET + "?date=" + this.date)
         .then((response) => {
           if (response && response.data) {
-            console.log(response.data)
             this.cafeItems = response.data
+            this.loadInProgress = false
           }
         })
         .catch((error) => {
           this.catchAxiosError(error)
+          this.loadInProgress = false
         })
+    },
+    editOrder(id) {
+      let element = this.selectedOrders.find((item) => item.id === id)
+      return element !== undefined
     }
   },
   computed: {
@@ -311,13 +335,13 @@ export default {
         { key: "order_name", label: this.$t("table.orderColumns.order"), sortable: false },
         { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width", sortable: true },
         {
-          key: "shipping",
+          key: "shipping_price",
           label: this.$t("table.orderColumns.shipping"),
           class: "align-right column-width",
           sortable: true
         },
         {
-          key: "packing",
+          key: "packing_price",
           label: this.$t("table.orderColumns.packing"),
           class: "align-right column-width",
           sortable: true
@@ -510,6 +534,24 @@ export default {
 
   .discount-input {
     width: 100%;
+  }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  .lds-dual-ring {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .lds-dual-ring:after {
+    border-color: $primary transparent $primary transparent;
+    height: 5rem;
+    width: 5rem;
   }
 }
 </style>

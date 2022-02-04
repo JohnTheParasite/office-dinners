@@ -60,7 +60,7 @@ export default {
       return this.options.find((x) => x.value === this.value)?.text
     },
     filteredOptions() {
-      return this.options.filter((x) => x.text.includes(this.filter))
+      return this.options.filter((x) => x.text.toLowerCase().includes(this.filter.toLowerCase()))
     }
   }
 }
