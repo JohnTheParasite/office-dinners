@@ -27,4 +27,22 @@ export default class FormDataService {
       { value: 50, text: "50", selected: true }
     ]
   }
+
+  /**
+   *
+   * @param date
+   * @returns {*}
+   */
+  static formatDateForTimeFormat(date) {
+    let formatter = Intl.DateTimeFormat("ru-RU", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    })
+    return formatter.format(date)
+  }
+
+  static formatDateWithLeadingZeroes(date) {
+    return date.toISOString().split("T")[0]
+  }
 }

@@ -57,7 +57,8 @@
     "orderDate": "Orders for date",
     "userPay": "User to pay",
     "added": "Order added",
-    "updated": "Order updated"
+    "updated": "Order updated",
+    "noOrdersForToday": "No orders for today"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",

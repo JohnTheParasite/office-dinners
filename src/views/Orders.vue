@@ -3,20 +3,25 @@
     <div class="content-block date-block">
       <label class="dateLabel">{{ $t("order.orderDate") }}:</label>
       <div class="date-picker">
-        <div class="button" @click="changeDate(-1)">&lt;</div>
+        <button class="button" @click="changeDate(-1)">
+          <fa-icon icon="chevron-left"></fa-icon>
+        </button>
         <div class="datepicker-element">
           <b-form-datepicker
-            id="example-datepicker"
             v-model="date"
-            @input="updateOrders"
-            class="mb-2"
-            start-weekday="1"
-            right
+            :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
             :placeholder="$t('interface.noDate')"
-            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+            class="mb-2"
+            right
+            :max="new Date()"
+            start-weekday="1"
+            @context="updateFromCalendar"
+            @input="updateFromCalendar"
           ></b-form-datepicker>
         </div>
-        <div class="button" @click="changeDate(1)">&gt;</div>
+        <button class="button" @click="changeDate(1)">
+          <fa-icon icon="chevron-right"></fa-icon>
+        </button>
       </div>
     </div>
     <div v-if="loadInProgress">
@@ -26,7 +31,14 @@
         </div>
       </div>
     </div>
-    <cafe-orders v-for="(cafe, index) in cafeItems" v-else :key="index" :cafe-data="cafe" @refresh="refresh"></cafe-orders>
+    <template v-else>
+      <template v-if="orders.length > 0">
+        <cafe-orders v-for="(cafe, index) in orders" :key="index" :cafe-data="cafe" @refresh="updateOrders"></cafe-orders>
+      </template>
+      <div class="content-block no-orders" v-else>
+        {{ $t("order.noOrdersForToday") }}
+      </div>
+    </template>
   </div>
 </template>
 
@@ -34,53 +46,37 @@
 import CafeOrders from "@/components/dataTable/CafeOrders"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import CssLoader from "@/components/CssLoader"
+import FormDataService from "@/services/formDataService"
+import ApiErrorHelper from "@/services/apiErrorHelper"
+import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "Orders",
-  components: { CssLoader, CafeOrders },
+  components: { FaIcon, CssLoader, CafeOrders },
+  mixins: [ApiErrorHelper],
   data() {
     return {
       loadInProgress: false,
-      date: this.today(),
-      cafeItems: []
+      date: FormDataService.formatDateWithLeadingZeroes(new Date()),
+      orders: []
     }
   },
-  beforeMount() {},
-  mounted() {},
   methods: {
-    today() {
-      let date = new Date()
-      return this.dateToString(date)
-    },
-    dateToString(date) {
-      let month = "" + (date.getMonth() + 1)
-      month = month.length === 1 ? "0" + month : month
-      let day = "" + date.getDate()
-      day = day.length === 1 ? "0" + day : day
-      let year = date.getFullYear()
-      return year + "-" + month + "-" + day
-    },
     changeDate(daysAmount) {
-      if (!this.date.length) {
-        return
-      }
       let date = new Date(this.date)
       date.setDate(date.getDate() + daysAmount)
-      this.date = this.dateToString(date)
+      this.date = FormDataService.formatDateWithLeadingZeroes(date)
+    },
+    updateFromCalendar() {
+      this.loadInProgress = true
       this.updateOrders()
     },
-    refresh() {
-      this.updateOrders(false)
-    },
-    updateOrders(showLoader = true) {
-      if (showLoader) {
-        this.loadInProgress = true
-      }
+    updateOrders() {
       this.$axios
         .get(ApiEndpoints.ORDERS_GET + "?date=" + this.date)
         .then((response) => {
           if (response && response.data) {
-            this.cafeItems = response.data
+            this.orders = response.data
             this.loadInProgress = false
           }
         })
@@ -120,18 +116,22 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid $primary;
+        border: 1px solid #7367f0;
         border-radius: 4px;
         margin: 4px 8px;
         width: 1.6rem;
-        background-color: $primary;
-        color: $white;
+        background-color: #7367f0;
+        color: #fff;
         cursor: pointer;
+        height: 1.6rem;
+        font-size: 0.6rem;
+        text-align: center;
       }
     }
   }
 
-  .loader {
+  .loader,
+  .no-orders {
     display: flex;
     align-items: center;
     justify-content: center;
