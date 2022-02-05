@@ -10,16 +10,16 @@
           <b-form-datepicker
             v-model="date"
             :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
+            :max="new Date()"
             :placeholder="$t('interface.noDate')"
             class="mb-2"
             right
-            :max="new Date()"
             start-weekday="1"
             @context="updateFromCalendar"
             @input="updateFromCalendar"
           ></b-form-datepicker>
         </div>
-        <button class="button" @click="changeDate(1)">
+        <button :disabled="cannotSetNextDate" class="button" @click="changeDate(1)">
           <font-awesome-icon icon="fa-solid fa-chevron-right" />
         </button>
       </div>
@@ -35,7 +35,7 @@
       <template v-if="orders.length > 0">
         <cafe-orders v-for="cafeData in orders" :key="cafeData.id" :cafe-data="cafeData" @updateOrders="updateOrders"></cafe-orders>
       </template>
-      <div class="content-block no-orders" v-else>
+      <div v-else class="content-block no-orders">
         {{ $t("order.noOrdersForToday") }}
       </div>
     </template>
@@ -58,6 +58,11 @@ export default {
       loadInProgress: false,
       date: FormDataService.formatDateWithLeadingZeroes(new Date()),
       orders: []
+    }
+  },
+  computed: {
+    cannotSetNextDate() {
+      return this.date === FormDataService.formatDateWithLeadingZeroes(new Date())
     }
   },
   methods: {
@@ -115,16 +120,21 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid #7367f0;
+        border: 1px solid $primary;
         border-radius: 4px;
         margin: 4px 8px;
         width: 1.6rem;
-        background-color: #7367f0;
-        color: #fff;
+        background-color: $primary;
+        color: $white;
         cursor: pointer;
         height: 1.6rem;
         font-size: 0.6rem;
         text-align: center;
+
+        &:disabled {
+          opacity: 0.7;
+          cursor: default;
+        }
       }
     }
   }
