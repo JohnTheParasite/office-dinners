@@ -1,5 +1,5 @@
 <template>
-  <b-modal :id="modalId" centered :header-class="buttonVariant" no-close-on-backdrop>
+  <b-modal :id="'b' + _uid" :header-class="buttonVariant" centered no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
@@ -34,10 +34,6 @@ export default {
       type: String,
       default: ""
     },
-    modalId: {
-      type: String,
-      default: ""
-    },
     buttonVariant: {
       default: SystemTypes.PRIMARY
     }
@@ -50,10 +46,10 @@ export default {
   methods: {
     show(apply) {
       this.apply = apply
-      this.$bvModal.show(this.modalId)
+      this.$bvModal.show("b" + this._uid)
     },
     hide() {
-      this.$bvModal.hide(this.modalId)
+      this.$bvModal.hide("b" + this._uid)
     }
   }
 }
