@@ -23,7 +23,7 @@ import FormButton from "@/components/controls/FormButton"
 import FaIcon from "@/components/icons/FaIcon"
 
 export default {
-  name: "modalQuestion",
+  name: "SimpleDialog",
   components: { FaIcon, FormButton },
   props: {
     title: {

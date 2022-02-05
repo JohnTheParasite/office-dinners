@@ -87,7 +87,7 @@
       bottom: 0;
       right: 0;
 
-      i {
+      svg {
         transition: transform 0.2s ease;
       }
     }
@@ -95,7 +95,7 @@
 
   &.show {
     .input-select {
-      i {
+      svg {
         transform: rotate(-180deg);
       }
     }

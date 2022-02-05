@@ -6,6 +6,7 @@ import { Store } from "@/plugins/store"
 import { AxiosPlugin } from "@/plugins/axios"
 import { BootstrapVue } from "bootstrap-vue"
 import i18n from "./i18n"
+import "@/plugins/fontAwesome"
 
 Vue.config.productionTip = false
 

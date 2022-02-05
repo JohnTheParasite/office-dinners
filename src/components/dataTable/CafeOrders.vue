@@ -5,21 +5,31 @@
         <div class="cafe-name-link">
           <a :href="cafeData.link" class="cafe-name" target="_blank">
             {{ cafeData.name }}
-            <fa-icon icon="external-link" />
+            <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" />
           </a>
         </div>
         <div class="order-block">
-          <div v-if="currentUserIsAdmin" class="order-user">
+          <div class="order-user">
             <label>{{ $t("order.userPay") }}:</label>
-            <select-input :init-value="cafeData.order_person" :options="$store.state.global.usersList" @change="onChange('order_person', $event)" />
-            <form-button label="interface.select" @click="selectUser()"></form-button>
+            <template v-if="currentUserIsAdmin && !cafeData.closed">
+              <select-input
+                ref="selectedUserToPay"
+                :init-value="cafeData.order_person"
+                :options="$store.state.global.usersList"
+                @change="checkSelectedUser($event)"
+              />
+              <form-button :disabled="disableSelectUser" label="interface.select" @click="selectUser()"></form-button>
+            </template>
+            <span v-else class="user-name-to-pay">{{ getSelectedUserToPay }}</span>
           </div>
-          <div v-else>
-            <label>{{ $t("order.userPay") }}: {{ cafeData.order_person }}</label>
-          </div>
-          <div v-if="closed" class="close-order-button">
+          <div class="horizontal-separator"></div>
+          <div v-if="cafeData.closed" class="close-order-button">
             <form-button label="interface.openOrder" @click="openOrder()"></form-button>
-            <form-button label="interface.ordered" @click="ordered()"></form-button>
+            <form-button v-if="!cafeData.ordered" label="interface.ordered" @click="ordered()"></form-button>
+            <div v-else class="ordered-date">
+              <div>{{ $t("order.orderedDate") }}</div>
+              <div>{{ cafeData.ordered_date }}</div>
+            </div>
           </div>
           <div v-else>
             <form-button label="interface.closeOrder" @click="closeOrder()"></form-button>
@@ -121,22 +131,21 @@
         </template>
       </b-table>
     </div>
-
-    <modal-question
+    <simple-dialog
       ref="orderApprovedModal"
       :apply="apply"
-      content="interface.orderedQuestion"
+      content="order.orderedQuestion"
       modalId="orderApprovedModal"
-      title="interface.orderedTitleQuestion"
-    ></modal-question>
-    <modal-question ref="discountModal" :apply="applyDiscount" modalId="discountModal" title="interface.selectDiscount">
+      title="order.orderedTitleQuestion"
+    ></simple-dialog>
+    <simple-dialog ref="discountModal" :apply="applyDiscount" modalId="discountModal" title="interface.selectDiscount">
       <div class="discount-area">
         <div class="discount-input">
           <text-input type="number" @input="onChange('discount', $event)"></text-input>
         </div>
         <toggle :init-value="percent" label="interface.percent" @change="onChange('percent', $event)"></toggle>
       </div>
-    </modal-question>
+    </simple-dialog>
   </div>
 </template>
 
@@ -144,14 +153,16 @@
 import FormButton from "@/components/controls/FormButton"
 import SelectInput from "@/components/controls/SelectInput"
 import FaIcon from "@/components/icons/FaIcon"
-import ModalQuestion from "@/components/modalQuestion"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import Toggle from "@/components/controls/Toggle"
 import TextInput from "@/components/controls/TextInput"
+import ApiErrorHelper from "@/services/apiErrorHelper"
+import SimpleDialog from "@/components/modals/SimpleDialog"
 
 export default {
   name: "CafeOrders",
-  components: { TextInput, Toggle, ModalQuestion, FaIcon, SelectInput, FormButton },
+  components: { SimpleDialog, TextInput, Toggle, FaIcon, SelectInput, FormButton },
+  mixins: [ApiErrorHelper],
   props: {
     cafeData: {
       type: Object
@@ -159,7 +170,7 @@ export default {
   },
   data() {
     return {
-      closed: false,
+      disableSelectUser: true,
       order_person: undefined,
       selectedOrders: [],
       selectedOrdersData: {},
@@ -175,7 +186,6 @@ export default {
     }
   },
   mounted() {
-    this.closed = this.cafeData.closed
     this.order_person = this.cafeData.order_person
     this.footer.total_shipping_price = this.cafeData.total_shipping_price
     this.footer.total_packing_price = this.cafeData.total_packing_price
@@ -185,18 +195,58 @@ export default {
     }
   },
   methods: {
-    selectUser() {},
+    checkSelectedUser(user) {
+      if (user !== this.cafeData.order_person) this.disableSelectUser = false
+    },
+    selectUser() {
+      let userId = this.$refs.selectedUserToPay.value
+      let id = this.cafeData.id
+      this.$axios
+        .post(ApiEndpoints.SET_ORDER_USER_TO_PAY, { id, userId })
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          this.disableSelectUser = true
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    },
     closeOrder() {
-      this.closed = true
+      this.$axios
+        .post(ApiEndpoints.CLOSE_ORDER, { id: this.cafeData.id })
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          this.$emit("updateOrders")
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     },
     openOrder() {
-      this.closed = false
+      this.$axios
+        .post(ApiEndpoints.OPEN_ORDER, { id: this.cafeData.id })
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          this.$emit("updateOrders")
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     },
     ordered(cafe) {
       this.$refs.orderApprovedModal.show(() => this.apply(cafe))
     },
     apply() {
-      this.$refs.orderApprovedModal.hide()
+      this.$axios
+        .post(ApiEndpoints.SET_ORDER_ORDERED, { id: this.cafeData.id })
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          this.$emit("updateOrders")
+          this.$refs.orderApprovedModal.hide()
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     },
     onChange(field, value) {
       this[field] = value
@@ -278,6 +328,12 @@ export default {
     }
   },
   computed: {
+    getSelectedUserToPay() {
+      if (this.$store.state.global.usersList.length < 1) {
+        return ""
+      }
+      return this.$store.state.global.usersList.find((u) => u.value === this.cafeData.order_person).text
+    },
     currentUserIsAdmin() {
       return this.$authService.getUserData().roleId < 2
     },
@@ -323,7 +379,13 @@ export default {
       .cafe-name {
         color: $primary;
         font-size: 1.3rem;
+        line-height: 1.3rem;
         font-weight: 500;
+
+        svg {
+          font-size: 1rem;
+          margin-bottom: 2px;
+        }
       }
     }
 
@@ -338,6 +400,10 @@ export default {
         justify-content: center;
         align-items: center;
         gap: 1rem;
+
+        .user-name-to-pay {
+          font-weight: bold;
+        }
 
         .form-group {
           margin-bottom: 0;
@@ -442,6 +508,12 @@ export default {
       text-align: right;
     }
   }
+}
+
+.horizontal-separator {
+  width: 1px;
+  border-left: 1px solid $input-border-color;
+  height: 20px;
 }
 
 .discount-area {

@@ -17,4 +17,8 @@ export class ApiEndpoints {
   static ORDER_ADD = process.env.VUE_APP_API_URL + "/cafe/add-order"
   static ORDER_CHANGE = process.env.VUE_APP_API_URL + "/cafe/change-order"
   static ORDERS_GET = process.env.VUE_APP_API_URL + "/order/get-for-date"
+  static SET_ORDER_USER_TO_PAY = process.env.VUE_APP_API_URL + "/order/select-user-to-pay"
+  static CLOSE_ORDER = process.env.VUE_APP_API_URL + "/order/close-order"
+  static OPEN_ORDER = process.env.VUE_APP_API_URL + "/order/open-order"
+  static SET_ORDER_ORDERED = process.env.VUE_APP_API_URL + "/order/set-ordered"
 }

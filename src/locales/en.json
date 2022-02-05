@@ -58,7 +58,10 @@
     "userPay": "User to pay",
     "added": "Order added",
     "updated": "Order updated",
-    "noOrdersForToday": "No orders for today"
+    "noOrdersForToday": "No orders for today",
+    "orderedTitleQuestion": "Please check all prices",
+    "orderedQuestion": "If all prices are correct - click OK",
+    "orderedDate": "Ordered on:"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -109,8 +112,6 @@
     "openOrder": "Open orders",
     "select": "Select",
     "selectDiscount": "Select discount",
-    "percent": "Percent",
-    "orderedTitleQuestion": "Question title",
-    "orderedQuestion": "How are you man?"
+    "percent": "Percent"
   }
 }

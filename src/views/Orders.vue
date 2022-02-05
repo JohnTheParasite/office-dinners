@@ -4,7 +4,7 @@
       <label class="dateLabel">{{ $t("order.orderDate") }}:</label>
       <div class="date-picker">
         <button class="button" @click="changeDate(-1)">
-          <fa-icon icon="chevron-left"></fa-icon>
+          <font-awesome-icon icon="fa-solid fa-chevron-left" />
         </button>
         <div class="datepicker-element">
           <b-form-datepicker
@@ -20,7 +20,7 @@
           ></b-form-datepicker>
         </div>
         <button class="button" @click="changeDate(1)">
-          <fa-icon icon="chevron-right"></fa-icon>
+          <font-awesome-icon icon="fa-solid fa-chevron-right" />
         </button>
       </div>
     </div>
@@ -33,7 +33,7 @@
     </div>
     <template v-else>
       <template v-if="orders.length > 0">
-        <cafe-orders v-for="(cafe, index) in orders" :key="index" :cafe-data="cafe" @refresh="updateOrders"></cafe-orders>
+        <cafe-orders v-for="cafeData in orders" :key="cafeData.id" :cafe-data="cafeData" @updateOrders="updateOrders"></cafe-orders>
       </template>
       <div class="content-block no-orders" v-else>
         {{ $t("order.noOrdersForToday") }}
@@ -48,11 +48,10 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import CssLoader from "@/components/CssLoader"
 import FormDataService from "@/services/formDataService"
 import ApiErrorHelper from "@/services/apiErrorHelper"
-import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "Orders",
-  components: { FaIcon, CssLoader, CafeOrders },
+  components: { CssLoader, CafeOrders },
   mixins: [ApiErrorHelper],
   data() {
     return {
