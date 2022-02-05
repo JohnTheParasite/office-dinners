@@ -58,7 +58,7 @@
     "userPay": "User to pay",
     "added": "Order added",
     "updated": "Order updated",
-    "noOrdersForToday": "No orders for today",
+    "noOrdersForToday": "No one has ordered this day",
     "orderedTitleQuestion": "Please check all prices",
     "orderedQuestion": "If all prices are correct - click OK",
     "orderedDate": "Ordered on:"
@@ -112,6 +112,9 @@
     "openOrder": "Open orders",
     "select": "Select",
     "selectDiscount": "Select discount",
-    "percent": "Percent"
+    "percent": "Percent",
+    "like": "Like",
+    "profile": "Profile",
+    "logout": "Logout"
   }
 }

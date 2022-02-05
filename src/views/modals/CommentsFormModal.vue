@@ -3,7 +3,7 @@
     <template #modal-header="{ close }">
       <h5>{{ $t("cafe.comments") }}</h5>
       <form-button @click="close" type="secondary" class="close">
-        <fa-icon icon="close" />
+        <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
     <div class="new-comment">
@@ -41,7 +41,6 @@
 <script>
 import FormButton from "@/components/controls/FormButton"
 import SystemTypes from "@/enums/systemTypes"
-import FaIcon from "@/components/icons/FaIcon"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import TextInput from "@/components/controls/TextInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
@@ -49,7 +48,7 @@ import FormDataService from "@/services/formDataService"
 
 export default {
   name: "CommentsFormModal",
-  components: { TextInput, FaIcon, FormButton },
+  components: { TextInput, FormButton },
   mixins: [ApiErrorHelper],
   props: {
     variation: {

@@ -4,7 +4,7 @@
       <input :id="_uid" @change="change" :disabled="readonly" :required="required" v-model="checked" type="checkbox" />
       <span class="checkbox-control">
         <span class="checkbox-check">
-          <fa-icon icon="check"></fa-icon>
+          <font-awesome-icon icon="fa-solid fa-check" />
         </span>
       </span>
       <span class="input-label" v-show="hasLabel" v-html="getLabel"></span>
@@ -14,11 +14,9 @@
 
 <script>
 import control from "./control"
-import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "Checkbox",
-  components: { FaIcon },
   mixins: [control],
   props: {
     initValue: { default: false }
@@ -92,7 +90,7 @@ export default {
         transform-origin: right;
         transform: translate(100%);
 
-        i {
+        svg {
           font-size: 11px;
           text-align: center;
           color: inherit;
@@ -118,7 +116,7 @@ export default {
         .checkbox-check {
           transform: translate(0);
 
-          i {
+          svg {
             opacity: 1;
             color: $white;
             display: flex;

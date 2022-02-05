@@ -11,25 +11,23 @@
     </div>
     <div class="openable-options">
       <div class="option">
-        <fa-icon icon="user"></fa-icon>
-        Profile
+        <font-awesome-icon icon="fa-solid fa-user" />
+        {{ $t("interface.profile") }}
       </div>
       <div class="separator"></div>
       <div class="option" @click="logout">
-        <fa-icon icon="sign-out"></fa-icon>
-        Logout
+        <font-awesome-icon icon="fa-solid fa-arrow-right-to-bracket" />
+        {{ $t("interface.logout") }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import FaIcon from "@/components/icons/FaIcon"
 import openableItem from "@/components/controls/openableItem"
 
 export default {
   name: "UserMenu",
-  components: { FaIcon },
   mixins: [openableItem],
   methods: {
     logout: function () {

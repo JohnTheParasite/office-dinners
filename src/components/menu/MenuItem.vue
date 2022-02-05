@@ -1,18 +1,15 @@
 <template>
   <div :class="{ selected: selectedItem }" class="menu-item">
     <router-link :to="{ name: routerName }">
-      <fa-icon :icon="icon"></fa-icon>
+      <font-awesome-icon :icon="getFaIcon" />
       {{ title }}
     </router-link>
   </div>
 </template>
 
 <script>
-import FaIcon from "@/components/icons/FaIcon"
-
 export default {
   name: "MenuItem",
-  components: { FaIcon },
   props: {
     routerName: {
       type: String
@@ -31,6 +28,9 @@ export default {
     }
   },
   computed: {
+    getFaIcon() {
+      return `fa-solid ${this.icon}`
+    },
     selectedItem() {
       return this.$route.name === this.routerName
     }
@@ -55,7 +55,7 @@ export default {
     transition: transform 0.25s ease;
     cursor: pointer;
 
-    .fa {
+    svg {
       margin-right: 1.1rem;
     }
   }

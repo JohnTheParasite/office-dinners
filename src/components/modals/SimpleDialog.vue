@@ -2,8 +2,8 @@
   <b-modal :id="'b' + _uid" :header-class="buttonVariant" centered no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
-      <form-button @click="close" type="secondary" class="close">
-        <fa-icon icon="close" />
+      <form-button class="close" type="secondary" @click="close">
+        <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
     <div class="content">
@@ -11,8 +11,8 @@
       <slot></slot>
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="Cancel" @click="cancel" type="secondary" />
-      <form-button label="OK" @click="apply" :type="buttonVariant" />
+      <form-button label="Cancel" type="secondary" @click="cancel" />
+      <form-button :type="buttonVariant" label="OK" @click="apply" />
     </template>
   </b-modal>
 </template>
@@ -20,11 +20,10 @@
 <script>
 import SystemTypes from "@/enums/systemTypes"
 import FormButton from "@/components/controls/FormButton"
-import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "SimpleDialog",
-  components: { FaIcon, FormButton },
+  components: { FormButton },
   props: {
     title: {
       type: String,

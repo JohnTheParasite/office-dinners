@@ -3,7 +3,7 @@
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
-        <fa-icon icon="close" />
+        <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
     <text-input label="cafe.name" :init-value="formGroup.name" @input="onChange('name', $event)" :required="true" />
@@ -20,7 +20,6 @@
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
 import SystemTypes from "@/enums/systemTypes"
-import FaIcon from "@/components/icons/FaIcon"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
@@ -28,7 +27,7 @@ import { httpRegex } from "@/helpers/validatorHelper"
 
 export default {
   name: "CafeFormModal",
-  components: { FaIcon, FormButton, TextInput },
+  components: { FormButton, TextInput },
   mixins: [ApiErrorHelper],
   props: {
     variation: {

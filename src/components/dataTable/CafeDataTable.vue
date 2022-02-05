@@ -8,7 +8,7 @@
         </div>
         {{ $t("table.entries") }}
       </div>
-      <div v-if="currentUserIsAdmin">
+      <div v-if="$authService.isAdministrator()">
         <div class="time-picker" v-if="votesOpened">
           <div class="close-votes-button">
             <slot name="closeVotes"></slot>
@@ -47,7 +47,7 @@
       <template #cell(name)="data">
         <a :href="data.item.link" target="_blank">
           {{ data.item.name }}
-          <fa-icon icon="external-link"></fa-icon>
+          <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" />
         </a>
       </template>
       <template #cell(comments)="data">
@@ -67,14 +67,16 @@
       <template #cell(likes)="data">
         <div class="like" :class="{ active: data.item.liked }">
           <div class="like-button" @click="clickLike(data.item.id)" v-if="votesOpened">
-            <fa-icon icon="thumbs-up" class="icon"></fa-icon>
-            Like
+            <font-awesome-icon icon="fa-solid fa-heart" />
+            {{ $t("interface.like") }}
           </div>
           <div class="like-counter">{{ data.item.likes }}</div>
         </div>
       </template>
       <template #cell(actions)="data">
-        <table-action-dropdown :object-id="data.item.id" :on-click-edit="onClickEdit"></table-action-dropdown>
+        <div class="action-button" @click="() => onClickEdit(data.item.id)">
+          <font-awesome-icon icon="fa-solid fa-pencil" />
+        </div>
       </template>
     </b-table>
     <div class="bottom-information">
@@ -108,11 +110,10 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import SelectInput from "@/components/controls/SelectInput"
 import CommentsFormModal from "@/views/modals/CommentsFormModal"
-import FaIcon from "@/components/icons/FaIcon"
 
 export default {
   name: "CafeDataTable",
-  components: { FaIcon, CommentsFormModal, SelectInput, Toggle },
+  components: { CommentsFormModal, SelectInput, Toggle },
   mixins: [DataTable],
   data() {
     return {
@@ -177,9 +178,6 @@ export default {
         { key: "actions", label: "", sortable: false }
       ]
     },
-    currentUserIsAdmin() {
-      return this.$authService.getUserData().roleId < 2
-    },
     votesOpened() {
       return this.$store.state.global.votesOpened
     }
@@ -224,7 +222,7 @@ export default {
     color: $primary;
     transition: 0.3s ease;
 
-    .icon {
+    svg {
       margin-right: 6px;
     }
 

@@ -2,12 +2,15 @@
   <b-modal id="orderDataModal" centered header-class="primary" no-close-on-backdrop size="lg">
     <template #modal-header="{ close }">
       <h5>{{ formGroup.name }}</h5>
-      <form-button @click="close" type="secondary" class="close">
-        <fa-icon icon="close" />
+      <form-button class="close" type="secondary" @click="close">
+        <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
     <div class="cafe-link-rating">
-      <a :href="formGroup.link" target="_blank">{{ $t("order.clicklink") }} <fa-icon icon="external-link"></fa-icon></a>
+      <a :href="formGroup.link" target="_blank"
+        >{{ $t("order.clicklink") }}
+        <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" />
+      </a>
       <b-form-rating v-model="formGroup.rating_food" readonly></b-form-rating>
     </div>
     <div class="date-delivery-rating">
@@ -18,19 +21,19 @@
       <b-form-rating v-model="formGroup.rating_delivery" readonly></b-form-rating>
     </div>
     <div class="inputs">
-      <text-input class="order" label="order.order" :init-value="formGroup.order_name" @input="onChange('order_name', $event)" :required="true" />
-      <text-input label="order.price" :init-value="formGroup.price" @input="onChange('price', $event)" type="Number" :required="true" />
+      <text-input :init-value="formGroup.order_name" :required="true" class="order" label="order.order" @input="onChange('order_name', $event)" />
+      <text-input :init-value="formGroup.price" :required="true" label="order.price" type="Number" @input="onChange('price', $event)" />
     </div>
     <select-input
-      v-if="currentUserIsAdmin"
-      :options="$store.state.global.usersList"
+      v-if="$authService.isAdministrator()"
       :init-value="formGroup.user_id"
+      :options="$store.state.global.usersList"
       label="order.user"
       @change="onChange('user_id', $event)"
     />
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" @click="cancel" type="secondary" />
-      <form-button label="interface.add" @click="add()" :disabled="!verified" />
+      <form-button label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="!verified" label="interface.add" @click="add()" />
     </template>
   </b-modal>
 </template>
@@ -38,7 +41,6 @@
 <script>
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
-import FaIcon from "@/components/icons/FaIcon"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import SelectInput from "@/components/controls/SelectInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
@@ -46,7 +48,7 @@ import FormDataService from "@/services/formDataService"
 
 export default {
   name: "OrderFormModal",
-  components: { SelectInput, FaIcon, FormButton, TextInput },
+  components: { SelectInput, FormButton, TextInput },
   mixins: [ApiErrorHelper],
   data() {
     return {
@@ -101,9 +103,6 @@ export default {
   computed: {
     verified() {
       return this.formGroup.order_name.length > 0 && this.formGroup.price > 0
-    },
-    currentUserIsAdmin() {
-      return this.$authService.getUserData().roleId < 2
     }
   }
 }

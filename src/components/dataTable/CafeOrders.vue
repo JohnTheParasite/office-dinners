@@ -11,7 +11,7 @@
         <div class="order-block">
           <div class="order-user">
             <label>{{ $t("order.userPay") }}:</label>
-            <template v-if="currentUserIsAdmin && !cafeData.closed">
+            <template v-if="$authService.isAdministrator() && !cafeData.closed">
               <select-input
                 ref="selectedUserToPay"
                 :init-value="cafeData.order_person"
@@ -64,18 +64,18 @@
           <div v-if="data.item.can_edit">
             <div v-if="editOrder(data.item.id)" class="action-buttons">
               <div class="action apply" @click="onClickApply(data.item)">
-                <fa-icon icon="check-square-o" />
+                <font-awesome-icon icon="fa-solid fa-check" />
               </div>
               <div class="action decline" @click="onClickDecline(data.item)">
-                <fa-icon icon="ban" />
+                <font-awesome-icon icon="fa-solid fa-ban" />
               </div>
             </div>
             <div v-else class="action-buttons">
               <div class="action edit" @click="onClickEdit(data.item)">
-                <fa-icon icon="pencil-square-o" />
+                <font-awesome-icon icon="fa-solid fa-pencil" />
               </div>
               <div class="action delete" @click="onClickDelete(data.item)">
-                <fa-icon icon="trash-o" />
+                <font-awesome-icon icon="fa-solid fa-trash-can" />
               </div>
             </div>
           </div>
@@ -110,18 +110,18 @@
               <div v-if="cafeData.can_edit">
                 <div v-if="footer.total_edit" class="action-buttons">
                   <div class="action apply" @click="onClickApplyFooter()">
-                    <fa-icon icon="check-square-o" />
+                    <font-awesome-icon icon="fa-solid fa-check" />
                   </div>
                   <div class="action decline" @click="onClickDeclineFooter()">
-                    <fa-icon icon="ban" />
+                    <font-awesome-icon icon="fa-solid fa-ban" />
                   </div>
                 </div>
                 <div v-else class="action-buttons">
                   <div class="action edit" @click="onClickEditFooter()">
-                    <fa-icon icon="pencil-square-o" />
+                    <font-awesome-icon icon="fa-solid fa-pencil" />
                   </div>
                   <div class="action" @click="onClickDiscount()">
-                    <fa-icon icon="percent" />
+                    <font-awesome-icon icon="fa-solid fa-percent" />
                   </div>
                 </div>
               </div>
@@ -152,7 +152,6 @@
 <script>
 import FormButton from "@/components/controls/FormButton"
 import SelectInput from "@/components/controls/SelectInput"
-import FaIcon from "@/components/icons/FaIcon"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import Toggle from "@/components/controls/Toggle"
 import TextInput from "@/components/controls/TextInput"
@@ -161,7 +160,7 @@ import SimpleDialog from "@/components/modals/SimpleDialog"
 
 export default {
   name: "CafeOrders",
-  components: { SimpleDialog, TextInput, Toggle, FaIcon, SelectInput, FormButton },
+  components: { SimpleDialog, TextInput, Toggle, SelectInput, FormButton },
   mixins: [ApiErrorHelper],
   props: {
     cafeData: {
@@ -334,27 +333,22 @@ export default {
       }
       return this.$store.state.global.usersList.find((u) => u.value === this.cafeData.order_person).text
     },
-    currentUserIsAdmin() {
-      return this.$authService.getUserData().roleId < 2
-    },
     getColumns() {
       return [
-        { key: "user", label: this.$t("table.orderColumns.user"), class: "user-column", sortable: true },
-        { key: "order_name", label: this.$t("table.orderColumns.order"), sortable: false },
-        { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width", sortable: true },
+        { key: "user", label: this.$t("table.orderColumns.user"), class: "user-column" },
+        { key: "order_name", label: this.$t("table.orderColumns.order") },
+        { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width" },
         {
           key: "shipping_price",
           label: this.$t("table.orderColumns.shipping"),
-          class: "align-right column-width",
-          sortable: true
+          class: "align-right column-width"
         },
         {
           key: "packing_price",
           label: this.$t("table.orderColumns.packing"),
-          class: "align-right column-width",
-          sortable: true
+          class: "align-right column-width"
         },
-        { key: "actions", label: "", class: "column-width", sortable: false }
+        { key: "actions", label: "", class: "column-width" }
       ]
     }
   }
@@ -458,11 +452,6 @@ export default {
     justify-content: center;
     gap: 0.6rem;
 
-    i {
-      padding: 2px 8px;
-      cursor: pointer;
-    }
-
     .action {
       display: flex;
       justify-content: center;
@@ -470,22 +459,23 @@ export default {
       border: 1px solid $primary;
       border-radius: 4px;
       width: 2rem;
+      height: 2rem;
       background-color: $primary;
       color: $white;
       cursor: pointer;
-      padding-top: 3px;
-      padding-bottom: 3px;
+
+      svg {
+        height: 0.85rem;
+      }
 
       &.edit {
         background-color: $primary;
         border-color: $primary;
-        padding: 3px 0 3px 3px;
       }
 
       &.delete {
         background-color: $danger;
         border-color: $danger;
-        padding: 0 1px;
       }
 
       &.decline {
@@ -496,7 +486,6 @@ export default {
       &.apply {
         background-color: $success;
         border-color: $success;
-        padding-left: 2px;
       }
     }
   }
