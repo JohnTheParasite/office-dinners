@@ -12,7 +12,7 @@
           <div class="order-user">
             <label>{{ $t("order.userPay") }}:</label>
             <template v-if="$authService.isAdministrator() && !cafeData.closed">
-              <select-input ref="selectedUserToPay" :init-value="cafeData.order_person" :options="this.usersList" @change="checkSelectedUser($event)" />
+              <select-input ref="selectedUserToPay" :init-value="cafeData.order_person" :options="usersList" @change="checkSelectedUser($event)" />
               <form-button :disabled="disableSelectUser" label="interface.select" @click="selectUser()"></form-button>
             </template>
             <span v-else class="user-name-to-pay">{{ getSelectedUserToPay }}</span>
@@ -159,15 +159,11 @@ export default {
       footer: {
         total_edit: false,
         total_shipping_price: 0,
-        old_total_shipping_price: 0,
-        total_packing_price: 0,
-        old_total_packing_price: 0
+        total_packing_price: 0
       }
     }
   },
   mounted() {
-    this.footer.total_shipping_price = this.cafeData.total_shipping_price
-    this.footer.total_packing_price = this.cafeData.total_packing_price
     let ord = this.cafeData.orders
     for (let i in ord) {
       this.selectedOrdersData["cafe_" + ord[i].id] = { ...ord[i] }
