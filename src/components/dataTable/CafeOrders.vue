@@ -43,7 +43,7 @@
         </template>
 
         <template #cell(order_name)="data">
-          <div v-if="editOrder(data.item.id)">
+          <div v-if="orderInEditMode(data.item.id)">
             <input v-model="selectedOrdersData['cafe_' + data.item.id].order_name" class="cafe-input" />
           </div>
           <div v-else class="text">
@@ -52,7 +52,7 @@
         </template>
 
         <template #cell(price)="data">
-          <div v-if="editOrder(data.item.id)">
+          <div v-if="orderInEditMode(data.item.id)">
             <input v-model="selectedOrdersData['cafe_' + data.item.id].price" class="cafe-input number" type="number" />
           </div>
           <div v-else class="text">
@@ -62,19 +62,19 @@
 
         <template #cell(actions)="data">
           <div v-if="data.item.can_edit">
-            <div v-if="editOrder(data.item.id)" class="action-buttons">
-              <div class="action apply" @click="onClickApply(data.item)">
+            <div v-if="orderInEditMode(data.item.id)" class="action-buttons">
+              <div class="action apply" @click="updateOrder(data.item.id)">
                 <font-awesome-icon icon="fa-solid fa-check" />
               </div>
-              <div class="action decline" @click="onClickDecline(data.item)">
+              <div class="action decline" @click="cancelEdit(data.item.id)">
                 <font-awesome-icon icon="fa-solid fa-ban" />
               </div>
             </div>
             <div v-else class="action-buttons">
-              <div class="action edit" @click="onClickEdit(data.item)">
+              <div class="action edit" @click="editOrder(data.item)">
                 <font-awesome-icon icon="fa-solid fa-pencil" />
               </div>
-              <div class="action delete" @click="onClickDelete(data.item)">
+              <div class="action delete" @click="deleteOrder(data.item.id)">
                 <font-awesome-icon icon="fa-solid fa-trash-can" />
               </div>
             </div>
@@ -84,45 +84,43 @@
         <template v-slot:custom-foot="">
           <b-tr class="footer footer-row">
             <b-td></b-td>
-            <b-td>Total:</b-td>
+            <b-td>{{ $t("order.total") }}: {{ cafeData.total_price }}</b-td>
             <b-td>
               <div class="text">
-                {{ cafeData.total_price }}
+                {{ cafeData.total_orders_price }}
               </div>
             </b-td>
             <b-td>
               <div v-if="footer.total_edit">
                 <input v-model="footer.total_shipping_price" class="cafe-input number footer" type="number" />
               </div>
-              <div v-else class="text">
-                {{ footer.total_shipping_price }}
-              </div>
+              <div v-else class="text">+{{ cafeData.total_shipping_price }}</div>
             </b-td>
             <b-td>
               <div v-if="footer.total_edit">
                 <input v-model="footer.total_packing_price" class="cafe-input number footer" type="number" />
               </div>
-              <div v-else class="text">
-                {{ footer.total_packing_price }}
-              </div>
+              <div v-else class="text">+{{ cafeData.total_packing_price }}</div>
             </b-td>
             <b-td>
               <div v-if="cafeData.can_edit">
-                <div v-if="footer.total_edit" class="action-buttons">
-                  <div class="action apply" @click="onClickApplyFooter()">
-                    <font-awesome-icon icon="fa-solid fa-check" />
-                  </div>
-                  <div class="action decline" @click="onClickDeclineFooter()">
-                    <font-awesome-icon icon="fa-solid fa-ban" />
-                  </div>
-                </div>
-                <div v-else class="action-buttons">
-                  <div class="action edit" @click="onClickEditFooter()">
-                    <font-awesome-icon icon="fa-solid fa-pencil" />
-                  </div>
-                  <div class="action" @click="onClickDiscount()">
-                    <font-awesome-icon icon="fa-solid fa-percent" />
-                  </div>
+                <div class="action-buttons">
+                  <template v-if="footer.total_edit">
+                    <div class="action apply" @click="setOrderPrices()">
+                      <font-awesome-icon icon="fa-solid fa-check" />
+                    </div>
+                    <div class="action decline" @click="cancelEditOrderPrices()">
+                      <font-awesome-icon icon="fa-solid fa-ban" />
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="action edit" @click="editOrderPrices()">
+                      <font-awesome-icon icon="fa-solid fa-pencil" />
+                    </div>
+                    <div class="action" @click="openDiscountModal()">
+                      <font-awesome-icon icon="fa-solid fa-percent" />
+                    </div>
+                  </template>
                 </div>
               </div>
               <div v-else></div>
@@ -138,7 +136,7 @@
       modalId="orderApprovedModal"
       title="order.orderedTitleQuestion"
     ></simple-dialog>
-    <simple-dialog ref="discountModal" :apply="applyDiscount" modalId="discountModal" title="interface.selectDiscount">
+    <simple-dialog ref="discountModal" :apply="applyDiscount" modalId="discountModal" title="order.setDiscount">
       <div class="discount-area">
         <div class="discount-input">
           <text-input type="number" @input="onChange('discount', $event)"></text-input>
@@ -170,7 +168,6 @@ export default {
   data() {
     return {
       disableSelectUser: true,
-      order_person: undefined,
       selectedOrders: [],
       selectedOrdersData: {},
       discount: 0,
@@ -185,12 +182,11 @@ export default {
     }
   },
   mounted() {
-    this.order_person = this.cafeData.order_person
     this.footer.total_shipping_price = this.cafeData.total_shipping_price
     this.footer.total_packing_price = this.cafeData.total_packing_price
     let ord = this.cafeData.orders
     for (let i in ord) {
-      this.selectedOrdersData["cafe_" + ord[i].id] = ord[i]
+      this.selectedOrdersData["cafe_" + ord[i].id] = { ...ord[i] }
     }
   },
   methods: {
@@ -250,31 +246,18 @@ export default {
     onChange(field, value) {
       this[field] = value
     },
-    editOrder(id) {
-      let element = this.selectedOrders.find((item) => item.id === id)
-      return element !== undefined
+    orderInEditMode(id) {
+      return this.selectedOrders.indexOf(id) > -1
     },
-    onClickEdit(row) {
-      this.selectedOrders.push({
-        id: row.id,
-        old_order_name: row.order_name,
-        old_price: row.price
-      })
+    editOrder(order) {
+      this.selectedOrdersData[`cafe_${order.id}`].order_name = order.order_name
+      this.selectedOrdersData[`cafe_${order.id}`].price = order.price
+      this.selectedOrders.push(order.id)
     },
-    onClickApply(row) {
-      let element = this.selectedOrders.find((item) => item.id === row.id)
-      if (element === undefined) {
-        return
-      }
-      let index = this.selectedOrders.indexOf(element)
-      if (row.order_name === element.old_order_name && row.price === element.old_price) {
-        this.selectedOrders.splice(index, 1)
-        return
-      }
-
-      let editedData = this.selectedOrdersData["cafe_" + row.id]
+    updateOrder(id) {
+      let editedData = this.selectedOrdersData["cafe_" + id]
       let updatedOrder = {
-        order_id: row.id,
+        order_id: id,
         order_name: editedData.order_name,
         price: editedData.price
       }
@@ -283,41 +266,52 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "order.updated")
           this.$emit("updateOrders")
-          this.selectedOrders.splice(index, 1)
+          this.cancelEdit(id)
         })
         .catch((error) => {
           this.catchAxiosError(error)
         })
     },
-    onClickDecline(row) {
-      let element = this.selectedOrders.find((item) => item.id === row.id)
-      if (element === undefined) {
-        return
-      }
-
-      row.order_name = element.old_order_name
-      row.price = element.old_price
-
-      let index = this.selectedOrders.indexOf(element)
+    cancelEdit(id) {
+      let index = this.selectedOrders.indexOf(id)
       this.selectedOrders.splice(index, 1)
     },
-    onClickDelete(row) {
-      console.log("delete order " + row.id)
+    deleteOrder(id) {
+      this.$axios
+        .delete(ApiEndpoints.DELETE_ORDER + "/" + id)
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.deleted")
+          this.$emit("updateOrders")
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     },
-    onClickEditFooter() {
+    editOrderPrices() {
       this.footer.total_edit = true
-      this.footer.old_total_shipping_price = this.footer.total_shipping_price
-      this.footer.old_total_packing_price = this.footer.total_packing_price
+      this.footer.total_shipping_price = this.cafeData.total_shipping_price
+      this.footer.total_packing_price = this.cafeData.total_packing_price
     },
-    onClickApplyFooter() {
+    setOrderPrices() {
+      this.$axios
+        .post(ApiEndpoints.UPDATE_ORDER_PRICES, {
+          id: this.cafeData.id,
+          shipping: this.footer.total_shipping_price,
+          packing: this.footer.total_packing_price
+        })
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          this.$emit("updateOrders")
+          this.footer.total_edit = false
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    },
+    cancelEditOrderPrices() {
       this.footer.total_edit = false
     },
-    onClickDeclineFooter() {
-      this.footer.total_edit = false
-      this.footer.total_shipping_price = this.footer.old_total_shipping_price
-      this.footer.total_packing_price = this.footer.old_total_packing_price
-    },
-    onClickDiscount(cafe) {
+    openDiscountModal(cafe) {
       this.discount = 0
       this.percent = false
       this.$refs.discountModal.show(() => this.applyDiscount(cafe))

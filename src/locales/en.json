@@ -61,7 +61,9 @@
     "noOrdersForToday": "No one has ordered this day",
     "orderedTitleQuestion": "Please check all prices",
     "orderedQuestion": "If all prices are correct - click OK",
-    "orderedDate": "Ordered on:"
+    "orderedDate": "Ordered on:",
+    "total": "Total",
+    "setDiscount": "Set discount"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -111,7 +113,6 @@
     "closeOrder": "Close orders",
     "openOrder": "Open orders",
     "select": "Select",
-    "selectDiscount": "Select discount",
     "percent": "Percent",
     "like": "Like",
     "profile": "Profile",
