@@ -12,4 +12,7 @@ export default class AuthService {
   static getUserData = () => {
     return JSON.parse(localStorage.getItem(AuthService.authKey))
   }
+  static isAdministrator = () => {
+    return AuthService.getUserData().roleId < 2
+  }
 }

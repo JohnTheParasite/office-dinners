@@ -3,7 +3,7 @@
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
-        <fa-icon icon="close" />
+        <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
     <text-input label="user.name" :init-value="formGroup.name" @input="onChange('name', $event)" :required="true" />
@@ -18,7 +18,7 @@
       @change="onChange('selected_language', $event)"
       :required="true"
     />
-    <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('role', $event)" />
+    <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
       <form-button label="Cancel" @click="cancel" type="secondary" />
       <form-button v-if="isAddUser" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
@@ -31,7 +31,6 @@
 import TextInput from "@/components/controls/TextInput"
 import FormButton from "@/components/controls/FormButton"
 import SystemTypes from "@/enums/systemTypes"
-import FaIcon from "@/components/icons/FaIcon"
 import RadioList from "@/components/controls/RadioList"
 import Checkbox from "@/components/controls/Checkbox"
 import SelectInput from "@/components/controls/SelectInput"
@@ -42,7 +41,7 @@ import PasswordInput from "@/components/controls/PasswordInput"
 
 export default {
   name: "UserFormModal",
-  components: { PasswordInput, SelectInput, Checkbox, RadioList, FaIcon, FormButton, TextInput },
+  components: { PasswordInput, SelectInput, Checkbox, RadioList, FormButton, TextInput },
   mixins: [ApiErrorHelper],
   props: {
     variation: {

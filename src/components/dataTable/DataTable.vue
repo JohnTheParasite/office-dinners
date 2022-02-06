@@ -4,7 +4,7 @@
       <div class="per-page">
         {{ $t("table.show") }}
         <div class="container">
-          <select-input :options="paginationOptions" :init-value="tableProperties.perPage" @change="onChangePerPage($event)" :required="true" />
+          <select-input :init-value="tableProperties.perPage" :options="paginationOptions" :required="true" @change="onChangePerPage($event)" />
         </div>
         {{ $t("table.entries") }}
       </div>
@@ -32,7 +32,9 @@
         {{ $t(data.item.active) }}
       </template>
       <template #cell(actions)="data">
-        <table-action-dropdown :object-id="data.item.id" :on-click-edit="onClickEdit"></table-action-dropdown>
+        <div class="action-button" @click="() => onClickEdit(data.item.id)">
+          <font-awesome-icon icon="fa-solid fa-pencil" />
+        </div>
       </template>
     </b-table>
     <div class="bottom-information">
@@ -59,14 +61,13 @@
 </template>
 
 <script>
-import TableActionDropdown from "@/components/controls/TableActionDropdown"
 import TextInput from "@/components/controls/TextInput"
 import FormDataService from "@/services/formDataService"
 import SelectInput from "@/components/controls/SelectInput"
 
 export default {
   name: "DataTable",
-  components: { SelectInput, TextInput, TableActionDropdown },
+  components: { SelectInput, TextInput },
   props: {
     items: {
       type: Array,
@@ -133,6 +134,10 @@ export default {
 
 <style lang="scss">
 @import "../../scss/components/color";
+
+.action-button {
+  cursor: pointer;
+}
 
 .actions,
 .bottom-information {

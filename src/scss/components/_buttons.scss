@@ -77,6 +77,25 @@
     }
   }
 
+  &-danger {
+    border-color: $danger;
+    background-color: $danger;
+    color: $white;
+
+    &:hover, &:focus {
+      &:not(.disabled):not(:disabled) {
+        box-shadow: 0 8px 25px -8px $danger;
+        border-color: $danger;
+        background-color: darken($danger, 2%);
+        color: $white;
+      }
+    }
+
+    &:disabled {
+      color: $white;
+    }
+  }
+
   &:not(.disabled):not(:disabled) {
     cursor: pointer;
   }

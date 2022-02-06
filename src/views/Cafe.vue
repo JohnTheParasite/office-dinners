@@ -1,6 +1,17 @@
 <template>
   <div class="router-container">
-    <cafe-data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
+    <cafe-data-table
+      ref="cafeDataTable"
+      :items="items"
+      :on-click-edit="openEdit"
+      :on-filter-change="updateResults"
+      :pagination="pagination"
+      :total="items.length"
+      @refreshTable="refreshTable"
+    >
+      <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
+      <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
+      <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
       <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
     </cafe-data-table>
     <cafe-form-modal ref="cafeDataModal" @refreshTable="refreshTable" />
@@ -23,12 +34,19 @@ export default {
   data() {
     return {
       items: [],
-      tableProperties: {},
+      tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
     }
   },
   beforeMount() {
     this.getItems()
+  },
+  mounted() {
+    if (process.env.VUE_APP_ENV === "dev") {
+      this.refreshTable()
+    } else {
+      window.setInterval(this.refreshTable, 2000)
+    }
   },
   methods: {
     getItems(props) {
@@ -40,7 +58,6 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.items = this.addItemProperties(response.data.items)
-            // this.tableProperties = response.data.tableProperties
             this.pagination = response.data.pagination
           }
         })
@@ -66,6 +83,39 @@ export default {
     },
     onclickAddCafe() {
       this.$refs.cafeDataModal.show()
+    },
+    onclickOpenCloseVotes() {
+      let endpoint = ApiEndpoints.VOTES_OPEN
+      if (this.votesOpened) {
+        endpoint = ApiEndpoints.VOTES_CLOSE
+      }
+      this.$axios
+        .post(endpoint)
+        .then((response) => {
+          if (response && response.data) {
+            this.$store.commit("toasts/addSuccessToast", this.votesOpened ? "cafe.votesClosed" : "cafe.votesOpened")
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    },
+    onclickSetTimer() {
+      this.$axios
+        .post(ApiEndpoints.VOTES_AUTOCLOSE, FormDataService.getFormData({ time: this.$refs.cafeDataTable.$data.time }))
+        .then((response) => {
+          if (response && response.data) {
+            this.$store.commit("toasts/addSuccessToast", "cafe.votesTimeoutSet")
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    }
+  },
+  computed: {
+    votesOpened() {
+      return this.$store.state.basic.votesOpened
     }
   }
 }

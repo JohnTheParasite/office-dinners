@@ -1,4 +1,4 @@
 export default class IconNames {
-  static EYE = "eye"
-  static EYE_SLASH = "eye-slash"
+  static EYE = "fa-eye"
+  static EYE_SLASH = "fa-eye-slash"
 }

@@ -4,6 +4,8 @@ import Home from "../views/Home.vue"
 import AuthService from "@/services/authService"
 import User from "@/views/User"
 import Cafe from "@/views/Cafe"
+import Orders from "@/views/Orders"
+import Refills from "@/views/Refills"
 
 Vue.use(VueRouter)
 
@@ -26,12 +28,12 @@ const routes = [
   {
     path: "/refills",
     name: "refills",
-    component: User
+    component: Refills
   },
   {
     path: "/orders",
     name: "orders",
-    component: User
+    component: Orders
   },
   {
     path: "/login",

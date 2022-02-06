@@ -4,7 +4,7 @@
   .primary {
     color: $primary;
 
-    i {
+    svg {
       color: $primary;
     }
   }
@@ -12,8 +12,16 @@
   .warning {
     color: $warning;
 
-    i {
+    svg {
       color: $warning;
+    }
+  }
+
+  .danger {
+    color: $danger;
+
+    svg {
+      color: $danger;
     }
   }
 

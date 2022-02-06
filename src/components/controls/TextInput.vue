@@ -34,7 +34,7 @@
           @click="click"
         />
         <span v-if="hasIcon" class="input-icon" @click="onIconClick">
-          <fa-icon :icon="icon"></fa-icon>
+          <font-awesome-icon :icon="getFaIcon" />
         </span>
       </div>
       <small v-show="errorMessage" class="text-error" v-html="errorMessage"></small>
@@ -44,12 +44,10 @@
 
 <script>
 import control from "@/components/controls/control"
-import FaIcon from "@/components/icons/FaIcon"
 import i18n from "@/i18n"
 
 export default {
   name: "TextInput",
-  components: { FaIcon },
   mixins: [control],
   props: {
     type: {
@@ -92,6 +90,9 @@ export default {
     this.inputModel = this.initValue
   },
   computed: {
+    getFaIcon() {
+      return `fa-solid ${this.icon}`
+    },
     value: {
       get() {
         return this.inputModel

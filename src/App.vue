@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <toaster-container />
+    <simple-dialog />
     <menu-container v-if="showMenu"></menu-container>
     <div class="content-container">
       <div class="top-shadow"></div>
@@ -13,9 +14,10 @@
 import MenuContainer from "@/components/menu/MenuContainer"
 import TopBar from "@/components/menu/TopBar"
 import ToasterContainer from "@/components/controls/ToastContainer"
+import SimpleDialog from "@/components/modals/SimpleDialog"
 
 export default {
-  components: { ToasterContainer, TopBar, MenuContainer },
+  components: { SimpleDialog, ToasterContainer, TopBar, MenuContainer },
   computed: {
     showMenu() {
       return this.$route.name !== "Login" && this.$route.name !== null
