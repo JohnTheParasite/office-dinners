@@ -17,6 +17,14 @@
     }
   }
 
+  .danger {
+    color: $danger;
+
+    svg {
+      color: $danger;
+    }
+  }
+
   .modal-content {
     border: none;
   }

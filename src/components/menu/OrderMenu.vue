@@ -49,8 +49,8 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.topCafe = response.data.cafes
-            this.$store.commit("global/isVotesOpened", !response.data.closed)
-            this.$store.dispatch("global/setUsersList", response.data.usersList)
+            this.$store.commit("basic/isVotesOpened", !response.data.closed)
+            this.$store.dispatch("basic/setFromHeaderData", response.data)
           }
         })
         .catch((error) => {
@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     votesOpened() {
-      return this.$store.state.global.votesOpened
+      return this.$store.state.basic.votesOpened
     }
   }
 }

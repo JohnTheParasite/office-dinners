@@ -1,5 +1,5 @@
 <template>
-  <b-modal :id="'b' + _uid" :header-class="buttonVariant" centered no-close-on-backdrop>
+  <b-modal :id="'b' + _uid" :header-class="type" centered no-close-on-backdrop @hidden="setInStore">
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button class="close" type="secondary" @click="close">
@@ -7,51 +7,44 @@
       </form-button>
     </template>
     <div class="content">
-      {{ $t(content) }}
+      {{ $t(message) }}
       <slot></slot>
     </div>
     <template #modal-footer="{ cancel }">
       <form-button label="Cancel" type="secondary" @click="cancel" />
-      <form-button :type="buttonVariant" label="OK" @click="apply" />
+      <form-button :type="type" label="OK" @click="apply" />
     </template>
   </b-modal>
 </template>
 
 <script>
-import SystemTypes from "@/enums/systemTypes"
 import FormButton from "@/components/controls/FormButton"
+import { mapState } from "vuex"
 
 export default {
   name: "SimpleDialog",
   components: { FormButton },
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    content: {
-      type: String,
-      default: ""
-    },
-    buttonVariant: {
-      default: SystemTypes.PRIMARY
-    }
+  computed: {
+    ...mapState("dialog", ["message", "title", "showDialog", "type", "apply"])
   },
-  data() {
-    return {
-      apply: () => {}
+  watch: {
+    ["showDialog"](open) {
+      if (open) {
+        this.show()
+      }
     }
   },
   methods: {
-    show(apply) {
-      this.apply = apply
+    show() {
       this.$bvModal.show("b" + this._uid)
     },
     hide() {
       this.$bvModal.hide("b" + this._uid)
+      this.setInStore()
+    },
+    setInStore() {
+      this.$store.commit("dialog/hideDialog")
     }
   }
 }
 </script>
-
-<style scoped></style>

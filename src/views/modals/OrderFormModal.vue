@@ -27,7 +27,7 @@
     <select-input
       v-if="$authService.isAdministrator()"
       :init-value="formGroup.user_id"
-      :options="$store.state.global.usersList"
+      :options="$store.state.basic.usersList"
       label="order.user"
       @change="onChange('user_id', $event)"
     />

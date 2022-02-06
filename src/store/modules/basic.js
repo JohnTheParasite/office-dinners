@@ -3,7 +3,8 @@ export default {
   state: {
     errors: [],
     votesOpened: false,
-    usersList: []
+    usersList: [],
+    currency: ""
   },
   mutations: {
     addErrors: (state, errors) => {
@@ -14,11 +15,15 @@ export default {
     },
     setUsersList: (state, usersList) => {
       state.usersList = usersList
+    },
+    setCurrency: (state, value) => {
+      state.currency = value
     }
   },
   actions: {
-    setUsersList({ commit }, usersList) {
-      commit("setUsersList", usersList)
+    setFromHeaderData({ commit }, data) {
+      commit("setUsersList", data.usersList)
+      commit("setCurrency", data.currency)
     }
   }
 }

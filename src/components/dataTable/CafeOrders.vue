@@ -12,12 +12,7 @@
           <div class="order-user">
             <label>{{ $t("order.userPay") }}:</label>
             <template v-if="$authService.isAdministrator() && !cafeData.closed">
-              <select-input
-                ref="selectedUserToPay"
-                :init-value="cafeData.order_person"
-                :options="$store.state.global.usersList"
-                @change="checkSelectedUser($event)"
-              />
+              <select-input ref="selectedUserToPay" :init-value="cafeData.order_person" :options="this.usersList" @change="checkSelectedUser($event)" />
               <form-button :disabled="disableSelectUser" label="interface.select" @click="selectUser()"></form-button>
             </template>
             <span v-else class="user-name-to-pay">{{ getSelectedUserToPay }}</span>
@@ -56,7 +51,8 @@
             <input v-model="selectedOrdersData['cafe_' + data.item.id].price" class="cafe-input number" type="number" />
           </div>
           <div v-else class="text">
-            {{ data.item.price }}
+            {{ data.item.final_price }} {{ currency }}
+            <div class="small-price">({{ data.item.price }} {{ currency }})</div>
           </div>
         </template>
 
@@ -74,7 +70,7 @@
               <div class="action edit" @click="editOrder(data.item)">
                 <font-awesome-icon icon="fa-solid fa-pencil" />
               </div>
-              <div class="action delete" @click="deleteOrder(data.item.id)">
+              <div class="action delete" @click="askToDeleteOrder(data.item.id)">
                 <font-awesome-icon icon="fa-solid fa-trash-can" />
               </div>
             </div>
@@ -84,23 +80,27 @@
         <template v-slot:custom-foot="">
           <b-tr class="footer footer-row">
             <b-td></b-td>
-            <b-td>{{ $t("order.total") }}: {{ cafeData.total_price }}</b-td>
             <b-td>
-              <div class="text">
-                {{ cafeData.total_orders_price }}
-              </div>
+              {{ $t("order.total") }}: {{ cafeData.total_price }} {{ currency }}
+              <span v-if="cafeData.total_discount > 0" class="small-price">
+                {{ $t("order.discount") }}: {{ cafeData.total_discount }} <span v-if="cafeData.total_discount_in_percent">%</span>
+                <span v-else>{{ currency }}</span>
+              </span>
+            </b-td>
+            <b-td>
+              <div class="text">{{ cafeData.total_orders_price }} {{ currency }}</div>
             </b-td>
             <b-td>
               <div v-if="footer.total_edit">
                 <input v-model="footer.total_shipping_price" class="cafe-input number footer" type="number" />
               </div>
-              <div v-else class="text">+{{ cafeData.total_shipping_price }}</div>
+              <div v-else class="text">+{{ cafeData.total_shipping_price }} {{ currency }}</div>
             </b-td>
             <b-td>
               <div v-if="footer.total_edit">
                 <input v-model="footer.total_packing_price" class="cafe-input number footer" type="number" />
               </div>
-              <div v-else class="text">+{{ cafeData.total_packing_price }}</div>
+              <div v-else class="text">+{{ cafeData.total_packing_price }} {{ currency }}</div>
             </b-td>
             <b-td>
               <div v-if="cafeData.can_edit">
@@ -129,21 +129,7 @@
         </template>
       </b-table>
     </div>
-    <simple-dialog
-      ref="orderApprovedModal"
-      :apply="apply"
-      content="order.orderedQuestion"
-      modalId="orderApprovedModal"
-      title="order.orderedTitleQuestion"
-    ></simple-dialog>
-    <simple-dialog ref="discountModal" :apply="applyDiscount" modalId="discountModal" title="order.setDiscount">
-      <div class="discount-area">
-        <div class="discount-input">
-          <text-input type="number" @input="onChange('discount', $event)"></text-input>
-        </div>
-        <toggle :init-value="percent" label="interface.percent" @change="onChange('percent', $event)"></toggle>
-      </div>
-    </simple-dialog>
+    <order-discount-modal ref="discountModal" :apply="applyDiscount" />
   </div>
 </template>
 
@@ -151,14 +137,14 @@
 import FormButton from "@/components/controls/FormButton"
 import SelectInput from "@/components/controls/SelectInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
-import Toggle from "@/components/controls/Toggle"
-import TextInput from "@/components/controls/TextInput"
 import ApiErrorHelper from "@/services/apiErrorHelper"
-import SimpleDialog from "@/components/modals/SimpleDialog"
+import SystemTypes from "@/enums/systemTypes"
+import OrderDiscountModal from "@/views/modals/OrderDiscountModal"
+import { mapState } from "vuex"
 
 export default {
   name: "CafeOrders",
-  components: { SimpleDialog, TextInput, Toggle, SelectInput, FormButton },
+  components: { OrderDiscountModal, SelectInput, FormButton },
   mixins: [ApiErrorHelper],
   props: {
     cafeData: {
@@ -170,8 +156,6 @@ export default {
       disableSelectUser: true,
       selectedOrders: [],
       selectedOrdersData: {},
-      discount: 0,
-      percent: false,
       footer: {
         total_edit: false,
         total_shipping_price: 0,
@@ -229,7 +213,11 @@ export default {
         })
     },
     ordered(cafe) {
-      this.$refs.orderApprovedModal.show(() => this.apply(cafe))
+      this.$store.commit("dialog/openDialog", {
+        apply: () => this.apply(cafe),
+        message: "order.orderedQuestion",
+        title: "order.orderedTitleQuestion"
+      })
     },
     apply() {
       this.$axios
@@ -242,9 +230,6 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
-    },
-    onChange(field, value) {
-      this[field] = value
     },
     orderInEditMode(id) {
       return this.selectedOrders.indexOf(id) > -1
@@ -275,6 +260,13 @@ export default {
     cancelEdit(id) {
       let index = this.selectedOrders.indexOf(id)
       this.selectedOrders.splice(index, 1)
+    },
+    askToDeleteOrder(id) {
+      this.$store.commit("dialog/openDialog", {
+        apply: () => this.deleteOrder(id),
+        message: "order.deleteOrderQuestion",
+        type: SystemTypes.DANGER
+      })
     },
     deleteOrder(id) {
       this.$axios
@@ -311,21 +303,33 @@ export default {
     cancelEditOrderPrices() {
       this.footer.total_edit = false
     },
-    openDiscountModal(cafe) {
-      this.discount = 0
-      this.percent = false
-      this.$refs.discountModal.show(() => this.applyDiscount(cafe))
+    openDiscountModal() {
+      this.$refs.discountModal.show()
     },
-    applyDiscount() {
-      this.$refs.discountModal.hide()
+    applyDiscount(price, type) {
+      this.$axios
+        .post(ApiEndpoints.SET_ORDER_DISCOUNT, {
+          id: this.cafeData.id,
+          discount: price,
+          percent: type
+        })
+        .then(() => {
+          this.$store.commit("toasts/addSuccessToast", "order.updated")
+          this.$emit("updateOrders")
+          this.$refs.discountModal.hide()
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     }
   },
   computed: {
+    ...mapState("basic", ["currency", "usersList"]),
     getSelectedUserToPay() {
-      if (this.$store.state.global.usersList.length < 1) {
+      if (this.$store.state.basic.usersList.length < 1) {
         return ""
       }
-      return this.$store.state.global.usersList.find((u) => u.value === this.cafeData.order_person).text
+      return this.$store.state.basic.usersList.find((u) => u.value === this.cafeData.order_person).text
     },
     getColumns() {
       return [
@@ -491,6 +495,10 @@ export default {
       text-align: right;
     }
   }
+}
+
+.small-price {
+  font-size: 0.75rem;
 }
 
 .horizontal-separator {

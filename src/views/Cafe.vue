@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     votesOpened() {
-      return this.$store.state.global.votesOpened
+      return this.$store.state.basic.votesOpened
     }
   }
 }

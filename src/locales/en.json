@@ -63,7 +63,9 @@
     "orderedQuestion": "If all prices are correct - click OK",
     "orderedDate": "Ordered on:",
     "total": "Total",
-    "setDiscount": "Set discount"
+    "setDiscount": "Set discount",
+    "deleteOrderQuestion": "Do you want to delete order?",
+    "discount": "Discount"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",

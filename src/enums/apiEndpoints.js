@@ -23,4 +23,5 @@ export class ApiEndpoints {
   static SET_ORDER_ORDERED = process.env.VUE_APP_API_URL + "/order/set-ordered"
   static DELETE_ORDER = process.env.VUE_APP_API_URL + "/order/delete"
   static UPDATE_ORDER_PRICES = process.env.VUE_APP_API_URL + "/order/update-order-prices"
+  static SET_ORDER_DISCOUNT = process.env.VUE_APP_API_URL + "/order/set-order-discount"
 }

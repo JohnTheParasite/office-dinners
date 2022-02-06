@@ -1,7 +1,8 @@
 import Vue from "vue"
 import Vuex from "vuex"
-import global from "./modules/global"
+import basic from "./modules/basic"
 import toasts from "./modules/toasts"
+import dialog from "./modules/dialog"
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    global,
-    toasts
+    basic,
+    toasts,
+    dialog
   }
 })
