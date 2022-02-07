@@ -30,6 +30,8 @@ export default {
     ["showDialog"](open) {
       if (open) {
         this.show()
+      } else {
+        this.$bvModal.hide("b" + this._uid)
       }
     }
   },

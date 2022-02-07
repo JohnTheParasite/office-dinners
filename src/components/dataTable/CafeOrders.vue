@@ -221,7 +221,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "order.updated")
           this.$emit("updateOrders")
-          this.$refs.orderApprovedModal.hide()
+          this.$store.commit('dialog/hideDialog')
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -270,6 +270,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "order.deleted")
           this.$emit("updateOrders")
+          this.$store.commit('dialog/hideDialog')
         })
         .catch((error) => {
           this.catchAxiosError(error)
