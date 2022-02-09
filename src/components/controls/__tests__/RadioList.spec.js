@@ -7,8 +7,8 @@ describe("RadioList render", () => {
   localVue.use(i18n)
 
   let mockOptions = [
-    { text: "user.admin", value: 1, selected: false },
-    { text: "user.user", value: 2, selected: false }
+    { text: "first element", value: 1, selected: false },
+    { text: "second element", value: 2, selected: false }
   ]
 
   it("should render RadioList element", () => {

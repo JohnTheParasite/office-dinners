@@ -8,6 +8,9 @@ describe("TextInput", () => {
   const localVue = new createLocalVue()
   localVue.use(i18n)
 
+  jest.useFakeTimers()
+  jest.spyOn(global, "setTimeout")
+
   it("should render textInput properly", () => {
     let textInputElement = shallowMount(textInput, { localVue, i18n })
     expect(textInputElement).toMatchSnapshot()
@@ -42,6 +45,13 @@ describe("TextInput", () => {
     textInputElement.vm.focusout()
     expect(textInputElement.vm.focused).toBeFalsy()
     expect(textInputElement.vm.errorMessage).not.toBe("")
+
+    textInputElement.setProps({ required: false })
+    textInputElement.vm.focusin()
+    expect(textInputElement.vm.focused).toBeTruthy()
+    textInputElement.vm.focusout()
+    expect(textInputElement.vm.focused).toBeFalsy()
+    expect(textInputElement.vm.errorMessage).not.toBe("")
   })
 
   it("click event should work", () => {
@@ -53,19 +63,36 @@ describe("TextInput", () => {
     expect(clickFunc).toBeCalledWith(1)
   })
 
-  // it("input event should work", () => {
-  //   let textInputElement = shallowMount(textInput, { localVue, i18n })
-  //
-  //   textInputElement.setProps({debounce: false})
-  //   let inputFunc = jest.fn()
-  //   textInputElement.vm.$on("input", inputFunc)
-  //   textInputElement.vm.input(1)
-  //
-  //   expect(inputFunc).toBeCalledWith(1)
-  // })
-
-  it("getFaIcon should work", () => {
+  it("input event should work", () => {
     let textInputElement = shallowMount(textInput, { localVue, i18n })
-    textInputElement.setProps({ value: "blahBlah" })
+
+    let inputFunc = jest.fn()
+    textInputElement.vm.$on("input", inputFunc)
+    textInputElement.vm.input(1)
+
+    expect(inputFunc).toBeCalledWith(undefined, expect.anything(), 1)
+
+    textInputElement.vm.value = "blahBlah"
+    textInputElement.vm.input(1)
+    expect(inputFunc).toBeCalledWith("blahBlah", expect.anything(), 1)
+  })
+
+  it("input event with debounce should work", () => {
+    let textInputElement = shallowMount(textInput, { localVue, i18n, propsData: { debounce: true } })
+    let inputFunc = jest.fn()
+    textInputElement.vm.$on("input", inputFunc)
+    textInputElement.vm.input(1)
+
+    expect(setTimeout).toHaveBeenCalledTimes(1)
+    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500)
+
+    jest.runOnlyPendingTimers()
+
+    expect(inputFunc).toBeCalled()
+  })
+
+  it("default prop function should work", () => {
+    let textInputElement = shallowMount(textInput, { localVue, i18n })
+    textInputElement.vm.onIconClick()
   })
 })
