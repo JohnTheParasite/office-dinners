@@ -2,7 +2,7 @@ import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
 import toast from "@/components/controls/Toast"
 import i18n from "@/i18n"
 
-describe("Toast", () => {
+describe("Toast with timeouts", () => {
   const localVue = new createLocalVue()
   localVue.use(i18n)
 
@@ -16,18 +16,6 @@ describe("Toast", () => {
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 5000)
 
     jest.runOnlyPendingTimers()
-
-    expect(toastElem).toMatchSnapshot()
-  })
-
-  it("toast render with computed", async () => {
-    let toastElem = await shallowMount(toast, { localVue, i18n })
-
-    expect(toastElem).toMatchSnapshot()
-  })
-
-  it("toast render with name", async () => {
-    let toastElem = await shallowMount(toast, { localVue, i18n, propsData: { header: "test" } })
 
     expect(toastElem).toMatchSnapshot()
   })
@@ -57,5 +45,22 @@ describe("Toast", () => {
     jest.runOnlyPendingTimers()
 
     expect(mockfn).toBeCalled()
+  })
+})
+
+describe("Tosts", () => {
+  const localVue = new createLocalVue()
+  localVue.use(i18n)
+
+  it("should render toast with computed", async () => {
+    let toastElem = await shallowMount(toast, { localVue, i18n })
+
+    expect(toastElem).toMatchSnapshot()
+  })
+
+  it("should render toast with name", async () => {
+    let toastElem = await shallowMount(toast, { localVue, i18n, propsData: { header: "test" } })
+
+    expect(toastElem).toMatchSnapshot()
   })
 })

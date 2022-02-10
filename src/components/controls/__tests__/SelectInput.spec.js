@@ -53,7 +53,7 @@ describe("selectInput", () => {
     expect(selectInputElement.vm.showOpenable).toBeTruthy()
   })
 
-  it("onDocumentClick() should work", async () => {
+  it("should onDocumentClick(e) function work", () => {
     const component = {
       template: '<div><select-input :options="options"></select-input></div>',
       components: { selectInput },
@@ -63,16 +63,17 @@ describe("selectInput", () => {
         }
       }
     }
+
     let divElement = mount(component, { localVue, i18n })
     let selectInputElement = divElement.findComponent(selectInput)
+
     expect(selectInputElement.vm.showOpenable).toBeFalsy()
     selectInputElement.vm.enableOpenable()
     expect(selectInputElement.vm.showOpenable).toBeTruthy()
+    selectInputElement.vm.onDocumentClick({ target: selectInputElement.vm.$el })
+    expect(selectInputElement.vm.showOpenable).toBeTruthy()
 
-    await selectInputElement.trigger("click")
-
-    await divElement.trigger("click")
-
+    selectInputElement.vm.onDocumentClick({ target: divElement.vm.$el })
     expect(selectInputElement.vm.showOpenable).toBeFalsy()
   })
 })
