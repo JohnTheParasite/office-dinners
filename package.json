@@ -78,5 +78,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/jest.init.js"
+    ]
+  }
 }
