@@ -67,6 +67,9 @@
     "deleteOrderQuestion": "Do you want to delete order?",
     "discount": "Discount"
   },
+  "refill": {
+    "setBalance": "Add to balance"
+  },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
     "edit": "Edit",
@@ -95,6 +98,10 @@
       "price": "price",
       "shipping": "shipping",
       "packing": "packing"
+    },
+    "refillsColumns": {
+      "user": "user",
+      "balance": "balance"
     }
   },
   "interface": {
