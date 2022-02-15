@@ -29,10 +29,11 @@ export default {
   methods: {
     getItems(props) {
       if (props === undefined) {
-        props = FormDataService.getDefaultListParameters()
+        this.tableProperties = FormDataService.getDefaultListParameters()
+        props = this.tableProperties
       }
       this.$axios
-        .get(ApiEndpoints.USER_LIST, { params: props })
+        .get(ApiEndpoints.USER_REFILLS, { params: props })
         .then((response) => {
           if (response && response.data) {
             this.items = response.data.items
@@ -51,10 +52,26 @@ export default {
       this.$refs.refillModal.show(userId)
     },
     applyBalance(userId, balance) {
-      console.log(userId)
-      console.log(balance)
-      this.$refs.refillModal.hide()
+      this.$axios
+        .patch(ApiEndpoints.USER_REFILL, { user_id: userId, value: balance })
+        .then((response) => {
+          if (response) {
+            this.$store.commit("toasts/addSuccessToast", "refill.balanceUpdated")
+            this.$refs.refillModal.hide()
+            this.updateResults(this.tableProperties)
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
     }
   }
 }
 </script>
+
+<style lang="scss">
+.table-column-balance,
+.table-column-actions {
+  text-align: right;
+}
+</style>

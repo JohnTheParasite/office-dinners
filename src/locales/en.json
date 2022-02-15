@@ -68,7 +68,8 @@
     "discount": "Discount"
   },
   "refill": {
-    "setBalance": "Add to balance"
+    "setBalance": "Add to balance",
+    "balanceUpdated": "Balance updated"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -90,7 +91,8 @@
       "rating_delivery": "Delivery",
       "comments": "Comments",
       "last_order_date": "Last order",
-      "vote": "Vote here!"
+      "vote": "Vote here!",
+      "balance": "Balance"
     },
     "orderColumns": {
       "user": "user",

@@ -104,11 +104,12 @@ export default {
         return {
           key: k,
           label: this.$t("table.columns." + k),
-          sortable: true
+          sortable: true,
+          class: `table-column-${k}`
         }
       })
       if (this.withActions) {
-        columns.push({ key: "actions", label: "" })
+        columns.push({ key: "actions", label: "", class: `table-column-actions` })
       }
       return columns
     }
