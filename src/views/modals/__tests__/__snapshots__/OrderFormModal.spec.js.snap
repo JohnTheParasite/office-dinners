@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`orderFormModal should render properly 1`] = `
+<b-modal-stub id="orderDataModal" canceltitle="Cancel" cancelvariant="secondary" centered="true" headerclass="primary" headerclosecontent="&amp;times;" headercloselabel="Close" nocloseonbackdrop="true" oktitle="OK" okvariant="primary" size="lg" titletag="h5">
+  <div class="cafe-link-rating"><a href="" target="_blank">order.clicklink
+      <font-awesome-icon-stub icon="fa-solid fa-arrow-up-right-from-square"></font-awesome-icon-stub>
+    </a>
+    <b-form-rating-stub value="0" iconclear="x" iconempty="star" iconfull="star-fill" iconhalf="star-half" readonly="true" stars="5"></b-form-rating-stub>
+  </div>
+  <div class="date-delivery-rating">
+    <div class="date">
+      <div class="last-order-label">table.columns.last_order_date:</div>
+      <div class="last-order-date"></div>
+    </div>
+    <b-form-rating-stub value="0" iconclear="x" iconempty="star" iconfull="star-fill" iconhalf="star-half" readonly="true" stars="5"></b-form-rating-stub>
+  </div>
+  <div class="inputs">
+    <text-input-stub label="order.order" required="true" description="" name="" initvalue="" type="text" placeholder="" warningmessage="errors.fieldIsRequired" icon="" oniconclick="[Function]" class="order"></text-input-stub>
+    <text-input-stub label="order.price" required="true" description="" name="" initvalue="" type="Number" placeholder="" warningmessage="errors.fieldIsRequired" icon="" oniconclick="[Function]"></text-input-stub>
+  </div>
+  <!---->
+</b-modal-stub>
+`;

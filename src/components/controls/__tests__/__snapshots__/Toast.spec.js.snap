@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toast toast render 1`] = `
+<transition-stub name="toast">
+  <!---->
+</transition-stub>
+`;
+
+exports[`Toast toast render with computed 1`] = `
+<transition-stub name="toast">
+  <!---->
+</transition-stub>
+`;
+
+exports[`Toast toast render with name 1`] = `
+<transition-stub name="toast">
+  <!---->
+</transition-stub>
+`;
+
+exports[`Toast with timeouts toast render 1`] = `
+<transition-stub name="toast">
+  <!---->
+</transition-stub>
+`;
+
+exports[`Tosts should render toast with computed 1`] = `
+<transition-stub name="toast">
+  <!---->
+</transition-stub>
+`;
+
+exports[`Tosts should render toast with name 1`] = `
+<transition-stub name="toast">
+  <!---->
+</transition-stub>
+`;

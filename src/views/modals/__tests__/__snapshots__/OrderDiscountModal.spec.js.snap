@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`orderDiscountModal should render properly 1`] = `
+<b-modal-stub id="b6" canceltitle="Cancel" cancelvariant="secondary" centered="true" headerclass="warning" headerclosecontent="&amp;times;" headercloselabel="Close" nocloseonbackdrop="true" oktitle="OK" okvariant="primary" size="md" titletag="h5">
+  <div class="content">
+    <div class="discount-area">
+      <div class="discount-input">
+        <text-input-stub label="" description="" name="" type="number" placeholder="" warningmessage="errors.fieldIsRequired" icon="" oniconclick="[Function]"></text-input-stub>
+      </div>
+      <toggle-stub label="interface.percent" description="" name=""></toggle-stub>
+    </div>
+  </div>
+</b-modal-stub>
+`;

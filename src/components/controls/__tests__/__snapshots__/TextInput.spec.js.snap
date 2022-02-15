@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextInput should render textInput properly 1`] = `
+<div role="group" class="form-group text"><label for="2" class="input-label" style="display: none;"></label>
+  <div role="group" class="input-group">
+    <div class="form-group-input-container"><input id="2" name="" placeholder="" type="text" class="form-control">
+      <!---->
+    </div> <small class="text-error" style="display: none;"></small>
+  </div>
+</div>
+`;
+
+exports[`TextInput should render with icon 1`] = `
+<div role="group" class="form-group text"><label for="4" class="input-label" style="display: none;"></label>
+  <div role="group" class="input-group icon">
+    <div class="form-group-input-container"><input id="4" name="" placeholder="" type="text" class="form-control"> <span class="input-icon"><font-awesome-icon-stub icon="fa-solid fa-eye"></font-awesome-icon-stub></span></div> <small class="text-error" style="display: none;"></small>
+  </div>
+</div>
+`;

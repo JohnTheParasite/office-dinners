@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormButton disabled property should work 1`] = `
+<button disabled="disabled" type="button" class="btn btn-primary">
+
+</button>
+`;
+
+exports[`FormButton formType property should work 1`] = `
+<button type="button" class="btn btn-primary">
+
+</button>
+`;
+
+exports[`FormButton label property should work 1`] = `
+<button type="button" class="btn btn-primary">
+  superbutton
+</button>
+`;
+
+exports[`FormButton loadingInProgress property should work 1`] = `
+<button type="button" class="btn btn-primary">
+  <cssloader-stub></cssloader-stub>
+</button>
+`;
+
+exports[`FormButton should render button element 1`] = `
+<button type="button" class="btn btn-primary">
+
+</button>
+`;
+
+exports[`FormButton size property should work 1`] = `
+<button type="button" class="btn btn-primary small">
+
+</button>
+`;
+
+exports[`FormButton type property should work 1`] = `
+<button type="button" class="btn btn-primary">
+
+</button>
+`;

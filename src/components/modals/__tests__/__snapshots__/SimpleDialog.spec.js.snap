@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`modal for questions should render SimpleDialog 1`] = `
+<b-modal-stub id="b6" canceltitle="Cancel" cancelvariant="secondary" centered="true" headerclass="primary" headerclosecontent="&amp;times;" headercloselabel="Close" nocloseonbackdrop="true" oktitle="OK" okvariant="primary" size="md" titletag="h5">
+  <div class="content">
+
+  </div>
+</b-modal-stub>
+`;
