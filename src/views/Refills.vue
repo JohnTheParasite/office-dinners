@@ -12,10 +12,12 @@ import DataTable from "@/components/dataTable/DataTable"
 import FormDataService from "@/services/formDataService"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import RefillFormModal from "@/views/modals/RefillFormModal"
+import ApiErrorHelper from "@/services/apiErrorHelper"
 
 export default {
   name: "Refills",
   components: { RefillFormModal, DataTable },
+  mixins: [ApiErrorHelper],
   data() {
     return {
       items: [],
