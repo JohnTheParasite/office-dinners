@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Main app render should render APP without errors 1`] = `
+<div id="app">
+  <toaster-container-stub></toaster-container-stub>
+  <simple-dialog-stub></simple-dialog-stub>
+  <!---->
+  <div class="content-container">
+    <div class="top-shadow"></div>
+    <!---->
+    <router-view-stub name="default"></router-view-stub>
+  </div>
+</div>
+`;

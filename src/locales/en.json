@@ -67,6 +67,10 @@
     "deleteOrderQuestion": "Do you want to delete order?",
     "discount": "Discount"
   },
+  "refill": {
+    "setBalance": "Add to balance",
+    "balanceUpdated": "Balance updated"
+  },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
     "edit": "Edit",
@@ -87,7 +91,8 @@
       "rating_delivery": "Delivery",
       "comments": "Comments",
       "last_order_date": "Last order",
-      "vote": "Vote here!"
+      "vote": "Vote here!",
+      "balance": "Balance"
     },
     "orderColumns": {
       "user": "user",
@@ -95,6 +100,10 @@
       "price": "price",
       "shipping": "shipping",
       "packing": "packing"
+    },
+    "refillsColumns": {
+      "user": "user",
+      "balance": "balance"
     }
   },
   "interface": {

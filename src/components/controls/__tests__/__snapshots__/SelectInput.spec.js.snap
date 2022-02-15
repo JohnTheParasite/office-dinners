@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`selectInput selectInput should render 1`] = `
+<div class="openable-container">
+  <div class="input-select">
+    <text-input-stub label="" description="" name="" type="text" placeholder="first element" warningmessage="errors.fieldIsRequired" icon="" oniconclick="[Function]"></text-input-stub>
+    <div class="square">
+      <font-awesome-icon-stub icon="fa-solid fa-chevron-down"></font-awesome-icon-stub>
+    </div>
+  </div>
+  <div class="openable-options">
+    <div class="option selected">
+      <div class="text">first element</div>
+      <font-awesome-icon-stub icon="fa-solid fa-check"></font-awesome-icon-stub>
+    </div>
+    <div class="option">
+      <div class="text">second element</div>
+      <!---->
+    </div>
+    <!---->
+  </div>
+</div>
+`;

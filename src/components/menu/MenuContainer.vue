@@ -4,7 +4,7 @@
     <menu-item icon="fa-chart-line" router-name="Home" title="Dashboard"></menu-item>
     <menu-item icon="fa-users" router-name="user" title="Users"></menu-item>
     <menu-item icon="fa-burger" router-name="cafe" title="Cafe list"></menu-item>
-    <menu-item icon="fa-hand-holding-dollar" router-name="refills" title="Refills"></menu-item>
+    <menu-item v-if="$authService.isAdministrator()" icon="fa-hand-holding-dollar" router-name="refills" title="Refills"></menu-item>
     <menu-item icon="fa-utensils" router-name="orders" title="Orders"></menu-item>
   </div>
 </template>

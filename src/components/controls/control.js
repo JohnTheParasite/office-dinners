@@ -48,10 +48,6 @@ export default {
     }
   },
   methods: {
-    input(event) {
-      this.errorMessage = ""
-      this.$emit("input", this.value, this, event)
-    },
     change(event) {
       this.errorMessage = ""
       this.$emit("change", this.value, this, event)
