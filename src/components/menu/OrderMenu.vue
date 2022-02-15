@@ -23,10 +23,12 @@
 import FormButton from "@/components/controls/FormButton"
 import OrderFormModal from "@/views/modals/OrderFormModal"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
+import ApiErrorHelper from "@/services/apiErrorHelper"
 
 export default {
   name: "OrderMenu",
   components: { OrderFormModal, FormButton },
+  mixins: [ApiErrorHelper],
   data() {
     return {
       topCafe: [],
