@@ -29,15 +29,19 @@ export default {
   components: { OrderFormModal, FormButton },
   data() {
     return {
-      topCafe: []
+      topCafe: [],
+      intervalId: undefined
     }
   },
   mounted() {
     if (process.env.VUE_APP_ENV === "dev") {
       this.getVoteResults()
     } else {
-      window.setInterval(this.getVoteResults, 2000)
+      this.intervalId = window.setInterval(this.getVoteResults, process.env.VUE_APP_TIMEOUT)
     }
+  },
+  beforeDestroy() {
+    window.clearInterval(this.intervalId)
   },
   methods: {
     cafeMakeOrder(cafe) {
