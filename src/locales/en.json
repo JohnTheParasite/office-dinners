@@ -106,6 +106,13 @@
       "balance": "balance"
     }
   },
+  "menu": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "cafeList": "Cafe list",
+    "refills": "Refills",
+    "orders": "Orders"
+  },
   "interface": {
     "yes": "Yes",
     "no": "No",
@@ -117,6 +124,7 @@
     "create": "Create",
     "update": "Update",
     "cancel": "Cancel",
+    "OK": "OK",
     "add": "Add",
     "noDate": "No date selected",
     "empty": "empty",

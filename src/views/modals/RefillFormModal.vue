@@ -14,8 +14,8 @@
       </div>
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="Cancel" type="secondary" @click="cancel" />
-      <form-button :disabled="!verified" label="OK" type="warning" @click="() => apply(userId, balance)" />
+      <form-button label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="!verified" label="interface.OK" type="warning" @click="() => apply(userId, balance)" />
     </template>
   </b-modal>
 </template>

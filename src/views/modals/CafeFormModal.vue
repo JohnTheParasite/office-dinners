@@ -9,7 +9,7 @@
     <text-input label="cafe.name" :init-value="formGroup.name" @input="onChange('name', $event)" :required="true" />
     <text-input label="cafe.link" :init-value="formGroup.link" @input="onChange('link', $event)" :required="true" />
     <template #modal-footer="{ cancel }">
-      <form-button label="Cancel" @click="cancel" type="secondary" />
+      <form-button label="interface.cancel" type="secondary" @click="cancel" />
       <form-button v-if="isAddCafe" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
       <form-button v-if="!isAddCafe" label="interface.update" @click="update()" :type="getButtonVariant" :disabled="!verified" />
     </template>
