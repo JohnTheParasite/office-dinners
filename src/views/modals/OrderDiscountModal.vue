@@ -15,8 +15,8 @@
       </div>
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="Cancel" type="secondary" @click="cancel" />
-      <form-button label="OK" type="warning" @click="() => apply(discount, percent)" />
+      <form-button label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button label="interface.OK" type="warning" @click="() => apply(discount, percent)" />
     </template>
   </b-modal>
 </template>

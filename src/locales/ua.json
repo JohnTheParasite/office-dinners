@@ -57,7 +57,19 @@
     "orderDate": "Замовлення на дату",
     "userPay": "Користувач до оплати",
     "added": "Замовлення доданл",
-    "updated": "Замовлення змінено"
+    "updated": "Замовлення змінено",
+    "noOrdersForToday": "Цього дня не було замовлень",
+    "orderedTitleQuestion": "Перевірте усі ціни",
+    "orderedQuestion": "Якщо усі ціни правильні - натисніть OK",
+    "orderedDate": "Замовлено на:",
+    "total": "Разом",
+    "setDiscount": "Встановити знижку",
+    "deleteOrderQuestion": "Видалити замовлення?",
+    "discount": "Знижка"
+  },
+  "refill": {
+    "setBalance": "Додати до балансу",
+    "balanceUpdated": "Баланс оновлено"
   },
   "table": {
     "showItems": "Показано {from} - {to} з {total} записів",
@@ -79,7 +91,8 @@
       "rating_delivery": "Доставка",
       "comments": "Коментарі",
       "last_order_date": "Останнє замовлення",
-      "vote": "Голосуй!"
+      "vote": "Голосуй!",
+      "balance": "Баланс"
     },
     "orderColumns": {
       "user": "Користувач",
@@ -87,7 +100,18 @@
       "price": "Ціна",
       "shipping": "Доставка",
       "packing": "Пакування"
+    },
+    "refillsColumns": {
+      "user": "Користувач",
+      "balance": "Баланс"
     }
+  },
+  "menu": {
+    "dashboard": "Мої обіди",
+    "users": "Користувачі",
+    "cafeList": "Список кафе",
+    "refills": "Баланси",
+    "orders": "Замовлення"
   },
   "interface": {
     "yes": "Так",
@@ -100,12 +124,17 @@
     "create": "Створити",
     "update": "Оновити",
     "cancel": "Відмінити",
+    "OK": "OK",
     "add": "Додати",
     "noDate": "Дата не обрана",
     "empty": "пусто",
     "ordered": "Замовлено",
     "closeOrder": "Закрити замовлення",
     "openOrder": "Відкрити замовлення",
-    "select": "Обрати"
+    "select": "Обрати",
+    "percent": "Відсотків",
+    "like": "Like",
+    "profile": "Профіль",
+    "logout": "Вийти"
   }
 }
