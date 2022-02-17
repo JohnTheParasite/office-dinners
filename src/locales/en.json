@@ -65,7 +65,9 @@
     "total": "Total",
     "setDiscount": "Set discount",
     "deleteOrderQuestion": "Do you want to delete order?",
-    "discount": "Discount"
+    "discount": "Discount",
+    "top3": "Top 3 voted",
+    "clickToOrder": "Click to order"
   },
   "refill": {
     "setBalance": "Add to balance",

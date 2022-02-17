@@ -65,7 +65,9 @@
     "total": "Разом",
     "setDiscount": "Встановити знижку",
     "deleteOrderQuestion": "Видалити замовлення?",
-    "discount": "Знижка"
+    "discount": "Знижка",
+    "top3": "Топ 3 голосів",
+    "clickToOrder": "Натисни для замовлення"
   },
   "refill": {
     "setBalance": "Додати до балансу",
