@@ -32,6 +32,9 @@ export default {
   methods: {
     logout: function () {
       this.$authService.logoutUser()
+      this.$store.state.toasts.timeoutIdList.forEach((timeoutId) => clearTimeout(timeoutId))
+      this.$store.dispatch("toasts/deleteTimeoutsFromList")
+      this.$store.dispatch("toasts/removeAllToasts")
       this.$router.push("login")
     }
   },

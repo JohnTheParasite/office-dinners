@@ -3,7 +3,8 @@ import SystemTypes from "@/enums/systemTypes"
 export default {
   namespaced: true,
   state: {
-    list: []
+    list: [],
+    timeoutIdList: []
   },
   mutations: {
     addDangerToast: (state, notification) => {
@@ -35,6 +36,26 @@ export default {
     },
     removeToast: (state, notification) => {
       state.list.splice(state.list.indexOf(notification), 1)
+    },
+    clearList: (state) => {
+      state.list = []
+    },
+    addTimeoutId: (state, id) => {
+      state.timeoutIdList.push(id)
+    },
+    clearTimeoutsList: (state) => {
+      state.timeoutIdList = []
+    }
+  },
+  actions: {
+    removeAllToasts({ commit }) {
+      commit("clearList")
+    },
+    addTimeoutIdToList({ commit }, id) {
+      commit("addTimeoutId", id)
+    },
+    deleteTimeoutsFromList({ commit }) {
+      commit("clearTimeoutsList")
     }
   }
 }

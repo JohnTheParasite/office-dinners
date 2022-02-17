@@ -23,21 +23,27 @@
 import FormButton from "@/components/controls/FormButton"
 import OrderFormModal from "@/views/modals/OrderFormModal"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
+import ApiErrorHelper from "@/services/apiErrorHelper"
 
 export default {
   name: "OrderMenu",
   components: { OrderFormModal, FormButton },
+  mixins: [ApiErrorHelper],
   data() {
     return {
-      topCafe: []
+      topCafe: [],
+      intervalId: 0
     }
   },
   mounted() {
     if (process.env.VUE_APP_ENV === "dev") {
       this.getVoteResults()
     } else {
-      window.setInterval(this.getVoteResults, 2000)
+      this.intervalId = window.setInterval(this.getVoteResults, process.env.VUE_APP_TIMEOUT)
     }
+  },
+  beforeDestroy() {
+    window.clearInterval(this.intervalId)
   },
   methods: {
     cafeMakeOrder(cafe) {

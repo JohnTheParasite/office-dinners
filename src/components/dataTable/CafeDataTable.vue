@@ -110,11 +110,12 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import SelectInput from "@/components/controls/SelectInput"
 import CommentsFormModal from "@/views/modals/CommentsFormModal"
+import ApiErrorHelper from "@/services/apiErrorHelper"
 
 export default {
   name: "CafeDataTable",
   components: { CommentsFormModal, SelectInput, Toggle },
-  mixins: [DataTable],
+  mixins: [DataTable, ApiErrorHelper],
   data() {
     return {
       time: this.setTime(),

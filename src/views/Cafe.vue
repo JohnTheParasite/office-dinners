@@ -35,7 +35,8 @@ export default {
     return {
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
-      pagination: {}
+      pagination: {},
+      intervalId: 0
     }
   },
   beforeMount() {
@@ -45,8 +46,11 @@ export default {
     if (process.env.VUE_APP_ENV === "dev") {
       this.refreshTable()
     } else {
-      window.setInterval(this.refreshTable, 2000)
+      this.intervalId = window.setInterval(this.refreshTable, process.env.VUE_APP_TIMEOUT)
     }
+  },
+  beforeDestroy() {
+    window.clearInterval(this.intervalId)
   },
   methods: {
     getItems(props) {
