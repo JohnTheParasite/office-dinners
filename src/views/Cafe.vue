@@ -7,14 +7,14 @@
       :on-filter-change="updateResults"
       :pagination="pagination"
       :total="items.length"
-      @refreshTable="refreshTable"
+      @refreshTable="getItems"
     >
       <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
       <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
       <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
       <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
     </cafe-data-table>
-    <cafe-form-modal ref="cafeDataModal" @refreshTable="refreshTable" />
+    <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" />
   </div>
 </template>
 
@@ -44,21 +44,18 @@ export default {
   },
   mounted() {
     if (process.env.VUE_APP_ENV === "dev") {
-      this.refreshTable()
+      this.getItems()
     } else {
-      this.intervalId = window.setInterval(this.refreshTable, process.env.VUE_APP_TIMEOUT)
+      this.intervalId = window.setInterval(this.getItems, process.env.VUE_APP_TIMEOUT)
     }
   },
   beforeDestroy() {
     window.clearInterval(this.intervalId)
   },
   methods: {
-    getItems(props) {
-      if (props === undefined) {
-        props = FormDataService.getDefaultListParameters()
-      }
+    getItems() {
       this.$axios
-        .get(ApiEndpoints.CAFE_LIST, { params: props })
+        .get(ApiEndpoints.CAFE_LIST, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
             this.items = this.addItemProperties(response.data.items)
@@ -77,13 +74,10 @@ export default {
     },
     updateResults(tableProperties) {
       this.tableProperties = tableProperties
-      this.getItems(this.tableProperties)
+      this.getItems()
     },
     openEdit(cafeId) {
       this.$refs.cafeDataModal.show(cafeId)
-    },
-    refreshTable() {
-      this.getItems(this.tableProperties)
     },
     onclickAddCafe() {
       this.$refs.cafeDataModal.show()

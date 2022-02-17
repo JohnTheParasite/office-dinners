@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       items: [],
-      tableProperties: {},
+      tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
     }
   },
@@ -29,13 +29,9 @@ export default {
     this.getItems()
   },
   methods: {
-    getItems(props) {
-      if (props === undefined) {
-        this.tableProperties = FormDataService.getDefaultListParameters()
-        props = this.tableProperties
-      }
+    getItems() {
       this.$axios
-        .get(ApiEndpoints.USER_REFILLS, { params: props })
+        .get(ApiEndpoints.USER_REFILLS, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
             this.items = response.data.items
@@ -48,7 +44,7 @@ export default {
     },
     updateResults(tableProperties) {
       this.tableProperties = tableProperties
-      this.getItems(this.tableProperties)
+      this.getItems()
     },
     openRefillModal(userId) {
       this.$refs.refillModal.show(userId)
@@ -60,7 +56,7 @@ export default {
           if (response) {
             this.$store.commit("toasts/addSuccessToast", "refill.balanceUpdated")
             this.$refs.refillModal.hide()
-            this.updateResults(this.tableProperties)
+            this.getItems()
           }
         })
         .catch((error) => {
