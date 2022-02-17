@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       topCafe: [],
-      intervalId: undefined
+      intervalId: 0
     }
   },
   mounted() {

@@ -36,7 +36,7 @@ export default {
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {},
-      intervalId: undefined
+      intervalId: 0
     }
   },
   beforeMount() {
