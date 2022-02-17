@@ -62,7 +62,10 @@ export default {
     }
   },
   created() {
-    orderBus.$on("updateOrders", this.updateOrders)
+    orderBus.$on("updateOrders", () => {
+      this.date = FormDataService.formatDateWithLeadingZeroes(new Date())
+      this.updateOrders()
+    })
   },
   methods: {
     changeDate(daysAmount) {
