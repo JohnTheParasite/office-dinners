@@ -48,6 +48,7 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import CssLoader from "@/components/CssLoader"
 import FormDataService from "@/services/formDataService"
 import ApiErrorHelper from "@/services/apiErrorHelper"
+import { orderBus } from "@/main"
 
 export default {
   name: "Orders",
@@ -60,10 +61,8 @@ export default {
       orders: []
     }
   },
-  computed: {
-    cannotSetNextDate() {
-      return this.date === FormDataService.formatDateWithLeadingZeroes(new Date())
-    }
+  created() {
+    orderBus.$on("updateOrders", this.updateOrders)
   },
   methods: {
     changeDate(daysAmount) {
@@ -88,6 +87,11 @@ export default {
           this.catchAxiosError(error)
           this.loadInProgress = false
         })
+    }
+  },
+  computed: {
+    cannotSetNextDate() {
+      return this.date === FormDataService.formatDateWithLeadingZeroes(new Date())
     }
   }
 }

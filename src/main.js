@@ -8,6 +8,8 @@ import { BootstrapVue } from "bootstrap-vue"
 import i18n from "./i18n"
 import "@/plugins/fontAwesome"
 
+export const orderBus = new Vue()
+
 Vue.config.productionTip = false
 
 Vue.use(Auth)
