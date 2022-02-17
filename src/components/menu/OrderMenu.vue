@@ -1,21 +1,26 @@
 <template>
-  <div v-if="votesOpened" class="order-top-bar">
-    <div class="order-menu">
-      <div v-for="item in topCafe" :key="item.id" class="cafe-with-counter">
-        <div class="cafe-button">
-          {{ item.name }}
+  <div class="order-buttons">
+    <label v-if="votesOpened">{{ $t("order.top3") }}</label>
+    <label v-else>{{ $t("order.clickToOrder") }}</label>
+    <div class="devider"></div>
+    <div v-if="votesOpened" class="order-top-bar">
+      <div class="order-menu">
+        <div v-for="item in topCafe" :key="item.id" class="cafe-with-counter">
+          <div class="cafe-button">
+            {{ item.name }}
+          </div>
+          <div class="like-counter">{{ item.likes }}</div>
         </div>
-        <div class="like-counter">{{ item.likes }}</div>
       </div>
     </div>
-  </div>
-  <div v-else class="order-top-bar">
-    <div class="order-menu">
-      <div v-for="item in topCafe" :key="item.id" class="cafe-button">
-        <form-button :label="item.name" size="btn-sm" type="success" @click="cafeMakeOrder(item)" />
+    <div v-else class="order-top-bar">
+      <div class="order-menu">
+        <div v-for="item in topCafe" :key="item.id" class="cafe-button">
+          <form-button :label="item.name" size="btn-sm" type="success" @click="cafeMakeOrder(item)" />
+        </div>
       </div>
+      <order-form-modal ref="orderDataModal"></order-form-modal>
     </div>
-    <order-form-modal ref="orderDataModal"></order-form-modal>
   </div>
 </template>
 
@@ -75,50 +80,51 @@ export default {
 <style lang="scss">
 @import "../../scss/components/color";
 
-.order-top-bar {
-  display: flex;
-  align-items: center;
-
-  .order-menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .cafe-button {
-      display: flex;
-      vertical-align: center;
-      height: 100%;
-    }
+.order-buttons {
+  .devider {
+    border-bottom: 1px solid $default-text-color;
+    margin: 0.3rem 0 0.6rem 0;
   }
 
-  .order-menu {
+  .order-top-bar {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 1rem;
 
-    .cafe-with-counter {
+    .order-menu {
       display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
 
       .cafe-button {
-        padding: 4px 12px;
-        border: 1px solid $primary;
-        border-radius: 4px;
-        color: $primary;
-        transition: 0.3s ease;
-        margin-right: 0;
+        display: flex;
+        vertical-align: center;
+        height: 100%;
       }
 
-      .like-counter {
+      .cafe-with-counter {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid $primary;
-        border-radius: 4px;
-        margin: 4px 8px 4px 4px;
-        width: 1.5rem;
-        background-color: $primary;
-        color: $white;
+
+        .cafe-button {
+          padding: 4px 12px;
+          border: 1px solid $primary;
+          border-radius: 4px;
+          color: $primary;
+          transition: 0.3s ease;
+          margin-right: 0;
+        }
+
+        .like-counter {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid $primary;
+          border-radius: 4px;
+          margin: 4px 8px 4px 4px;
+          width: 1.5rem;
+          background-color: $primary;
+          color: $white;
+        }
       }
     }
   }
