@@ -3,7 +3,7 @@
     <data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
       <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
     </data-table>
-    <user-form-modal ref="userDataModal" @refreshTable="refreshTable"></user-form-modal>
+    <user-form-modal ref="userDataModal" @refreshTable="getItems"></user-form-modal>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       items: [],
-      tableProperties: {},
+      tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
     }
   },
@@ -30,12 +30,9 @@ export default {
     this.getItems()
   },
   methods: {
-    getItems(props) {
-      if (props === undefined) {
-        props = FormDataService.getDefaultListParameters()
-      }
+    getItems() {
       this.$axios
-        .get(ApiEndpoints.USER_LIST, { params: props })
+        .get(ApiEndpoints.USER_LIST, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
             this.items = response.data.items
@@ -48,16 +45,13 @@ export default {
     },
     updateResults(tableProperties) {
       this.tableProperties = tableProperties
-      this.getItems(this.tableProperties)
+      this.getItems()
     },
     openEdit(userId) {
       this.$refs.userDataModal.show(userId)
     },
     onclick() {
       this.$refs.userDataModal.show()
-    },
-    refreshTable() {
-      this.getItems(this.tableProperties)
     }
   }
 }
