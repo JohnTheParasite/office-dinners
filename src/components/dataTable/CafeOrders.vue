@@ -67,10 +67,10 @@
               </div>
             </div>
             <div v-else class="action-buttons">
-              <div class="action edit" @click="editOrder(data.item)">
+              <div v-if="!cafeData.ordered" class="action edit" @click="editOrder(data.item)">
                 <font-awesome-icon icon="fa-solid fa-pencil" />
               </div>
-              <div class="action delete" @click="askToDeleteOrder(data.item.id)">
+              <div v-if="!cafeData.ordered" class="action delete" @click="askToDeleteOrder(data.item.id)">
                 <font-awesome-icon icon="fa-solid fa-trash-can" />
               </div>
             </div>
@@ -114,10 +114,10 @@
                     </div>
                   </template>
                   <template v-else>
-                    <div class="action edit" @click="editOrderPrices()">
+                    <div v-if="!cafeData.ordered" class="action edit" @click="editOrderPrices()">
                       <font-awesome-icon icon="fa-solid fa-pencil" />
                     </div>
-                    <div class="action" @click="openDiscountModal()">
+                    <div v-if="!cafeData.ordered" class="action" @click="openDiscountModal()">
                       <font-awesome-icon icon="fa-solid fa-percent" />
                     </div>
                   </template>
@@ -212,7 +212,7 @@ export default {
       this.$store.commit("dialog/openDialog", {
         apply: () => this.apply(cafe),
         message: "order.orderedQuestion",
-        title: "order.orderedTitleQuestion"
+        title: ""
       })
     },
     apply() {
@@ -221,7 +221,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "order.updated")
           this.$emit("updateOrders")
-          this.$store.commit('dialog/hideDialog')
+          this.$store.commit("dialog/hideDialog")
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -270,7 +270,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "order.deleted")
           this.$emit("updateOrders")
-          this.$store.commit('dialog/hideDialog')
+          this.$store.commit("dialog/hideDialog")
         })
         .catch((error) => {
           this.catchAxiosError(error)
