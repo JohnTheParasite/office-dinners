@@ -15,12 +15,21 @@ import MenuContainer from "@/components/menu/MenuContainer"
 import TopBar from "@/components/menu/TopBar"
 import ToasterContainer from "@/components/controls/ToastContainer"
 import SimpleDialog from "@/components/modals/SimpleDialog"
+import { Subscriber } from "@/services/push/subscriber"
 
 export default {
   components: { SimpleDialog, ToasterContainer, TopBar, MenuContainer },
   computed: {
     showMenu() {
       return this.$route.name !== "Login" && this.$route.name !== null
+    }
+  },
+  mounted() {
+    if (this.$authService.isAuthenticated()) {
+      new Subscriber().start()
+      document.addEventListener("message", () => {
+        console.warn("got message!!")
+      })
     }
   }
 }
