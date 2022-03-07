@@ -20,7 +20,7 @@
     />
     <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
-      <form-button label="Cancel" @click="cancel" type="secondary" />
+      <form-button label="interface.cancel" type="secondary" @click="cancel" />
       <form-button v-if="isAddUser" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
       <form-button v-if="!isAddUser" label="interface.update" @click="update()" :type="getButtonVariant" :disabled="!verified" />
     </template>

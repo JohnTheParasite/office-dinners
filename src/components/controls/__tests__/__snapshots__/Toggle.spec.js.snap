@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toggle should render toggle element 1`] = `<div class="input toggle form-group"><label for="2"><input id="2" type="checkbox"> <span class="toggle-body"><span class="toggle-dot"></span></span> <span class="input-label" style="display: none;"></span></label></div>`;

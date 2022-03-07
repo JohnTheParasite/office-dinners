@@ -65,7 +65,13 @@
     "total": "Total",
     "setDiscount": "Set discount",
     "deleteOrderQuestion": "Do you want to delete order?",
-    "discount": "Discount"
+    "discount": "Discount",
+    "top3": "Top 3 voted",
+    "clickToOrder": "Click to order"
+  },
+  "refill": {
+    "setBalance": "Add to balance",
+    "balanceUpdated": "Balance updated"
   },
   "table": {
     "showItems": "Showing {from} - {to} of {total} entries",
@@ -87,7 +93,8 @@
       "rating_delivery": "Delivery",
       "comments": "Comments",
       "last_order_date": "Last order",
-      "vote": "Vote here!"
+      "vote": "Vote here!",
+      "balance": "Balance"
     },
     "orderColumns": {
       "user": "user",
@@ -95,7 +102,18 @@
       "price": "price",
       "shipping": "shipping",
       "packing": "packing"
+    },
+    "refillsColumns": {
+      "user": "user",
+      "balance": "balance"
     }
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "cafeList": "Cafe list",
+    "refills": "Refills",
+    "orders": "Orders"
   },
   "interface": {
     "yes": "Yes",
@@ -108,6 +126,7 @@
     "create": "Create",
     "update": "Update",
     "cancel": "Cancel",
+    "OK": "OK",
     "add": "Add",
     "noDate": "No date selected",
     "empty": "empty",

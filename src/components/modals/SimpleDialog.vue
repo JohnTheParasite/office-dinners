@@ -10,8 +10,8 @@
       {{ $t(message) }}
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="Cancel" type="secondary" @click="cancel" />
-      <form-button :type="type" label="OK" @click="apply" />
+      <form-button label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :type="type" label="interface.OK" @click="apply" />
     </template>
   </b-modal>
 </template>
@@ -30,6 +30,8 @@ export default {
     ["showDialog"](open) {
       if (open) {
         this.show()
+      } else {
+        this.$bvModal.hide("b" + this._uid)
       }
     }
   },

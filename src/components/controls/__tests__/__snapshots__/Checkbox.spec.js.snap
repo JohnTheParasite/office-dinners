@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checkbox should render unchecked checkbox 1`] = `<div class="input checkbox form-group"><label for="2"><input id="2" type="checkbox"> <span class="checkbox-control"><span class="checkbox-check"><font-awesome-icon-stub icon="fa-solid fa-check"></font-awesome-icon-stub></span></span> <span class="input-label" style="display: none;"></span></label></div>`;

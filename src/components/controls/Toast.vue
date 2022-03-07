@@ -56,13 +56,14 @@ export default {
     },
     leave(el) {
       const parent = el.parentNode
-      setTimeout(() => {
+      let timeoutId = setTimeout(() => {
         if (parent.childNodes.length === 1) {
           document.body.removeChild(parent)
         }
         parent.removeChild(el)
         this.$destroy()
       }, 250)
+      this.$store.dispatch("toasts/addTimeoutIdToList", timeoutId)
     }
   },
   computed: {

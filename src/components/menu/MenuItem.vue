@@ -2,7 +2,7 @@
   <div :class="{ selected: selectedItem }" class="menu-item">
     <router-link :to="{ name: routerName }">
       <font-awesome-icon :icon="getFaIcon" />
-      {{ title }}
+      {{ $t(title) }}
     </router-link>
   </div>
 </template>
