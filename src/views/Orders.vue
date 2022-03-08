@@ -48,7 +48,7 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import CssLoader from "@/components/CssLoader"
 import FormDataService from "@/services/formDataService"
 import ApiErrorHelper from "@/services/apiErrorHelper"
-import { orderBus } from "@/main"
+import { orderBus } from "@/eventBuses/eventBuses"
 
 export default {
   name: "Orders",
@@ -83,11 +83,12 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.orders = response.data
-            this.loadInProgress = false
           }
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
           this.loadInProgress = false
         })
     }

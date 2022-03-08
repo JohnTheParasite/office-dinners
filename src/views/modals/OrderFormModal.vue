@@ -45,7 +45,7 @@ import ApiErrorHelper from "@/services/apiErrorHelper"
 import SelectInput from "@/components/controls/SelectInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
-import { orderBus } from "@/main"
+import { orderBus } from "@/eventBuses/eventBuses"
 
 export default {
   name: "OrderFormModal",
