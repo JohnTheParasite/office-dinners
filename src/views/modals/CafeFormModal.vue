@@ -2,16 +2,16 @@
   <b-modal id="cafeDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
-      <form-button @click="close" type="secondary" class="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
     <text-input label="cafe.name" :init-value="formGroup.name" @input="onChange('name', $event)" :required="true" />
     <text-input label="cafe.link" :init-value="formGroup.link" @input="onChange('link', $event)" :required="true" />
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button v-if="isAddCafe" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
-      <form-button v-if="!isAddCafe" label="interface.update" @click="update()" :type="getButtonVariant" :disabled="!verified" />
+      <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button v-if="isAddCafe" :disabled="!verified || loadInProgress" :type="getButtonVariant" label="interface.create" @click="create()" />
+      <form-button v-if="!isAddCafe" :disabled="!verified || loadInProgress" :type="getButtonVariant" label="interface.update" @click="update()" />
     </template>
   </b-modal>
 </template>
@@ -40,7 +40,8 @@ export default {
         name: "",
         link: ""
       },
-      cafeId: undefined
+      cafeId: undefined,
+      loadInProgress: false
     }
   },
   methods: {
@@ -63,6 +64,7 @@ export default {
       }
     },
     create() {
+      this.loadInProgress = true
       this.$axios
         .post(ApiEndpoints.CREATE_CAFE, FormDataService.getFormData(this.formGroup))
         .then(() => {
@@ -73,8 +75,12 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+        .finally(() => {
+          this.loadInProgress = false
+        })
     },
     update() {
+      this.loadInProgress = true
       this.$axios
         .patch(ApiEndpoints.CAFE_DATA + "/" + this.cafeId, this.formGroup)
         .then(() => {
@@ -84,6 +90,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.loadInProgress = false
         })
     },
     getCafeData(cafeId) {

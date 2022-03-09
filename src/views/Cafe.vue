@@ -1,20 +1,29 @@
 <template>
   <div class="router-container">
-    <cafe-data-table
-      ref="cafeDataTable"
-      :items="items"
-      :on-click-edit="openEdit"
-      :on-filter-change="updateResults"
-      :pagination="pagination"
-      :total="items.length"
-      @refreshTable="getItems"
-    >
-      <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
-      <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
-      <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
-      <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
-    </cafe-data-table>
-    <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" />
+    <div v-if="loadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <css-loader></css-loader>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <cafe-data-table
+        ref="cafeDataTable"
+        :items="items"
+        :on-click-edit="openEdit"
+        :on-filter-change="updateResults"
+        :pagination="pagination"
+        :total="items.length"
+        @refreshTable="getItems"
+      >
+        <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
+        <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
+        <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
+        <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
+      </cafe-data-table>
+      <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" />
+    </div>
   </div>
 </template>
 
@@ -26,13 +35,15 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import i18n from "@/i18n"
 import CafeDataTable from "@/components/dataTable/CafeDataTable"
 import CafeFormModal from "@/views/modals/CafeFormModal"
+import CssLoader from "@/components/CssLoader"
 
 export default {
   name: "Cafe",
-  components: { CafeFormModal, CafeDataTable, FormButton },
+  components: { CssLoader, CafeFormModal, CafeDataTable, FormButton },
   mixins: [ApiErrorHelper],
   data() {
     return {
+      loadInProgress: false,
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {},
@@ -54,6 +65,7 @@ export default {
   },
   methods: {
     getItems() {
+      this.loadInProgress = true
       this.$axios
         .get(ApiEndpoints.CAFE_LIST, { params: this.tableProperties })
         .then((response) => {
@@ -64,6 +76,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.loadInProgress = false
         })
     },
     addItemProperties(items) {
@@ -119,4 +134,25 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "../scss/components/color";
+
+.loader,
+.no-orders {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  .lds-dual-ring {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .lds-dual-ring:after {
+    border-color: $primary transparent $primary transparent;
+    height: 5rem;
+    width: 5rem;
+  }
+}
+</style>

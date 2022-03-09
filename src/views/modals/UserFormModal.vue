@@ -21,8 +21,24 @@
     <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
       <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button v-if="isAddUser" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
-      <form-button v-if="!isAddUser" label="interface.update" @click="update()" :type="getButtonVariant" :disabled="!verified" />
+      <div class="acceptButton">
+        <form-button
+          v-if="isAddUser"
+          :disabled="!verified"
+          :loading-in-progress="loadInProgress"
+          :type="getButtonVariant"
+          label="interface.create"
+          @click="create()"
+        />
+        <form-button
+          v-if="!isAddUser"
+          :disabled="!verified"
+          :loading-in-progress="loadInProgress"
+          :type="getButtonVariant"
+          label="interface.update"
+          @click="update()"
+        />
+      </div>
     </template>
   </b-modal>
 </template>
@@ -59,7 +75,8 @@ export default {
         selected_language: "pl",
         role: 2
       },
-      userId: undefined
+      userId: undefined,
+      loadInProgress: false
     }
   },
   methods: {
@@ -87,6 +104,7 @@ export default {
       }
     },
     create() {
+      this.loadInProgress = true
       this.$axios
         .post(ApiEndpoints.CREATE_USER, FormDataService.getFormData(this.formGroup))
         .then(() => {
@@ -97,8 +115,12 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+        .finally(() => {
+          this.loadInProgress = false
+        })
     },
     update() {
+      this.loadInProgress = true
       this.$axios
         .patch(ApiEndpoints.USER_DATA + "/" + this.userId, this.formGroup)
         .then(() => {
@@ -108,6 +130,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.loadInProgress = false
         })
     },
     getUserData(userId) {
@@ -158,3 +183,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.acceptButton {
+  .btn {
+    min-width: 10rem;
+  }
+}
+</style>

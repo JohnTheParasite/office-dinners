@@ -1,9 +1,24 @@
 <template>
   <div class="router-container refills-block">
-    <div class="content-block">
-      <data-table :items="items" :on-click-edit="openRefillModal" :on-filter-change="updateResults" :pagination="pagination" :total="items.length"></data-table>
+    <div v-if="loadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <css-loader></css-loader>
+        </div>
+      </div>
     </div>
-    <refill-form-modal ref="refillModal" :apply="applyBalance"></refill-form-modal>
+    <div v-else>
+      <div class="content-block">
+        <data-table
+          :items="items"
+          :on-click-edit="openRefillModal"
+          :on-filter-change="updateResults"
+          :pagination="pagination"
+          :total="items.length"
+        ></data-table>
+      </div>
+      <refill-form-modal ref="refillModal" :apply="applyBalance"></refill-form-modal>
+    </div>
   </div>
 </template>
 
@@ -13,13 +28,15 @@ import FormDataService from "@/services/formDataService"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import RefillFormModal from "@/views/modals/RefillFormModal"
 import ApiErrorHelper from "@/services/apiErrorHelper"
+import CssLoader from "@/components/CssLoader"
 
 export default {
   name: "Refills",
-  components: { RefillFormModal, DataTable },
+  components: { CssLoader, RefillFormModal, DataTable },
   mixins: [ApiErrorHelper],
   data() {
     return {
+      loadInProgress: false,
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
@@ -30,6 +47,7 @@ export default {
   },
   methods: {
     getItems() {
+      this.loadInProgress = true
       this.$axios
         .get(ApiEndpoints.USER_REFILLS, { params: this.tableProperties })
         .then((response) => {
@@ -40,6 +58,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.loadInProgress = false
         })
     },
     updateResults(tableProperties) {
@@ -68,8 +89,29 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../scss/components/color";
+
 .table-column-balance,
 .table-column-actions {
   text-align: right;
+}
+
+.loader,
+.no-orders {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  .lds-dual-ring {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .lds-dual-ring:after {
+    border-color: $primary transparent $primary transparent;
+    height: 5rem;
+    width: 5rem;
+  }
 }
 </style>
