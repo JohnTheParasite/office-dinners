@@ -45,6 +45,7 @@ import ApiErrorHelper from "@/services/apiErrorHelper"
 import SelectInput from "@/components/controls/SelectInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
+import { orderBus } from "@/eventBuses/eventBuses"
 
 export default {
   name: "OrderFormModal",
@@ -93,6 +94,7 @@ export default {
           if (response && response.data) {
             this.$store.commit("toasts/addSuccessToast", "order.added")
             this.$bvModal.hide("orderDataModal")
+            orderBus.$emit("updateOrders")
           }
         })
         .catch((error) => {

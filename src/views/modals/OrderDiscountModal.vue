@@ -9,7 +9,7 @@
     <div class="content">
       <div class="discount-area">
         <div class="discount-input">
-          <text-input type="number" @input="onChange('discount', $event)"></text-input>
+          <text-input :init-value="discount" type="number" @input="onChange('discount', $event)"></text-input>
         </div>
         <toggle :init-value="percent" label="interface.percent" @change="onChange('percent', $event)"></toggle>
       </div>
@@ -39,9 +39,9 @@ export default {
     }
   },
   methods: {
-    show() {
-      this.discount = 0
-      this.percent = false
+    show(total_discount, total_discount_in_percent) {
+      this.discount = total_discount
+      this.percent = total_discount_in_percent
       this.$bvModal.show("b" + this._uid)
     },
     hide() {

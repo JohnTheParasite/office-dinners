@@ -117,7 +117,7 @@
                     <div v-if="!cafeData.ordered" class="action edit" @click="editOrderPrices()">
                       <font-awesome-icon icon="fa-solid fa-pencil" />
                     </div>
-                    <div v-if="!cafeData.ordered" class="action" @click="openDiscountModal()">
+                    <div v-if="!cafeData.ordered" class="action" @click="openDiscountModal(cafeData.total_discount, cafeData.total_discount_in_percent)">
                       <font-awesome-icon icon="fa-solid fa-percent" />
                     </div>
                   </template>
@@ -300,8 +300,8 @@ export default {
     cancelEditOrderPrices() {
       this.footer.total_edit = false
     },
-    openDiscountModal() {
-      this.$refs.discountModal.show()
+    openDiscountModal(total_discount, total_discount_in_percent) {
+      this.$refs.discountModal.show(total_discount, total_discount_in_percent)
     },
     applyDiscount(price, type) {
       this.$axios
