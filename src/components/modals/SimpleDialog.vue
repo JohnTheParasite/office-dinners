@@ -6,9 +6,7 @@
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
-    <div class="content">
-      {{ $t(message) }}
-    </div>
+    <div class="content" v-html="$t(message)"></div>
     <template #modal-footer="{ cancel }">
       <form-button label="interface.cancel" type="secondary" @click="cancel" />
       <form-button :type="type" label="interface.OK" @click="apply" />

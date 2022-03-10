@@ -60,7 +60,7 @@
     "updated": "Замовлення змінено",
     "noOrdersForToday": "Цього дня не було замовлень",
     "orderedTitleQuestion": "Перевірте усі ціни",
-    "orderedQuestion": "Якщо усі ціни правильні - натисніть OK",
+    "orderedQuestion": "<div style='text-align: center;'>Ця дія заблокує можливість редагування замовлення. <br/> Якщо усі ціни правильні - натисніть OK</div>",
     "orderedDate": "Замовлено на:",
     "total": "Разом",
     "setDiscount": "Встановити знижку",

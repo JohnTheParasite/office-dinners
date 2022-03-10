@@ -67,10 +67,10 @@
               </div>
             </div>
             <div v-else class="action-buttons">
-              <div class="action edit" @click="editOrder(data.item)">
+              <div v-if="!cafeData.ordered" class="action edit" @click="editOrder(data.item)">
                 <font-awesome-icon icon="fa-solid fa-pencil" />
               </div>
-              <div class="action delete" @click="askToDeleteOrder(data.item.id)">
+              <div v-if="!cafeData.ordered" class="action delete" @click="askToDeleteOrder(data.item.id)">
                 <font-awesome-icon icon="fa-solid fa-trash-can" />
               </div>
             </div>
@@ -114,10 +114,10 @@
                     </div>
                   </template>
                   <template v-else>
-                    <div class="action edit" @click="editOrderPrices()">
+                    <div v-if="!cafeData.ordered" class="action edit" @click="editOrderPrices()">
                       <font-awesome-icon icon="fa-solid fa-pencil" />
                     </div>
-                    <div class="action" @click="openDiscountModal(cafeData.total_discount, cafeData.total_discount_in_percent)">
+                    <div v-if="!cafeData.ordered" class="action" @click="openDiscountModal(cafeData.total_discount, cafeData.total_discount_in_percent)">
                       <font-awesome-icon icon="fa-solid fa-percent" />
                     </div>
                   </template>
@@ -212,7 +212,7 @@ export default {
       this.$store.commit("dialog/openDialog", {
         apply: () => this.apply(cafe),
         message: "order.orderedQuestion",
-        title: "order.orderedTitleQuestion"
+        title: ""
       })
     },
     apply() {
