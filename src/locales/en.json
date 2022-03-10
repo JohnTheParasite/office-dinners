@@ -60,7 +60,7 @@
     "updated": "Order updated",
     "noOrdersForToday": "No one has ordered this day",
     "orderedTitleQuestion": "Please check all prices",
-    "orderedQuestion": "If all prices are correct - click OK",
+    "orderedQuestion": "<div style='text-align: center;'>This action will block possibility to edit this order. <br/> If all prices are correct - click OK</div>",
     "orderedDate": "Ordered on:",
     "total": "Total",
     "setDiscount": "Set discount",
