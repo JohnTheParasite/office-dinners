@@ -2,7 +2,7 @@
   <b-modal :id="'b' + _uid" centered header-class="warning" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t("order.setDiscount") }}</h5>
-      <form-button class="close" type="secondary" @click="close">
+      <form-button :disabled="modalLoadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
@@ -15,8 +15,8 @@
       </div>
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button label="interface.OK" type="warning" @click="() => apply(discount, percent)" />
+      <form-button :disabled="modalLoadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="modalLoadInProgress" label="interface.OK" type="warning" @click="() => apply(discount, percent)" />
     </template>
   </b-modal>
 </template>
@@ -30,7 +30,11 @@ export default {
   name: "OrderDiscountModal",
   components: { Toggle, TextInput, FormButton },
   props: {
-    apply: Function
+    apply: Function,
+    modalLoadInProgress: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

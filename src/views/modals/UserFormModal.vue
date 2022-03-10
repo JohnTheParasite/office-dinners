@@ -2,7 +2,7 @@
   <b-modal id="userDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
-      <form-button @click="close" type="secondary" class="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
@@ -20,24 +20,10 @@
     />
     <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
       <div class="acceptButton">
-        <form-button
-          v-if="isAddUser"
-          :disabled="!verified"
-          :loading-in-progress="loadInProgress"
-          :type="getButtonVariant"
-          label="interface.create"
-          @click="create()"
-        />
-        <form-button
-          v-if="!isAddUser"
-          :disabled="!verified"
-          :loading-in-progress="loadInProgress"
-          :type="getButtonVariant"
-          label="interface.update"
-          @click="update()"
-        />
+        <form-button v-if="isAddUser" :disabled="!verified || loadInProgress" :type="getButtonVariant" label="interface.create" @click="create()" />
+        <form-button v-if="!isAddUser" :disabled="!verified || loadInProgress" :type="getButtonVariant" label="interface.update" @click="update()" />
       </div>
     </template>
   </b-modal>
@@ -184,10 +170,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.acceptButton {
-  .btn {
-    min-width: 10rem;
-  }
-}
-</style>
+<style lang="scss"></style>

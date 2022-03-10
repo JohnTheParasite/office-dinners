@@ -129,7 +129,7 @@
         </template>
       </b-table>
     </div>
-    <order-discount-modal ref="discountModal" :apply="applyDiscount" />
+    <order-discount-modal ref="discountModal" :apply="applyDiscount" :modal-load-in-progress="modalLoadInProgress" />
   </div>
 </template>
 
@@ -156,6 +156,7 @@ export default {
       disableSelectUser: true,
       selectedOrders: [],
       selectedOrdersData: {},
+      modalLoadInProgress: false,
       footer: {
         total_edit: false,
         total_shipping_price: 0,
@@ -304,6 +305,7 @@ export default {
       this.$refs.discountModal.show(total_discount, total_discount_in_percent)
     },
     applyDiscount(price, type) {
+      this.modalLoadInProgress = true
       this.$axios
         .post(ApiEndpoints.SET_ORDER_DISCOUNT, {
           id: this.cafeData.id,
@@ -317,6 +319,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.modalLoadInProgress = false
         })
     }
   },

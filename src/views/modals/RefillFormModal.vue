@@ -2,7 +2,7 @@
   <b-modal :id="'b' + _uid" centered header-class="warning" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t("refill.setBalance") }}</h5>
-      <form-button class="close" type="secondary" @click="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
@@ -14,8 +14,8 @@
       </div>
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button :disabled="!verified" label="interface.OK" type="warning" @click="() => apply(userId, balance)" />
+      <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="!verified || loadInProgress" label="interface.OK" type="warning" @click="() => apply(userId, balance)" />
     </template>
   </b-modal>
 </template>
@@ -28,7 +28,11 @@ export default {
   name: "RefillFormModal",
   components: { TextInput, FormButton },
   props: {
-    apply: Function
+    apply: Function,
+    loadInProgress: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
