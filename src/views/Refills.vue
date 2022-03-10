@@ -17,7 +17,7 @@
           :total="items.length"
         ></data-table>
       </div>
-      <refill-form-modal ref="refillModal" :apply="applyBalance" :load-in-progress="modalLoadInProgress" />
+      <refill-form-modal ref="refillModal" :apply="applyBalance" />
     </div>
   </div>
 </template>
@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       loadInProgress: false,
-      modalLoadInProgress: false,
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
@@ -72,8 +71,7 @@ export default {
       this.$refs.refillModal.show(userId)
     },
     applyBalance(userId, balance) {
-      this.modalLoadInProgress = true
-      this.$axios
+      return this.$axios
         .patch(ApiEndpoints.USER_REFILL, { user_id: userId, value: balance })
         .then((response) => {
           if (response) {
@@ -84,9 +82,6 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
-        })
-        .finally(() => {
-          this.modalLoadInProgress = false
         })
     }
   }

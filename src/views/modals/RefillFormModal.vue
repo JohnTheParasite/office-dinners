@@ -15,7 +15,7 @@
     </div>
     <template #modal-footer="{ cancel }">
       <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button :disabled="!verified || loadInProgress" label="interface.OK" type="warning" @click="() => apply(userId, balance)" />
+      <form-button :disabled="!verified || loadInProgress" label="interface.OK" type="warning" @click="emitApply(userId, balance)" />
     </template>
   </b-modal>
 </template>
@@ -28,16 +28,13 @@ export default {
   name: "RefillFormModal",
   components: { TextInput, FormButton },
   props: {
-    apply: Function,
-    loadInProgress: {
-      type: Boolean,
-      default: false
-    }
+    apply: Function
   },
   data() {
     return {
       balance: "0",
-      userId: undefined
+      userId: undefined,
+      loadInProgress: false
     }
   },
   methods: {
@@ -51,6 +48,12 @@ export default {
     },
     onChange(field, value) {
       this[field] = value
+    },
+    emitApply(userId, balance) {
+      this.loadInProgress = true
+      this.apply(userId, balance).finally(() => {
+        this.loadInProgress = false
+      })
     }
   },
   computed: {
