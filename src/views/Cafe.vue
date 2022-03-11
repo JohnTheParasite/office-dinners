@@ -51,7 +51,10 @@ export default {
     }
   },
   beforeMount() {
-    this.getItems()
+    this.loadInProgress = true
+    this.getItems().finally(() => {
+      this.loadInProgress = false
+    })
   },
   mounted() {
     if (process.env.VUE_APP_ENV === "dev") {
@@ -65,8 +68,7 @@ export default {
   },
   methods: {
     getItems() {
-      this.loadInProgress = true
-      this.$axios
+      return this.$axios
         .get(ApiEndpoints.CAFE_LIST, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
@@ -76,9 +78,6 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
-        })
-        .finally(() => {
-          this.loadInProgress = false
         })
     },
     addItemProperties(items) {
