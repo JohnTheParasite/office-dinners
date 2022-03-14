@@ -13,6 +13,7 @@
           <div class="close-votes-button">
             <slot name="closeVotes"></slot>
           </div>
+          <div class="horizontal-separator"></div>
           <div class="time-picker-element">
             <b-form-timepicker v-model="time" locale="en" right :placeholder="$t('interface.empty')"></b-form-timepicker>
           </div>
@@ -199,10 +200,17 @@ export default {
     left: 0;
   }
 }
+
 .cafe-content {
   .toggle {
     margin-bottom: 0;
   }
+}
+
+.horizontal-separator {
+  width: 1px;
+  border-left: 1px solid $input-border-color;
+  height: 20px;
 }
 
 .like {
