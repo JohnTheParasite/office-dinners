@@ -157,7 +157,7 @@ export default {
     .container {
       margin-left: 6px;
       margin-right: 6px;
-      width: 66px;
+      width: 70px;
 
       .openable-options {
         top: 33px;
