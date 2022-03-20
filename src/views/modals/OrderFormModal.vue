@@ -11,14 +11,20 @@
         >{{ $t("order.clicklink") }}
         <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" />
       </a>
-      <b-form-rating v-model="formGroup.rating_food" readonly></b-form-rating>
+      <div class="rating">
+        <label>{{ $t("cafe.food") }}</label>
+        <b-form-rating v-model="formGroup.rating_food" readonly></b-form-rating>
+      </div>
     </div>
     <div class="date-delivery-rating">
       <div class="date">
         <div class="last-order-label">{{ $t("table.columns.last_order_date") }}:</div>
         <div class="last-order-date">{{ formGroup.last_order_date }}</div>
       </div>
-      <b-form-rating v-model="formGroup.rating_delivery" readonly></b-form-rating>
+      <div class="rating">
+        <label>{{ $t("cafe.delivery") }}</label>
+        <b-form-rating v-model="formGroup.rating_delivery" readonly></b-form-rating>
+      </div>
     </div>
     <div class="inputs">
       <text-input :init-value="formGroup.order_name" :required="true" class="order" label="order.order" @input="onChange('order_name', $event)" />
@@ -125,7 +131,6 @@ export default {
 .date {
   display: flex;
   font-size: 1rem;
-  margin-bottom: 1rem;
 
   .last-order-label {
     margin-right: 8px;
@@ -134,6 +139,16 @@ export default {
   .last-order-date {
     font-weight: 600;
   }
+}
+
+.date-delivery-rating {
+  margin-bottom: 1rem;
+}
+
+.rating {
+  display: flex;
+  text-align: right;
+  gap: 1rem;
 }
 
 .inputs {
