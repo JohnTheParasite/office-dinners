@@ -100,7 +100,7 @@
       "user": "user",
       "order": "order",
       "price": "price",
-      "shipping": "shipping",
+      "shipping": "delivery",
       "packing": "packing"
     },
     "refillsColumns": {

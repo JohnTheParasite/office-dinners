@@ -6,9 +6,7 @@
     <div v-if="votesOpened" class="order-top-bar">
       <div class="order-menu">
         <div v-for="item in topCafe" :key="item.id" class="cafe-with-counter">
-          <div class="cafe-button">
-            {{ item.name }}
-          </div>
+          <div class="cafe-button" @click="openCafeList">{{ item.name }}</div>
           <div class="like-counter">{{ item.likes }}</div>
         </div>
       </div>
@@ -67,6 +65,9 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+    },
+    openCafeList() {
+      this.$router.push("cafe")
     }
   },
   computed: {
@@ -100,6 +101,7 @@ export default {
         display: flex;
         vertical-align: center;
         height: 100%;
+        cursor: pointer;
       }
 
       .cafe-with-counter {
@@ -112,6 +114,13 @@ export default {
           color: $primary;
           transition: 0.3s ease;
           margin-right: 0;
+
+          &:hover {
+            color: $white;
+            box-shadow: 0 8px 25px -8px $primary;
+            border-color: $primary;
+            background-color: $primary;
+          }
         }
 
         .like-counter {

@@ -88,7 +88,14 @@
               </span>
             </b-td>
             <b-td>
-              <div class="text">{{ cafeData.total_orders_price }} {{ currency }}</div>
+              <div class="text">
+                {{
+                  cafeData.total_discount_in_percent
+                    ? (cafeData.total_orders_price / 100) * (100 - cafeData.total_discount)
+                    : cafeData.total_orders_price - cafeData.total_discount
+                }}
+                {{ currency }}
+              </div>
             </b-td>
             <b-td>
               <div v-if="footer.total_edit">
@@ -168,6 +175,7 @@ export default {
     for (let i in ord) {
       this.selectedOrdersData["cafe_" + ord[i].id] = { ...ord[i] }
     }
+    console.log(this.cafeData)
   },
   methods: {
     checkSelectedUser(user) {
