@@ -144,3 +144,9 @@ h5, .h5 {
 .align-center {
   text-align: center;
 }
+
+.horizontal-separator {
+  width: 1px;
+  border-left: 1px solid $input-border-color;
+  height: 20px;
+}

@@ -38,6 +38,7 @@
       primary-key="id"
       responsive
       show-empty
+      hover
     >
       <template #empty="">
         <span class="text-primary"> {{ $t("table.noItems") }} </span>
@@ -205,12 +206,6 @@ export default {
   .toggle {
     margin-bottom: 0;
   }
-}
-
-.horizontal-separator {
-  width: 1px;
-  border-left: 1px solid $input-border-color;
-  height: 20px;
 }
 
 .like {
