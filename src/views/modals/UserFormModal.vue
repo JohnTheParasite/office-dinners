@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="userDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
+  <b-modal :id="'b' + _uid" :header-class="getButtonVariant" centered no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
       <form-button @click="close" type="secondary" class="close">
@@ -10,7 +10,7 @@
     <text-input label="user.surname" :init-value="formGroup.surname" @input="onChange('surname', $event)" :required="true" />
     <text-input label="email" type="email" :init-value="formGroup.mail" @input="onChange('mail', $event)" :required="true" />
     <password-input :init-value="formGroup.password" @input="onChange('password', $event)" :required="isAddUser" />
-    <radio-list :options="roleOptions" label="user.role" :init-value="formGroup.role" @change="onChange('role', $event)" />
+    <radio-list v-if="!isCurrentUser" :init-value="formGroup.role" :options="roleOptions" label="user.role" @change="onChange('role', $event)" />
     <select-input
       :options="languageOptions"
       label="user.preferredLanguage"
@@ -18,7 +18,7 @@
       @change="onChange('selected_language', $event)"
       :required="true"
     />
-    <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
+    <checkbox v-if="!isCurrentUser" :init-value="formGroup.active" label="user.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
       <form-button label="interface.cancel" type="secondary" @click="cancel" />
       <form-button v-if="isAddUser" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
@@ -67,7 +67,7 @@ export default {
       this.userId = userId
       this.initFormGroup()
       if (this.isAddUser) {
-        this.$bvModal.show("userDataModal")
+        this.$bvModal.show("b" + this._uid)
       } else {
         this.getUserData(userId)
       }
@@ -92,7 +92,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "user.created")
           this.$emit("refreshTable")
-          this.$bvModal.hide("userDataModal")
+          this.$bvModal.hide("b" + this._uid)
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -104,7 +104,7 @@ export default {
         .then(() => {
           this.$store.commit("toasts/addSuccessToast", "user.modified")
           this.$emit("refreshTable")
-          this.$bvModal.hide("userDataModal")
+          this.$bvModal.hide("b" + this._uid)
         })
         .catch((error) => {
           this.catchAxiosError(error)
@@ -116,7 +116,7 @@ export default {
         .then((response) => {
           if (response && response.data) {
             Object.assign(this.formGroup, response.data)
-            this.$bvModal.show("userDataModal")
+            this.$bvModal.show("b" + this._uid)
           }
         })
         .catch((error) => {
@@ -154,6 +154,9 @@ export default {
     },
     isAddUser() {
       return this.userId === undefined
+    },
+    isCurrentUser() {
+      return this.userId === this.$authService.getUserData().id
     }
   }
 }
