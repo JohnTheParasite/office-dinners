@@ -67,7 +67,8 @@
     "deleteOrderQuestion": "Do you want to delete order?",
     "discount": "Discount",
     "top3": "Top 3 voted",
-    "clickToOrder": "Click to order"
+    "clickToOrder": "Click to order",
+    "priceWithoutDiscount": "Price without discount"
   },
   "refill": {
     "setBalance": "Add to balance",
