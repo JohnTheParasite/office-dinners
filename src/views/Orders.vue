@@ -146,24 +146,5 @@ export default {
       }
     }
   }
-
-  .loader,
-  .no-orders {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50vh;
-
-    .lds-dual-ring {
-      height: 5rem;
-      width: 5rem;
-    }
-
-    .lds-dual-ring:after {
-      border-color: $primary transparent $primary transparent;
-      height: 5rem;
-      width: 5rem;
-    }
-  }
 }
 </style>
