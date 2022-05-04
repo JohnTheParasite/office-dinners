@@ -4,23 +4,23 @@
       <div class="per-page">
         {{ $t("table.show") }}
         <div class="container">
-          <select-input :options="paginationOptions" :init-value="tableProperties.perPage" @change="onChangePerPage($event)" :required="true" />
+          <select-input :init-value="tableProperties.perPage" :options="paginationOptions" :required="true" @change="onChangePerPage($event)" />
         </div>
         {{ $t("table.entries") }}
       </div>
       <div v-if="$authService.isAdministrator()">
-        <div class="time-picker" v-if="votesOpened">
+        <div v-if="votesOpened" class="time-picker">
           <div class="close-votes-button">
             <slot name="closeVotes"></slot>
           </div>
           <div class="time-picker-element">
-            <b-form-timepicker v-model="time" locale="en" right :placeholder="$t('interface.empty')"></b-form-timepicker>
+            <b-form-timepicker v-model="time" :placeholder="$t('interface.empty')" locale="en" right></b-form-timepicker>
           </div>
           <div class="set-auto-close-time">
             <slot name="setAutoCloseTime"></slot>
           </div>
         </div>
-        <div class="open-votes-button" v-if="!votesOpened">
+        <div v-if="!votesOpened" class="open-votes-button">
           <slot name="openVotes"></slot>
         </div>
       </div>
@@ -65,12 +65,12 @@
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
       <template #cell(likes)="data">
-        <div class="like" :class="{ active: data.item.liked }">
-          <div class="like-button" @click="clickLike(data.item.id)" v-if="votesOpened">
+        <div :class="{ active: data.item.liked || staticLiked.indexOf(data.item.id) > -1 }" class="like">
+          <div v-if="votesOpened" class="like-button" @click="clickLike(data.item.id)">
             <font-awesome-icon icon="fa-solid fa-heart" />
             {{ $t("interface.like") }}
           </div>
-          <div class="like-counter">{{ data.item.likes }}</div>
+          <div class="like-counter">{{ totalVotes[data.item.id] }}</div>
         </div>
       </template>
       <template #cell(actions)="data">
@@ -116,10 +116,16 @@ export default {
   name: "CafeDataTable",
   components: { CommentsFormModal, SelectInput, Toggle },
   mixins: [DataTable, ApiErrorHelper],
+  props: {
+    totalVotes: {
+      default: {}
+    }
+  },
   data() {
     return {
       time: this.setTime(),
-      votesClosed: true
+      votesClosed: true,
+      staticLiked: []
     }
   },
   methods: {
@@ -155,10 +161,16 @@ export default {
             cafe_id: value
           })
         )
+        .then(() => {
+          if (this.staticLiked.indexOf(value) > -1) {
+            this.staticLiked.splice(this.staticLiked.indexOf(value), 1)
+          } else {
+            this.staticLiked.push(value)
+          }
+        })
         .catch((error) => {
           this.catchAxiosError(error)
         })
-      this.$emit("refreshTable")
     },
     setTime() {
       let currentDate = new Date()
@@ -199,6 +211,7 @@ export default {
     left: 0;
   }
 }
+
 .cafe-content {
   .toggle {
     margin-bottom: 0;

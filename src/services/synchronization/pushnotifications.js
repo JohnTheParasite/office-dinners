@@ -1,14 +1,12 @@
 import AuthService from "@/services/authService"
 
-export class Subscriber {
-  pushEnabled = false
-
-  start() {
-    this.enablePushNotifications()
+export class Pushnotifications {
+  static connect() {
+    Pushnotifications.enablePushNotifications()
     navigator.serviceWorker.register("serviceWorker.js").then(
-      () => {
-        console.log("[SW] Service worker has been registered")
-        this.push_updateSubscription()
+      (registration) => {
+        console.log("[SW] Service worker has been registered", registration.pushManager.getSubscription())
+        Pushnotifications.tryUpdateSubscription()
       },
       (e) => {
         console.error("[SW] Service worker registration failed", e)
@@ -16,7 +14,7 @@ export class Subscriber {
     )
   }
 
-  checkPermissions() {
+  static checkPermissions() {
     return new Promise((resolve, reject) => {
       if (Notification.permission === "denied") {
         return reject(new Error("Push messages are blocked."))
@@ -40,7 +38,7 @@ export class Subscriber {
     })
   }
 
-  urlBase64ToUint8Array(base64String) {
+  static urlBase64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
     const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/")
 
@@ -53,7 +51,7 @@ export class Subscriber {
     return outputArray
   }
 
-  subscribeOnServer(subscription, method) {
+  static subscribeOnServer(subscription, method) {
     const key = subscription.getKey("p256dh")
     const token = subscription.getKey("auth")
     const contentEncoding = (PushManager.supportedContentEncodings || ["aesgcm"])[0]
@@ -72,36 +70,33 @@ export class Subscriber {
     }).then(() => subscription)
   }
 
-  push_updateSubscription() {
+  static tryUpdateSubscription() {
     navigator.serviceWorker.ready
       .then((serviceWorkerRegistration) => serviceWorkerRegistration.pushManager.getSubscription())
       .then((subscription) => {
         if (!subscription) {
-          // We aren't subscribed to push, so set UI to allow the user to enable push
           return
         }
 
-        // Keep your server in sync with the latest endpoint
-        return this.subscribeOnServer(subscription, "PUT")
+        return Pushnotifications.subscribeOnServer(subscription, "PUT")
       })
       .catch((e) => {
         console.error("Error when updating the subscription", e)
       })
   }
 
-  enablePushNotifications() {
-    return this.checkPermissions()
+  static enablePushNotifications() {
+    return Pushnotifications.checkPermissions()
       .then(() => navigator.serviceWorker.ready)
       .then((serviceWorkerRegistration) =>
         serviceWorkerRegistration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: this.urlBase64ToUint8Array(process.env.VUE_APP_APPLICATION_SERVER_KEY)
+          applicationServerKey: Pushnotifications.urlBase64ToUint8Array(process.env.VUE_APP_APPLICATION_SERVER_KEY)
         })
       )
       .then((subscription) => {
-        return this.subscribeOnServer(subscription, "POST")
+        return Pushnotifications.subscribeOnServer(subscription, "POST")
       })
-      .then(() => (this.pushEnabled = true))
       .catch((e) => {
         if (Notification.permission === "denied") {
           console.warn("Notifications are denied by the user.")

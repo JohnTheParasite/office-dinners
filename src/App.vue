@@ -15,7 +15,8 @@ import MenuContainer from "@/components/menu/MenuContainer"
 import TopBar from "@/components/menu/TopBar"
 import ToasterContainer from "@/components/controls/ToastContainer"
 import SimpleDialog from "@/components/modals/SimpleDialog"
-import { Subscriber } from "@/services/push/subscriber"
+import { Pushnotifications } from "@/services/synchronization/pushnotifications"
+import { Websockets } from "@/services/synchronization/websockets"
 
 export default {
   components: { SimpleDialog, ToasterContainer, TopBar, MenuContainer },
@@ -26,10 +27,8 @@ export default {
   },
   mounted() {
     if (this.$authService.isAuthenticated()) {
-      new Subscriber().start()
-      document.addEventListener("message", () => {
-        console.warn("got message!!")
-      })
+      Pushnotifications.connect()
+      Websockets.connect()
     }
   }
 }

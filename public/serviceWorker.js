@@ -3,9 +3,7 @@ self.addEventListener("push", function (event) {
     return
   }
 
-  const sendNotification = (body) => {
-    // you could refresh a notification badge here with postMessage API
-
+  const workWithData = (body) => {
     const objectData = JSON.parse(body)
     return self.registration.showNotification(objectData.title, {
       body: objectData.message
@@ -14,6 +12,6 @@ self.addEventListener("push", function (event) {
 
   if (event.data) {
     const message = event.data.text()
-    event.waitUntil(sendNotification(message))
+    event.waitUntil(workWithData(message))
   }
 })
