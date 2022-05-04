@@ -101,7 +101,7 @@
       "user": "user",
       "order": "order",
       "price": "price",
-      "shipping": "delivery",
+      "delivery": "delivery",
       "packing": "packing"
     },
     "refillsColumns": {

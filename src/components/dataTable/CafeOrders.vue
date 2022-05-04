@@ -332,7 +332,7 @@ export default {
         { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width" },
         {
           key: "shipping_price",
-          label: this.$t("table.orderColumns.shipping"),
+          label: this.$t("table.orderColumns.delivery"),
           class: "align-right column-width"
         },
         {
