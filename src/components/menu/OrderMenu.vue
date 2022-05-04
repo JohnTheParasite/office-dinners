@@ -1,7 +1,7 @@
 <template>
   <div class="order-buttons">
-    <label v-if="votesOpened">{{ $t("order.top3") }}</label>
-    <label v-else>{{ $t("order.clickToOrder") }}</label>
+    <label v-if="votesOpened && topCafe.length">{{ $t("order.top3") }}</label>
+    <label v-if="!votesOpened">{{ $t("order.clickToOrder") }}</label>
     <div class="devider"></div>
     <div v-if="votesOpened" class="order-top-bar">
       <div class="order-menu">

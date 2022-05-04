@@ -2,7 +2,7 @@
   <b-modal id="orderDataModal" centered header-class="primary" no-close-on-backdrop size="lg">
     <template #modal-header="{ close }">
       <h5>{{ formGroup.name }}</h5>
-      <form-button class="close" type="secondary" @click="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
@@ -32,8 +32,8 @@
       @change="onChange('user_id', $event)"
     />
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button :disabled="!verified" label="interface.add" @click="add()" />
+      <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="!verified || loadInProgress" label="interface.add" @click="add()" />
     </template>
   </b-modal>
 </template>
@@ -54,7 +54,8 @@ export default {
   data() {
     return {
       formGroup: this.initFormGroup(),
-      users: []
+      users: [],
+      loadInProgress: false
     }
   },
   methods: {
@@ -80,6 +81,7 @@ export default {
       this.formGroup[field] = value
     },
     add() {
+      this.loadInProgress = true
       this.$axios
         .post(
           ApiEndpoints.ORDER_ADD,
@@ -99,6 +101,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.loadInProgress = false
         })
     }
   },

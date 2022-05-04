@@ -1,9 +1,18 @@
 <template>
   <div class="router-container">
-    <data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
-      <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
-    </data-table>
-    <user-form-modal ref="userDataModal" @refreshTable="getItems"></user-form-modal>
+    <div v-if="loadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <css-loader></css-loader>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <data-table :items="items" :on-click-edit="openEdit" :on-filter-change="updateResults" :pagination="pagination" :total="items.length">
+        <form-button slot="actionButton" label="user.add" @click="onclick"></form-button>
+      </data-table>
+      <user-form-modal ref="userDataModal" @refreshTable="getItems"></user-form-modal>
+    </div>
   </div>
 </template>
 
@@ -14,24 +23,29 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import UserFormModal from "@/views/modals/UserFormModal"
+import CssLoader from "@/components/CssLoader"
 
 export default {
   name: "User",
-  components: { UserFormModal, FormButton, DataTable },
+  components: { CssLoader, UserFormModal, FormButton, DataTable },
   mixins: [ApiErrorHelper],
   data() {
     return {
+      loadInProgress: false,
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
     }
   },
   beforeMount() {
-    this.getItems()
+    this.loadInProgress = true
+    this.getItems().finally(() => {
+      this.loadInProgress = false
+    })
   },
   methods: {
     getItems() {
-      this.$axios
+      return this.$axios
         .get(ApiEndpoints.USER_LIST, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
@@ -57,4 +71,4 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>

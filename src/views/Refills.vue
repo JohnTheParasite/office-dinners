@@ -1,9 +1,24 @@
 <template>
   <div class="router-container refills-block">
-    <div class="content-block">
-      <data-table :items="items" :on-click-edit="openRefillModal" :on-filter-change="updateResults" :pagination="pagination" :total="items.length"></data-table>
+    <div v-if="loadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <css-loader></css-loader>
+        </div>
+      </div>
     </div>
-    <refill-form-modal ref="refillModal" :apply="applyBalance"></refill-form-modal>
+    <div v-else>
+      <div class="content-block">
+        <data-table
+          :items="items"
+          :on-click-edit="openRefillModal"
+          :on-filter-change="updateResults"
+          :pagination="pagination"
+          :total="items.length"
+        ></data-table>
+      </div>
+      <refill-form-modal ref="refillModal" :apply="applyBalance" />
+    </div>
   </div>
 </template>
 
@@ -13,24 +28,29 @@ import FormDataService from "@/services/formDataService"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import RefillFormModal from "@/views/modals/RefillFormModal"
 import ApiErrorHelper from "@/services/apiErrorHelper"
+import CssLoader from "@/components/CssLoader"
 
 export default {
   name: "Refills",
-  components: { RefillFormModal, DataTable },
+  components: { CssLoader, RefillFormModal, DataTable },
   mixins: [ApiErrorHelper],
   data() {
     return {
+      loadInProgress: false,
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {}
     }
   },
   beforeMount() {
-    this.getItems()
+    this.loadInProgress = true
+    this.getItems().finally(() => {
+      this.loadInProgress = false
+    })
   },
   methods: {
     getItems() {
-      this.$axios
+      return this.$axios
         .get(ApiEndpoints.USER_REFILLS, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
@@ -50,7 +70,7 @@ export default {
       this.$refs.refillModal.show(userId)
     },
     applyBalance(userId, balance) {
-      this.$axios
+      return this.$axios
         .patch(ApiEndpoints.USER_REFILL, { user_id: userId, value: balance })
         .then((response) => {
           if (response) {

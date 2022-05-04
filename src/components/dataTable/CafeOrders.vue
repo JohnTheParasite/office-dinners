@@ -301,7 +301,7 @@ export default {
       this.$refs.discountModal.show(total_discount, total_discount_in_percent)
     },
     applyDiscount(price, type) {
-      this.$axios
+      return this.$axios
         .post(ApiEndpoints.SET_ORDER_DISCOUNT, {
           id: this.cafeData.id,
           discount: price,
