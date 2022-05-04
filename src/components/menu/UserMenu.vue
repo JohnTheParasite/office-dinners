@@ -9,7 +9,7 @@
         <img src="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png" />
       </div>
     </div>
-    <div class="openable-options">
+    <div class="openable-options" @click="openUserData">
       <div class="option">
         <font-awesome-icon icon="fa-solid fa-user" />
         {{ $t("interface.profile") }}
@@ -20,14 +20,17 @@
         {{ $t("interface.logout") }}
       </div>
     </div>
+    <user-form-modal ref="userDataModal"></user-form-modal>
   </div>
 </template>
 
 <script>
 import openableItem from "@/components/controls/openableItem"
+import UserFormModal from "@/views/modals/UserFormModal"
 
 export default {
   name: "UserMenu",
+  components: { UserFormModal },
   mixins: [openableItem],
   methods: {
     logout: function () {
@@ -36,6 +39,9 @@ export default {
       this.$store.dispatch("toasts/deleteTimeoutsFromList")
       this.$store.dispatch("toasts/removeAllToasts")
       this.$router.push("login")
+    },
+    openUserData() {
+      this.$refs.userDataModal.show(this.$authService.getUserData().id)
     }
   },
   computed: {
