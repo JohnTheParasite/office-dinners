@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <b-table :fields="getColumns" :items="cafeData.orders" primary-key="id" responsive show-empty>
+      <b-table :fields="getColumns" :items="cafeData.orders" hover primary-key="id" responsive show-empty>
         <template #empty="">
           <span class="text-primary"> {{ $t("table.noItems") }} </span>
         </template>
@@ -496,12 +496,6 @@ export default {
 
 .small-price {
   font-size: 0.75rem;
-}
-
-.horizontal-separator {
-  width: 1px;
-  border-left: 1px solid $input-border-color;
-  height: 20px;
 }
 
 .discount-area {
