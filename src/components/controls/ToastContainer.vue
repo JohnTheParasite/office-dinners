@@ -30,5 +30,10 @@ export default {
   justify-content: flex-end;
   right: 10px;
   flex-direction: column-reverse;
+
+  @media screen and (max-width: 360px) {
+    width: 100%;
+    padding-left: 1.5rem;
+  }
 }
 </style>

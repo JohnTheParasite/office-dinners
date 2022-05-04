@@ -67,7 +67,8 @@
     "deleteOrderQuestion": "Видалити замовлення?",
     "discount": "Знижка",
     "top3": "Топ 3 голосів",
-    "clickToOrder": "Натисни для замовлення"
+    "clickToOrder": "Натисни для замовлення",
+    "priceWithoutDiscount": "Ціна без знижки"
   },
   "refill": {
     "setBalance": "Додати до балансу",
@@ -100,7 +101,7 @@
       "user": "Користувач",
       "order": "Замовлення",
       "price": "Ціна",
-      "shipping": "Доставка",
+      "delivery": "Доставка",
       "packing": "Пакування"
     },
     "refillsColumns": {

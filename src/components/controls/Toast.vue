@@ -109,6 +109,10 @@ export default {
   border-radius: 0.25rem;
   margin-bottom: 0.3rem;
 
+  @media screen and (max-width: 360px) {
+    width: 100%;
+  }
+
   &.default {
     background-color: rgba($white, 0.85);
 

@@ -21,6 +21,7 @@
       primary-key="id"
       responsive
       show-empty
+      hover
     >
       <template #empty="">
         <span class="text-primary"> {{ $t("table.noItems") }} </span>

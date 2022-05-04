@@ -52,7 +52,7 @@
           </div>
           <div v-else class="text">
             {{ data.item.final_price }} {{ currency }}
-            <div class="small-price">({{ data.item.price }} {{ currency }})</div>
+            <div class="small-price" :title="$t('order.priceWithoutDiscount')">({{ data.item.price }} {{ currency }})</div>
           </div>
         </template>
 
@@ -80,15 +80,12 @@
         <template v-slot:custom-foot="">
           <b-tr class="footer footer-row">
             <b-td></b-td>
+            <b-td> {{ $t("order.total") }}: {{ cafeData.total_price_with_discount }} {{ currency }} </b-td>
             <b-td>
-              {{ $t("order.total") }}: {{ cafeData.total_price }} {{ currency }}
-              <span v-if="cafeData.total_discount > 0" class="small-price">
-                {{ $t("order.discount") }}: {{ cafeData.total_discount }} <span v-if="cafeData.total_discount_in_percent">%</span>
-                <span v-else>{{ currency }}</span>
-              </span>
-            </b-td>
-            <b-td>
-              <div class="text">{{ cafeData.total_orders_price }} {{ currency }}</div>
+              <div class="text">
+                {{ cafeData.total_orders_price_with_discount }} {{ currency }}
+                <div class="small-price" :title="$t('order.priceWithoutDiscount')">({{ cafeData.total_orders_price }} {{ currency }})</div>
+              </div>
             </b-td>
             <b-td>
               <div v-if="footer.total_edit">
@@ -335,7 +332,7 @@ export default {
         { key: "price", label: this.$t("table.orderColumns.price"), class: "align-right column-width" },
         {
           key: "shipping_price",
-          label: this.$t("table.orderColumns.shipping"),
+          label: this.$t("table.orderColumns.delivery"),
           class: "align-right column-width"
         },
         {

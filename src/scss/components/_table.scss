@@ -25,6 +25,14 @@
   }
 }
 
+.table-hover {
+  tbody {
+    tr:hover {
+      background-color: #7367f012;
+    }
+  }
+}
+
 @media all and (min-width: (992px)) {
   .table-responsive {
     overflow-x: visible;

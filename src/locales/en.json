@@ -67,7 +67,8 @@
     "deleteOrderQuestion": "Do you want to delete order?",
     "discount": "Discount",
     "top3": "Top 3 voted",
-    "clickToOrder": "Click to order"
+    "clickToOrder": "Click to order",
+    "priceWithoutDiscount": "Price without discount"
   },
   "refill": {
     "setBalance": "Add to balance",
@@ -100,7 +101,7 @@
       "user": "user",
       "order": "order",
       "price": "price",
-      "shipping": "shipping",
+      "delivery": "delivery",
       "packing": "packing"
     },
     "refillsColumns": {
