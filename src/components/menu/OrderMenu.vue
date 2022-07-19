@@ -2,7 +2,7 @@
   <div class="order-buttons">
     <label v-if="votesOpened && topCafe.length">{{ $t("order.top3") }}</label>
     <label v-if="!votesOpened">{{ $t("order.clickToOrder") }}</label>
-    <div class="devider"></div>
+    <div class="divider"></div>
     <div v-if="votesOpened" class="order-top-bar">
       <div class="order-menu">
         <div v-for="item in topCafe" :key="item.id" class="cafe-with-counter">
@@ -25,8 +25,9 @@
 <script>
 import FormButton from "@/components/controls/FormButton"
 import OrderFormModal from "@/views/modals/OrderFormModal"
-import { ApiEndpoints } from "@/enums/apiEndpoints"
 import ApiErrorHelper from "@/services/apiErrorHelper"
+import { ApiEndpoints } from "@/enums/apiEndpoints"
+import { socketBus } from "@/eventBuses/eventBuses"
 
 export default {
   name: "OrderMenu",
@@ -39,11 +40,17 @@ export default {
     }
   },
   mounted() {
-    if (process.env.VUE_APP_ENV === "dev") {
-      this.getVoteResults()
-    } else {
-      this.intervalId = window.setInterval(this.getVoteResults, process.env.VUE_APP_TIMEOUT)
-    }
+    this.getVoteResults()
+    socketBus.$on("newData", (messageEvent) => {
+      try {
+        let data = JSON.parse(messageEvent.data)
+        if (data.header) {
+          this.updateFromSocketData(data.header)
+        }
+      } catch (exception) {
+        console.error("If you see this, please tell your administrator about this exception", exception)
+      }
+    })
   },
   beforeDestroy() {
     window.clearInterval(this.intervalId)
@@ -51,6 +58,11 @@ export default {
   methods: {
     cafeMakeOrder(cafe) {
       this.$refs.orderDataModal.show(cafe)
+    },
+    updateFromSocketData(data) {
+      this.topCafe = data.cafes
+      this.$store.commit("basic/isVotesOpened", !data.closed)
+      this.$store.dispatch("basic/setFromHeaderData", data)
     },
     getVoteResults() {
       this.$axios
@@ -82,7 +94,7 @@ export default {
 @import "../../scss/components/color";
 
 .order-buttons {
-  .devider {
+  .divider {
     border-bottom: 1px solid $default-text-color;
     margin: 0.3rem 0 0.6rem 0;
   }

@@ -6,6 +6,7 @@ export class ApiEndpoints {
   static USER_REFILLS = process.env.VUE_APP_API_URL + "/user/refills"
   static USER_REFILL = process.env.VUE_APP_API_URL + "/user/refill"
   static CAFE_LIST = process.env.VUE_APP_API_URL + "/cafe/list"
+  static CAFE_TOTAL_VOTES = process.env.VUE_APP_API_URL + "/cafe/total-votes"
   static TOGGLE_CAFE = process.env.VUE_APP_API_URL + "/cafe/toggle"
   static CREATE_CAFE = process.env.VUE_APP_API_URL + "/cafe/create"
   static CAFE_DATA = process.env.VUE_APP_API_URL + "/cafe/update"
