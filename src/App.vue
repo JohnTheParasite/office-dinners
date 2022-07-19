@@ -15,12 +15,20 @@ import MenuContainer from "@/components/menu/MenuContainer"
 import TopBar from "@/components/menu/TopBar"
 import ToasterContainer from "@/components/controls/ToastContainer"
 import SimpleDialog from "@/components/modals/SimpleDialog"
+import { Pushnotifications } from "@/services/synchronization/pushnotifications"
+import { Websockets } from "@/services/synchronization/websockets"
 
 export default {
   components: { SimpleDialog, ToasterContainer, TopBar, MenuContainer },
   computed: {
     showMenu() {
       return this.$route.name !== "Login" && this.$route.name !== null
+    }
+  },
+  mounted() {
+    if (this.$authService.isAuthenticated()) {
+      Pushnotifications.connect()
+      Websockets.connect()
     }
   }
 }

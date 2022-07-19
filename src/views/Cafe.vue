@@ -15,15 +15,15 @@
         :on-filter-change="updateResults"
         :pagination="pagination"
         :total="items.length"
-        @refreshTable="getItems"
-      >
-        <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
-        <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
-        <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
-        <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
-      </cafe-data-table>
-      <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" />
-    </div>
+        :total-votes="totalVotes"
+      @refreshTable="getItems"
+    >
+      <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
+      <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
+      <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
+      <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
+    </cafe-data-table>
+    <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" /></div>
   </div>
 </template>
 
@@ -36,6 +36,7 @@ import i18n from "@/i18n"
 import CafeDataTable from "@/components/dataTable/CafeDataTable"
 import CafeFormModal from "@/views/modals/CafeFormModal"
 import CssLoader from "@/components/CssLoader"
+import { socketBus } from "@/eventBuses/eventBuses"
 
 export default {
   name: "Cafe",
@@ -47,7 +48,8 @@ export default {
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {},
-      intervalId: 0
+      intervalId: 0,
+      totalVotes: {}
     }
   },
   beforeMount() {
@@ -57,11 +59,17 @@ export default {
     })
   },
   mounted() {
-    if (process.env.VUE_APP_ENV === "dev") {
-      this.getItems()
-    } else {
-      this.intervalId = window.setInterval(this.getItems, process.env.VUE_APP_TIMEOUT)
-    }
+    this.getItems()
+    socketBus.$on("newData", (messageEvent) => {
+      try {
+        let data = JSON.parse(messageEvent.data)
+        if (data.votes) {
+          this.totalVotes = data.votes
+        }
+      } catch (exception) {
+        console.error("If you see this, please tell your administrator about this exception", exception)
+      }
+    })
   },
   beforeDestroy() {
     window.clearInterval(this.intervalId)
@@ -74,11 +82,17 @@ export default {
           if (response && response.data) {
             this.items = this.addItemProperties(response.data.items)
             this.pagination = response.data.pagination
+            this.getTotalVotes()
           }
         })
         .catch((error) => {
           this.catchAxiosError(error)
         })
+    },
+    getTotalVotes() {
+      this.$axios.get(ApiEndpoints.CAFE_TOTAL_VOTES).then((response) => {
+        if (response && response.data) this.totalVotes = response.data
+      })
     },
     addItemProperties(items) {
       items.forEach((item) => {
