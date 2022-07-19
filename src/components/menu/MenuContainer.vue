@@ -1,20 +1,26 @@
 <template>
   <div class="menu-container">
-    <div class="logo">Dinners</div>
-    <menu-item icon="fa-chart-line" router-name="Home" title="menu.dashboard"></menu-item>
-    <menu-item icon="fa-users" router-name="user" title="menu.users"></menu-item>
-    <menu-item icon="fa-burger" router-name="cafe" title="menu.cafeList"></menu-item>
-    <menu-item v-if="$authService.isAdministrator()" icon="fa-hand-holding-dollar" router-name="refills" title="menu.refills"></menu-item>
-    <menu-item icon="fa-utensils" router-name="orders" title="menu.orders"></menu-item>
+    <div class="upper-menu">
+      <div class="logo">Dinners</div>
+      <menu-item icon="fa-chart-line" router-name="Home" title="menu.dashboard"></menu-item>
+      <menu-item icon="fa-users" router-name="user" title="menu.users"></menu-item>
+      <menu-item icon="fa-burger" router-name="cafe" title="menu.cafeList"></menu-item>
+      <menu-item v-if="$authService.isAdministrator()" icon="fa-hand-holding-dollar" router-name="refills" title="menu.refills"></menu-item>
+      <menu-item icon="fa-utensils" router-name="orders" title="menu.orders"></menu-item>
+    </div>
+    <div class="footer-part">
+      <Countdown-timer />
+    </div>
   </div>
 </template>
 
 <script>
 import MenuItem from "@/components/menu/MenuItem"
+import CountdownTimer from "../CountdownTimer.vue"
 
 export default {
   name: "MenuContainer",
-  components: { MenuItem }
+  components: { MenuItem, CountdownTimer }
 }
 </script>
 
@@ -31,6 +37,9 @@ export default {
   box-shadow: 0 0 15px 0 rgba($black-border-color, 5%);
   font-size: 1.1rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   .logo {
     padding: 2rem;
