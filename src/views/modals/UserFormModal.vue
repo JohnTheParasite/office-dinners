@@ -2,7 +2,7 @@
   <b-modal id="userDataModal" centered :header-class="getButtonVariant" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t(title) }}</h5>
-      <form-button @click="close" type="secondary" class="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
@@ -20,9 +20,11 @@
     />
     <checkbox label="user.active" :init-value="formGroup.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button v-if="isAddUser" label="interface.create" @click="create()" :type="getButtonVariant" :disabled="!verified" />
-      <form-button v-if="!isAddUser" label="interface.update" @click="update()" :type="getButtonVariant" :disabled="!verified" />
+      <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
+      <div class="acceptButton">
+        <form-button v-if="isAddUser" :disabled="!verified || loadInProgress" :type="getButtonVariant" label="interface.create" @click="create()" />
+        <form-button v-if="!isAddUser" :disabled="!verified || loadInProgress" :type="getButtonVariant" label="interface.update" @click="update()" />
+      </div>
     </template>
   </b-modal>
 </template>
@@ -59,7 +61,8 @@ export default {
         selected_language: "pl",
         role: 2
       },
-      userId: undefined
+      userId: undefined,
+      loadInProgress: false
     }
   },
   methods: {
@@ -87,6 +90,7 @@ export default {
       }
     },
     create() {
+      this.loadInProgress = true
       this.$axios
         .post(ApiEndpoints.CREATE_USER, FormDataService.getFormData(this.formGroup))
         .then(() => {
@@ -97,8 +101,12 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+        .finally(() => {
+          this.loadInProgress = false
+        })
     },
     update() {
+      this.loadInProgress = true
       this.$axios
         .patch(ApiEndpoints.USER_DATA + "/" + this.userId, this.formGroup)
         .then(() => {
@@ -108,6 +116,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.loadInProgress = false
         })
     },
     getUserData(userId) {
@@ -158,3 +169,5 @@ export default {
   }
 }
 </script>
+
+<style lang="scss"></style>

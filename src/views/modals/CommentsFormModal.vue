@@ -2,37 +2,46 @@
   <b-modal id="commentsDataModal" :header-class="variation" hide-footer centered>
     <template #modal-header="{ close }">
       <h5>{{ $t("cafe.comments") }}</h5>
-      <form-button @click="close" type="secondary" class="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
-    <div class="new-comment">
-      <text-input label="user.name" :init-value="formGroup.username" @input="onChange('username', $event)" :required="true" ref="usernameInput" />
-      <div class="comment-grade">
-        <b>{{ $t("cafe.food") }}</b>
-        <b-form-rating v-model="formGroup.rating_food"></b-form-rating>
+    <div v-if="modalLoadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <css-loader></css-loader>
+        </div>
       </div>
-      <div class="comment-grade">
-        <b>{{ $t("cafe.delivery") }}</b>
-        <b-form-rating v-model="formGroup.rating_delivery"></b-form-rating>
-      </div>
-      <text-input label="Comment" :multiline="true" class="comment" :init-value="formGroup.comment" @input="onChange('comment', $event)" ref="commentInput" />
-      <form-button :disabled="!verified" label="cafe.addComment" @click="addComment" />
-      <div class="separator"></div>
     </div>
-    <div class="comments">
-      <div class="comment-container" v-for="comment in comments" :key="comment.id">
-        <div class="commentator-name">{{ comment.username }}</div>
-        <div class="comment-date">{{ comment.create_date }}</div>
+    <div v-else>
+      <div class="new-comment">
+        <text-input ref="usernameInput" :init-value="formGroup.username" :required="true" label="user.name" @input="onChange('username', $event)" />
         <div class="comment-grade">
           <b>{{ $t("cafe.food") }}</b>
-          <b-form-rating v-model="comment.rating_food" readonly></b-form-rating>
+          <b-form-rating v-model="formGroup.rating_food"></b-form-rating>
         </div>
         <div class="comment-grade">
           <b>{{ $t("cafe.delivery") }}</b>
-          <b-form-rating v-model="comment.rating_delivery" readonly></b-form-rating>
+          <b-form-rating v-model="formGroup.rating_delivery"></b-form-rating>
         </div>
-        <div class="comment">{{ comment.comment }}</div>
+        <text-input ref="commentInput" :init-value="formGroup.comment" :multiline="true" class="comment" label="Comment" @input="onChange('comment', $event)" />
+        <form-button :disabled="!verified || loadInProgress" label="cafe.addComment" @click="addComment" />
+        <div class="separator"></div>
+      </div>
+      <div class="comments">
+        <div v-for="comment in comments" :key="comment.id" class="comment-container">
+          <div class="commentator-name">{{ comment.username }}</div>
+          <div class="comment-date">{{ comment.create_date }}</div>
+          <div class="comment-grade">
+            <b>{{ $t("cafe.food") }}</b>
+            <b-form-rating v-model="comment.rating_food" readonly></b-form-rating>
+          </div>
+          <div class="comment-grade">
+            <b>{{ $t("cafe.delivery") }}</b>
+            <b-form-rating v-model="comment.rating_delivery" readonly></b-form-rating>
+          </div>
+          <div class="comment">{{ comment.comment }}</div>
+        </div>
       </div>
     </div>
   </b-modal>
@@ -45,10 +54,11 @@ import ApiErrorHelper from "@/services/apiErrorHelper"
 import TextInput from "@/components/controls/TextInput"
 import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
+import CssLoader from "@/components/CssLoader"
 
 export default {
   name: "CommentsFormModal",
-  components: { TextInput, FormButton },
+  components: { CssLoader, TextInput, FormButton },
   mixins: [ApiErrorHelper],
   props: {
     variation: {
@@ -59,7 +69,9 @@ export default {
     return {
       formGroup: this.initFormGroup(),
       comments: [],
-      cafeId: undefined
+      cafeId: undefined,
+      loadInProgress: false,
+      modalLoadInProgress: false
     }
   },
   methods: {
@@ -82,6 +94,7 @@ export default {
       }
     },
     addComment() {
+      this.loadInProgress = true
       this.$axios
         .post(ApiEndpoints.CREATE_COMMENT, FormDataService.getFormData(this.formGroup))
         .then((response) => {
@@ -92,8 +105,12 @@ export default {
         .catch((error) => {
           this.catchAxiosError(error)
         })
+        .finally(() => {
+          this.loadInProgress = false
+        })
     },
     getCafeComments(cafeId) {
+      this.modalLoadInProgress = true
       this.$axios
         .get(ApiEndpoints.CAFE_COMMENTS + "/" + cafeId)
         .then((response) => {
@@ -103,6 +120,9 @@ export default {
         })
         .catch((error) => {
           this.catchAxiosError(error)
+        })
+        .finally(() => {
+          this.modalLoadInProgress = false
         })
     },
     resetFormGroup() {
@@ -164,6 +184,24 @@ export default {
   .separator {
     margin-top: 1rem;
     margin-bottom: 1rem;
+  }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+
+  .lds-dual-ring {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .lds-dual-ring:after {
+    border-color: $primary transparent $primary transparent;
+    height: 5rem;
+    width: 5rem;
   }
 }
 </style>

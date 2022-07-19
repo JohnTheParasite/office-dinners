@@ -2,7 +2,7 @@
   <b-modal :id="'b' + _uid" centered header-class="warning" no-close-on-backdrop>
     <template #modal-header="{ close }">
       <h5>{{ $t("order.setDiscount") }}</h5>
-      <form-button class="close" type="secondary" @click="close">
+      <form-button :disabled="loadInProgress" class="close" type="secondary" @click="close">
         <font-awesome-icon icon="fa-solid fa-xmark" />
       </form-button>
     </template>
@@ -15,8 +15,8 @@
       </div>
     </div>
     <template #modal-footer="{ cancel }">
-      <form-button label="interface.cancel" type="secondary" @click="cancel" />
-      <form-button label="interface.OK" type="warning" @click="() => apply(discount, percent)" />
+      <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
+      <form-button :disabled="loadInProgress" label="interface.OK" type="warning" @click="emitApply(discount, percent)" />
     </template>
   </b-modal>
 </template>
@@ -35,7 +35,8 @@ export default {
   data() {
     return {
       discount: 0,
-      percent: false
+      percent: false,
+      loadInProgress: false
     }
   },
   methods: {
@@ -49,6 +50,12 @@ export default {
     },
     onChange(field, value) {
       this[field] = value
+    },
+    emitApply(discount, percent) {
+      this.loadInProgress = true
+      this.apply(discount, percent).finally(() => {
+        this.loadInProgress = false
+      })
     }
   }
 }

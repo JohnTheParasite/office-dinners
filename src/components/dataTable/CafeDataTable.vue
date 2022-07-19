@@ -13,6 +13,7 @@
           <div class="close-votes-button">
             <slot name="closeVotes"></slot>
           </div>
+          <div class="horizontal-separator"></div>
           <div class="time-picker-element">
             <b-form-timepicker v-model="time" :placeholder="$t('interface.empty')" locale="en" right></b-form-timepicker>
           </div>
@@ -37,6 +38,7 @@
       primary-key="id"
       responsive
       show-empty
+      hover
     >
       <template #empty="">
         <span class="text-primary"> {{ $t("table.noItems") }} </span>

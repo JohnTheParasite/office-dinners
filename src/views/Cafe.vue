@@ -1,13 +1,21 @@
 <template>
   <div class="router-container">
-    <cafe-data-table
-      ref="cafeDataTable"
-      :items="items"
-      :on-click-edit="openEdit"
-      :on-filter-change="updateResults"
-      :pagination="pagination"
-      :total="items.length"
-      :total-votes="totalVotes"
+    <div v-if="loadInProgress">
+      <div class="content-block">
+        <div class="loader">
+          <css-loader></css-loader>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <cafe-data-table
+        ref="cafeDataTable"
+        :items="items"
+        :on-click-edit="openEdit"
+        :on-filter-change="updateResults"
+        :pagination="pagination"
+        :total="items.length"
+        :total-votes="totalVotes"
       @refreshTable="getItems"
     >
       <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
@@ -15,7 +23,7 @@
       <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
       <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
     </cafe-data-table>
-    <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" />
+    <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" /></div>
   </div>
 </template>
 
@@ -27,14 +35,16 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import i18n from "@/i18n"
 import CafeDataTable from "@/components/dataTable/CafeDataTable"
 import CafeFormModal from "@/views/modals/CafeFormModal"
+import CssLoader from "@/components/CssLoader"
 import { socketBus } from "@/eventBuses/eventBuses"
 
 export default {
   name: "Cafe",
-  components: { CafeFormModal, CafeDataTable, FormButton },
+  components: { CssLoader, CafeFormModal, CafeDataTable, FormButton },
   mixins: [ApiErrorHelper],
   data() {
     return {
+      loadInProgress: false,
       items: [],
       tableProperties: FormDataService.getDefaultListParameters(),
       pagination: {},
@@ -43,7 +53,10 @@ export default {
     }
   },
   beforeMount() {
-    this.getItems()
+    this.loadInProgress = true
+    this.getItems().finally(() => {
+      this.loadInProgress = false
+    })
   },
   mounted() {
     this.getItems()
@@ -63,7 +76,7 @@ export default {
   },
   methods: {
     getItems() {
-      this.$axios
+      return this.$axios
         .get(ApiEndpoints.CAFE_LIST, { params: this.tableProperties })
         .then((response) => {
           if (response && response.data) {
@@ -134,4 +147,4 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>

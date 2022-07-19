@@ -107,6 +107,7 @@ export default {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 0 1.5rem;
 
   .inner-form {
     width: 100%;
