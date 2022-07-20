@@ -2,16 +2,20 @@ import AuthService from "@/services/authService"
 
 export class Pushnotifications {
   static connect() {
-    Pushnotifications.enablePushNotifications()
-    navigator.serviceWorker.register("serviceWorker.js").then(
-      (registration) => {
-        console.log("[SW] Service worker has been registered", registration.pushManager.getSubscription())
-        Pushnotifications.tryUpdateSubscription()
-      },
-      (e) => {
-        console.error("[SW] Service worker registration failed", e)
-      }
-    )
+    if (!("serviceWorker" in navigator)) {
+      return
+    }
+    Pushnotifications.enablePushNotifications().then(() => {
+      navigator.serviceWorker.register("serviceWorker.js").then(
+        (registration) => {
+          console.log("[SW] Service worker has been registered", registration.pushManager.getSubscription())
+          Pushnotifications.tryUpdateSubscription()
+        },
+        (e) => {
+          console.error("[SW] Service worker registration failed", e)
+        }
+      )
+    })
   }
 
   static checkPermissions() {
