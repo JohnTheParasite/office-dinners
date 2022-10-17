@@ -3,6 +3,7 @@ export default {
   state: {
     errors: [],
     votesOpened: false,
+    autoCloseTime: "",
     usersList: [],
     currency: ""
   },
@@ -18,12 +19,16 @@ export default {
     },
     setCurrency: (state, value) => {
       state.currency = value
+    },
+    setAutoCloseTime: (state, value) => {
+      state.autoCloseTime = value
     }
   },
   actions: {
     setFromHeaderData({ commit }, data) {
       commit("setUsersList", data.usersList)
       commit("setCurrency", data.currency)
+      commit("setAutoCloseTime", data.autoCloseTime)
     }
   }
 }

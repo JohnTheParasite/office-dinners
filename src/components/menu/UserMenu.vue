@@ -9,8 +9,8 @@
         <img src="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png" />
       </div>
     </div>
-    <div class="openable-options" @click="openUserData">
-      <div class="option">
+    <div class="openable-options">
+      <div class="option" @click="openUserData">
         <font-awesome-icon icon="fa-solid fa-user" />
         {{ $t("interface.profile") }}
       </div>

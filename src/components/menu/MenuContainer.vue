@@ -9,7 +9,7 @@
       <menu-item icon="fa-utensils" router-name="orders" title="menu.orders"></menu-item>
     </div>
     <div class="footer-part">
-      <Countdown-timer />
+      <countdown-timer :auto-close-date="$store.state.basic.autoCloseTime" />
     </div>
   </div>
 </template>

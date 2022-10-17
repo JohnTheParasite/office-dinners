@@ -1,5 +1,5 @@
 <template>
-  <div class="timer">
+  <div class="timer" v-if="!hasNoDate">
     <div class="hour">
       <span class="number">{{ hours }}</span>
       <div class="format">Hours</div>
@@ -28,22 +28,45 @@ export default {
       interval: ""
     }
   },
+  props: {
+    autoCloseDate: {
+      type: String,
+      required: true
+    }
+  },
+  watch: {
+    autoCloseDate: {
+      deep: true,
+      handler: function (value) {
+        if (value.length < 1) {
+          this.hours = 0
+          this.minutes = 0
+          this.seconds = 0
+          window.clearInterval(this.interval)
+        } else {
+          this.initTimer(value)
+        }
+      }
+    }
+  },
+  computed: {
+    hasNoDate() {
+      return (this.autoCloseDate && this.autoCloseDate.length < 1) || (this.hours === 0 && this.minutes === 0 && this.seconds === 0)
+    }
+  },
   mounted() {
-    // this will be changed after api date will be received
-    const autoCloseTime = "19:30"
-    const dateParts = autoCloseTime.split(":")
-    let now = new Date()
-    this.endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), dateParts[0], dateParts[1])
-    //
-
-    this.end = this.endTime.getTime()
-
-    this.timerCount()
-    this.interval = setInterval(() => {
-      this.timerCount()
-    }, 1000)
+    this.initTimer(this.autoCloseDate)
   },
   methods: {
+    initTimer(date) {
+      this.endTime = new Date(date)
+      this.end = this.endTime.getTime()
+
+      this.timerCount()
+      this.interval = setInterval(() => {
+        this.timerCount()
+      }, 1000)
+    },
     timerCount() {
       let now = new Date().getTime()
       let passTime = this.endTime.getTime() - now
@@ -77,6 +100,7 @@ export default {
     font-weight: 500;
     text-align: center;
     margin: 0 5px;
+
     .format {
       font-weight: 300;
       font-size: 14px;
@@ -87,6 +111,7 @@ export default {
       color: $primary;
     }
   }
+
   .number {
     background: $primary;
     padding: 0 5px;

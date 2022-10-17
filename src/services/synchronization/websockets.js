@@ -13,6 +13,9 @@ export class Websockets {
   }
 
   static disconnect() {
-    if (Websockets.webSocket !== null) Websockets.webSocket.close()
+    if (Websockets.webSocket !== null) {
+      Websockets.webSocket.close()
+      Websockets.webSocket = null
+    }
   }
 }

@@ -45,9 +45,11 @@
     "closeVotes": "Close votes",
     "openVotes": "Open votes",
     "setAutoCloseTime": "Set autoclose time",
+    "offAutoCloseTime": "Turn off autoclose time",
     "votesClosed": "Votes closed",
     "votesOpened": "Votes opened",
-    "votesTimeoutSet": "Autoclose time set"
+    "votesTimeoutSet": "Autoclose time set",
+    "votesTimeoutOff": "Autoclose time turned off"
   },
   "order": {
     "user": "User",

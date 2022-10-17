@@ -15,10 +15,13 @@
           </div>
           <div class="horizontal-separator"></div>
           <div class="time-picker-element">
-            <b-form-timepicker v-model="time" :placeholder="$t('interface.empty')" locale="en" right></b-form-timepicker>
+            <b-form-timepicker v-model="time" :disabled="autoCloseTimeIsSet" :placeholder="$t('interface.empty')" locale="en" right></b-form-timepicker>
           </div>
-          <div class="set-auto-close-time">
+          <div class="set-auto-close-time" v-show="!autoCloseTimeIsSet">
             <slot name="setAutoCloseTime"></slot>
+          </div>
+          <div class="set-auto-close-time" v-show="autoCloseTimeIsSet">
+            <slot name="turnOffAutoCloseTime"></slot>
           </div>
         </div>
         <div v-if="!votesOpened" class="open-votes-button">
@@ -47,8 +50,8 @@
         <span v-html="data.value"></span>
       </template>
       <template #cell(name)="data">
-        <a :href="data.item.link" target="_blank">
-          {{ data.item.name }}
+        <a class="cafe-link" :href="data.item.link" target="_blank">
+          <span v-html="data.item.name"></span>
           <font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" />
         </a>
       </template>
@@ -195,6 +198,12 @@ export default {
     },
     votesOpened() {
       return this.$store.state.basic.votesOpened
+    },
+    autoCloseTime() {
+      return this.$store.state.basic.autoCloseTime
+    },
+    autoCloseTimeIsSet() {
+      return this.autoCloseTime.length > 0
     }
   }
 }
@@ -267,6 +276,14 @@ export default {
   .like-button {
     color: $white;
     background-color: $primary;
+  }
+}
+
+.cafe-link {
+  display: flex;
+  align-items: center;
+  svg {
+    margin-left: 5px;
   }
 }
 

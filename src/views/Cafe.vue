@@ -16,14 +16,16 @@
         :pagination="pagination"
         :total="items.length"
         :total-votes="totalVotes"
-      @refreshTable="getItems"
-    >
-      <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
-      <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
-      <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
-      <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
-    </cafe-data-table>
-    <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" /></div>
+        @refreshTable="getItems"
+      >
+        <form-button slot="closeVotes" label="cafe.closeVotes" @click="onclickOpenCloseVotes"></form-button>
+        <form-button slot="openVotes" label="cafe.openVotes" @click="onclickOpenCloseVotes"></form-button>
+        <form-button slot="setAutoCloseTime" label="cafe.setAutoCloseTime" @click="onclickSetTimer"></form-button>
+        <form-button slot="turnOffAutoCloseTime" label="cafe.offAutoCloseTime" @click="onclickDisableTimer"></form-button>
+        <form-button slot="actionButton" label="cafe.add" @click="onclickAddCafe"></form-button>
+      </cafe-data-table>
+      <cafe-form-modal ref="cafeDataModal" @refreshTable="getItems" />
+    </div>
   </div>
 </template>
 
@@ -132,6 +134,18 @@ export default {
         .then((response) => {
           if (response && response.data) {
             this.$store.commit("toasts/addSuccessToast", "cafe.votesTimeoutSet")
+          }
+        })
+        .catch((error) => {
+          this.catchAxiosError(error)
+        })
+    },
+    onclickDisableTimer() {
+      this.$axios
+        .post(ApiEndpoints.VOTES_AUTOCLOSE_OFF)
+        .then((response) => {
+          if (response && response.data) {
+            this.$store.commit("toasts/addSuccessToast", "cafe.votesTimeoutOff")
           }
         })
         .catch((error) => {
