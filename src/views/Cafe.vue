@@ -68,6 +68,11 @@ export default {
         if (data.votes) {
           this.totalVotes = data.votes
         }
+        if (data.header.cafes && data.header.closed) {
+          data.header.cafes.forEach((cafe) => {
+            this.items.find((i) => i.id === cafe.id).active = true
+          })
+        }
       } catch (exception) {
         console.error("If you see this, please tell your administrator about this exception", exception)
       }

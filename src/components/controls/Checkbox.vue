@@ -41,6 +41,11 @@ export default {
       this.checked = this.initValue
     }
   },
+  watch: {
+    initValue(value) {
+      this.checked = value
+    }
+  },
   created() {
     this.reset()
   }
