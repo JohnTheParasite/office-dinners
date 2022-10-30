@@ -66,9 +66,9 @@ export default {
       try {
         let data = JSON.parse(messageEvent.data)
         if (data.votes) {
-          this.totalVotes = data.votes
+          this.setVotesData(data.votes)
         }
-        if (data.header.cafes && data.header.closed) {
+        if (data.header !== undefined && data.header.cafes && data.header.closed) {
           data.header.cafes.forEach((cafe) => {
             this.items.find((i) => i.id === cafe.id).active = true
           })
@@ -98,8 +98,18 @@ export default {
     },
     getTotalVotes() {
       this.$axios.get(ApiEndpoints.CAFE_TOTAL_VOTES).then((response) => {
-        if (response && response.data) this.totalVotes = response.data
+        if (response && response.data) this.setVotesData(response.data)
       })
+    },
+    setVotesData(data) {
+      this.totalVotes = data.votes
+      if (data.liked) {
+        Object.keys(data.liked).forEach((cafeId) => {
+          if (this.items.find((i) => i.id === parseInt(cafeId))) {
+            this.items.find((i) => i.id === parseInt(cafeId)).liked = data.liked[cafeId]
+          }
+        })
+      }
     },
     addItemProperties(items) {
       items.forEach((item) => {

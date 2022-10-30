@@ -145,7 +145,8 @@ export default {
     languageOptions() {
       return [
         { text: "interface.english", value: "en", selected: false },
-        { text: "interface.polish", value: "pl", selected: false }
+        { text: "interface.polish", value: "pl", selected: false },
+        { text: "interface.ukrainian", value: "ua", selected: false }
       ]
     },
     getButtonVariant() {

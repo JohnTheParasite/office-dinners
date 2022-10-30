@@ -70,7 +70,7 @@
         <toggle :init-value="data.item.active" :name="data.item.id.toString()" @change="toggleCafe"></toggle>
       </template>
       <template #cell(likes)="data">
-        <div :class="{ active: data.item.liked || staticLiked.indexOf(data.item.id) > -1 }" class="like">
+        <div :class="{ active: data.item.liked }" class="like">
           <div v-if="votesOpened" class="like-button" @click="clickLike(data.item.id)">
             <font-awesome-icon icon="fa-solid fa-heart" />
             {{ $t("interface.like") }}

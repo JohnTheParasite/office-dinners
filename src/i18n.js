@@ -1,5 +1,6 @@
 import Vue from "vue"
 import VueI18n from "vue-i18n"
+import AuthService from "@/services/authService"
 
 Vue.use(VueI18n)
 
@@ -17,7 +18,7 @@ function loadLocaleMessages() {
 }
 
 export default new VueI18n({
-  locale: process.env.VUE_APP_I18N_LOCALE || "en",
+  locale: AuthService.getUserLanguage(),
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "en",
   messages: loadLocaleMessages(),
   silentTranslationWarn: true
