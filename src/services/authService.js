@@ -30,4 +30,11 @@ export default class AuthService {
     }
     return process.env.VUE_APP_I18N_LOCALE
   }
+  static updateUserLanguage = (language) => {
+    if (this.isAuthenticated()) {
+      let userData = this.getUserData()
+      userData.language = language
+      localStorage.setItem(AuthService.authKey, JSON.stringify(userData))
+    }
+  }
 }

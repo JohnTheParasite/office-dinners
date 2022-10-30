@@ -40,6 +40,7 @@ import { ApiEndpoints } from "@/enums/apiEndpoints"
 import FormDataService from "@/services/formDataService"
 import ApiErrorHelper from "@/services/apiErrorHelper"
 import PasswordInput from "@/components/controls/PasswordInput"
+import AuthService from "@/services/authService"
 
 export default {
   name: "UserFormModal",
@@ -119,6 +120,10 @@ export default {
         })
         .finally(() => {
           this.loadInProgress = false
+          if (this.isCurrentUser) {
+            AuthService.updateUserLanguage(this.formGroup.selected_language)
+            window.location.reload()
+          }
         })
     },
     getUserData(userId) {
