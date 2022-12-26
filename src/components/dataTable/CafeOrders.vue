@@ -11,7 +11,7 @@
         <div class="order-block">
           <div class="order-user">
             <label>{{ $t("order.userPay") }}:</label>
-            <template v-if="$authService.isAdministrator() && !cafeData.closed">
+            <template v-if="$store.state.basic.isAdmin && !cafeData.closed">
               <select-input ref="selectedUserToPay" :init-value="cafeData.order_person" :options="usersList" @change="checkSelectedUser($event)" />
               <form-button :disabled="disableSelectUser" label="interface.select" @click="selectUser()"></form-button>
             </template>

@@ -28,4 +28,5 @@ export class ApiEndpoints {
   static DELETE_ORDER = process.env.VUE_APP_API_URL + "/order/delete"
   static UPDATE_ORDER_PRICES = process.env.VUE_APP_API_URL + "/order/update-order-prices"
   static SET_ORDER_DISCOUNT = process.env.VUE_APP_API_URL + "/order/set-order-discount"
+  static PRE_AUTH_DATA = process.env.VUE_APP_API_URL + "/pre-auth-data"
 }

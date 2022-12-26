@@ -3,11 +3,13 @@
     <div class="inner-form">
       <div class="login-form">
         <div class="logo">
-          <h2 class="brand-text text-primary">Logo</h2>
+          <h2 class="brand-text text-primary">
+            <img alt="main-logo" class="index-logo" :src="logo" />
+          </h2>
         </div>
         <form ref="form" class="auth-login-form" @submit="login">
           <text-input :required="true" label="email" @input="onInput('email', $event)" />
-          <password-input :required="true" @input="onInput('password', $event)"> </password-input>
+          <password-input :required="true" @input="onInput('password', $event)"></password-input>
           <form-button :disabled="!enableSubmit" :loading-in-progress="loadInProgress" form-type="submit" label="signIn"></form-button>
         </form>
       </div>
@@ -38,7 +40,8 @@ export default {
         icon: IconNames.EYE
       },
       errorMessage: "",
-      loadInProgress: false
+      loadInProgress: false,
+      logo: ""
     }
   },
   methods: {
@@ -86,12 +89,26 @@ export default {
         .finally(() => {
           this.loadInProgress = false
         })
+    },
+    getSvgImage(base64) {
+      let imageElement = document.createElementNS("http://www.w3.org/2000/svg", "image")
+      imageElement.setAttribute("width", "100")
+      imageElement.setAttribute("height", "100")
+      imageElement.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", window.btoa(base64))
     }
   },
   computed: {
     enableSubmit() {
       return this.formGroup.email.length && this.formGroup.password.length
     }
+  },
+  beforeMount() {
+    this.$axios.get(ApiEndpoints.PRE_AUTH_DATA).then((response) => {
+      if (response.data) {
+        this.logo = response.data.logo
+      }
+      console.warn(response)
+    })
   }
 }
 </script>
@@ -108,6 +125,10 @@ export default {
   justify-content: center;
   overflow: hidden;
   padding: 0 1.5rem;
+
+  .index-logo {
+    width: 150px;
+  }
 
   .inner-form {
     width: 100%;

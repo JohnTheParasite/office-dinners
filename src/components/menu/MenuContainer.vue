@@ -3,9 +3,9 @@
     <div class="upper-menu">
       <div class="logo">Dinners</div>
       <menu-item icon="fa-chart-line" router-name="Home" title="menu.dashboard"></menu-item>
-      <menu-item icon="fa-users" router-name="user" title="menu.users"></menu-item>
+      <menu-item v-if="$store.state.basic.isAdmin" icon="fa-users" router-name="user" title="menu.users"></menu-item>
       <menu-item icon="fa-burger" router-name="cafe" title="menu.cafeList"></menu-item>
-      <menu-item v-if="$authService.isAdministrator()" icon="fa-hand-holding-dollar" router-name="refills" title="menu.refills"></menu-item>
+      <menu-item v-if="$store.state.basic.isAdmin" icon="fa-hand-holding-dollar" router-name="refills" title="menu.refills"></menu-item>
       <menu-item icon="fa-utensils" router-name="orders" title="menu.orders"></menu-item>
     </div>
     <div class="footer-part">

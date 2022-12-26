@@ -31,7 +31,7 @@
       <text-input :init-value="formGroup.price" :required="true" label="order.price" type="Number" @input="onChange('price', $event)" />
     </div>
     <select-input
-      v-if="$authService.isAdministrator()"
+      v-if="$store.state.basic.isAdmin"
       :init-value="formGroup.user_id"
       :options="$store.state.basic.usersList"
       label="order.user"

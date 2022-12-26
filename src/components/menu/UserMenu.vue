@@ -6,7 +6,7 @@
         <span class="role">{{ getRole }}</span>
       </div>
       <div class="avatar">
-        <img src="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png" />
+        <img alt="avatar" :src="$store.state.basic.avatar" />
       </div>
     </div>
     <div class="openable-options">

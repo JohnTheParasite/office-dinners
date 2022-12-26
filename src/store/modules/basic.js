@@ -5,7 +5,9 @@ export default {
     votesOpened: false,
     autoCloseTime: "",
     usersList: [],
-    currency: ""
+    currency: "",
+    isAdmin: false,
+    avatar: ""
   },
   mutations: {
     addErrors: (state, errors) => {
@@ -22,6 +24,12 @@ export default {
     },
     setAutoCloseTime: (state, value) => {
       state.autoCloseTime = value
+    },
+    setIsAdmin: (state, value) => {
+      state.isAdmin = value
+    },
+    setAvatar: (state, value) => {
+      state.avatar = value
     }
   },
   actions: {
@@ -29,6 +37,8 @@ export default {
       commit("setUsersList", data.usersList)
       commit("setCurrency", data.currency)
       commit("setAutoCloseTime", data.autoCloseTime)
+      commit("setIsAdmin", data.isAdmin)
+      commit("setAvatar", data.avatar)
     }
   }
 }

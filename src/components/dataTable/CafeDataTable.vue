@@ -8,7 +8,7 @@
         </div>
         {{ $t("table.entries") }}
       </div>
-      <div v-if="$authService.isAdministrator()">
+      <div v-if="$store.state.basic.isAdmin">
         <div v-if="votesOpened" class="time-picker">
           <div class="close-votes-button">
             <slot name="closeVotes"></slot>
