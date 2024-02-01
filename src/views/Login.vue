@@ -77,6 +77,7 @@ export default {
           }
         })
         .catch((error) => {
+          console.warn('error', error)
           if (error.response) {
             this.processErrorCode(error.response.data.status)
           } else if (error.request) {

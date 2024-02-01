@@ -185,8 +185,7 @@ export default {
   },
   computed: {
     getColumns() {
-      return [
-        { key: "active", label: this.$t("table.columns.active"), sortable: true },
+      let columns = [
         { key: "likes", label: this.$t("table.columns.vote"), class: "align-center", sortable: true },
         { key: "name", label: this.$t("table.columns.name"), sortable: true },
         { key: "rating_food", label: this.$t("table.columns.rating_food"), sortable: true },
@@ -195,6 +194,10 @@ export default {
         { key: "last_order_date", label: this.$t("table.columns.last_order_date"), sortable: true },
         { key: "actions", label: "", sortable: false }
       ]
+      if (this.$store.state.basic.isAdmin) {
+        columns.unshift({ key: "active", label: this.$t("table.columns.active"), sortable: true })
+      }
+      return columns
     },
     votesOpened() {
       return this.$store.state.basic.votesOpened
@@ -282,6 +285,7 @@ export default {
 .cafe-link {
   display: flex;
   align-items: center;
+
   svg {
     margin-left: 5px;
   }

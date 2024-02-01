@@ -18,7 +18,7 @@
       @change="onChange('selected_language', $event)"
       :required="true"
     />
-    <checkbox v-if="!isCurrentUser" :init-value="formGroup.active" label="user.active" @change="onChange('active', $event)" />
+    <checkbox v-if="!isCurrentUser" :init-value="Number.parseInt(formGroup.active) === 1" label="user.active" @change="onChange('active', $event)" />
     <template #modal-footer="{ cancel }">
       <form-button :disabled="loadInProgress" label="interface.cancel" type="secondary" @click="cancel" />
       <div class="acceptButton">

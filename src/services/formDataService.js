@@ -14,7 +14,7 @@ export default class FormDataService {
     return {
       sortKey: "id",
       currentPage: 1,
-      perPage: 10,
+      perPage: 50,
       isSortDirDesc: false,
       searchValue: ""
     }
@@ -34,7 +34,7 @@ export default class FormDataService {
    * @returns {*}
    */
   static formatDateForTimeFormat(date) {
-    let formatter = Intl.DateTimeFormat("ru-RU", {
+    let formatter = Intl.DateTimeFormat("uk-UA", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit"
